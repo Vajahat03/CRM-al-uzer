@@ -1,0 +1,10 @@
+{"text": "Bhai dekhna zara, Ahmed ka passport kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ahmed", "document_type": "passport"}, "notes": "Colloquial Hinglish phrase with 'khatam ho raha hai'"}
+{"text": "Kaam kahan tak pahucha Rahul ke GST registration ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rahul", "service": "GST registration"}, "notes": "Colloquial status query with 'kahan tak pahucha'"}
+{"text": "Aaj counter pe total kitna cash jama hua?", "intent": "FINANCIAL_STATEMENT", "entities": {"channel": "kirkol", "period": "today"}, "notes": "Kirkol counter POS cash inquiry in Hindi"}
+{"text": "Faisal ko bolo baaki ₹12,000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Faisal", "amount": 12000}, "notes": "Imperative reminder request in Hinglish"}
+{"text": "Suresh ka driving license renew karwana hai, naya order daal do ₹4500 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Suresh", "document_type": "driving license", "amount": 4500}, "notes": "Complex multi-entity lead creation in Hinglish"}
+{"text": "Kal shaam tak 25k account me aa jayenge Amit ke.", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Amit", "amount": 25000, "date": "tomorrow"}, "notes": "Slang amount '25k' with informal future tense"}
+{"text": "Check which client files are stuck in Al Uzer approval.", "intent": "JOB_STATUS_INQUIRY", "entities": {"stage": "Al Uzer"}, "notes": "Operational bottleneck query in English"}
+{"text": "Priya ne pucha passport ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Priya", "document_type": "passport"}, "notes": "Indirect third-person customer query"}
+{"text": "Agar koi invoice 45 din se zyada pending hai to list nikalo.", "intent": "OVERDUE_INVOICES", "entities": {"period_days": 45}, "notes": "Conditional filter query in Hinglish"}
+{"text": "What was our net margin after deducting operational rent and staff expenses?", "intent": "FINANCIAL_STATEMENT", "entities": {"metric": "net_margin"}, "notes": "Formal accounting inquiry in English"}

@@ -1,0 +1,632 @@
+{"text": "Kiska rc book agle 30 din me expire hoga?", "intent": "DOCUMENT_EXPIRATION", "entities": {"document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Rahul ko bolo baaki ₹12000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Rahul", "amount": 12000}, "language": "Hinglish"}
+{"text": "Fatima ka churn risk aur next best action kya hai?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Fatima"}, "language": "Hinglish"}
+{"text": "Create a new lead for Rohan with budget of ₹3500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rohan", "amount": 3500}, "language": "English"}
+{"text": "Kaam kahan tak pahucha Rahul ke gumasta license ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rahul", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Faisal ne pucha aadhaar card ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Faisal", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Imran ka gst certificate renew karwana hai, naya order daal do ₹20000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Imran", "document_type": "gst certificate", "amount": 20000}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹3500 balance somvaar", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 3500, "date": "somvaar"}, "language": "English"}
+{"text": "Settling the remaining ₹20000 balance somvaar", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 20000, "date": "somvaar"}, "language": "English"}
+{"text": "Imran ka inquiry aaya hai ₹7500 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Imran", "amount": 7500}, "language": "Hinglish"}
+{"text": "Pooja ko bolo baaki ₹75000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Pooja", "amount": 75000}, "language": "Hinglish"}
+{"text": "Vikram ne bola ₹5000 monday tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Vikram", "amount": 5000, "date": "monday"}, "language": "Hinglish"}
+{"text": "Kavita ka visa kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Kavita", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Suresh ke liye ek follow-up task schedule karo today ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Suresh", "date": "today"}, "language": "Hinglish"}
+{"text": "kal tak 15000 account me aa jayenge Imran ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Imran", "amount": 15000, "date": "kal"}, "language": "Hinglish"}
+{"text": "Harsh ka rc book renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Harsh", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Create a new lead for Zaid with budget of ₹5000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Zaid", "amount": 5000}, "language": "English"}
+{"text": "Kaam kahan tak pahucha Ananya ke aadhaar card ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Ananya", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "kal shaam ko subah Amit ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Amit", "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Faisal ka ₹20000 payment aaj aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Faisal", "amount": 20000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹50000 balance agle hafte", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 50000, "date": "agle hafte"}, "language": "English"}
+{"text": "Bhai somvaar ko ₹15000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 15000, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Sameer ka gumasta license renew karwana hai, naya order daal do ₹1500 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sameer", "document_type": "gumasta license", "amount": 1500}, "language": "Hinglish"}
+{"text": "Rohan ko bolo baaki ₹12000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Rohan", "amount": 12000}, "language": "Hinglish"}
+{"text": "next week tak 7500 account me aa jayenge Priya ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Priya", "amount": 7500, "date": "next week"}, "language": "Hinglish"}
+{"text": "Rohan ka gst certificate renew karwana hai, naya order daal do ₹20000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rohan", "document_type": "gst certificate", "amount": 20000}, "language": "Hinglish"}
+{"text": "Sameer ke liye ₹1500 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sameer", "amount": 1500}, "language": "Hinglish"}
+{"text": "Bhai agle hafte ko ₹120000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 120000, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Rajesh expecting ₹5000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rajesh", "amount": 5000}, "language": "English"}
+{"text": "Kavita ko bolo baaki ₹50000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Kavita", "amount": 50000}, "language": "Hinglish"}
+{"text": "Ahmed ne bola ₹5000 aaj tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Ahmed", "amount": 5000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Harsh ne bola ₹35000 monday tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Harsh", "amount": 35000, "date": "monday"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Suresh ka pan card kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Suresh", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Rohan ko bolo baaki ₹120000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Rohan", "amount": 120000}, "language": "Hinglish"}
+{"text": "somvaar ko subah Rajesh ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Rajesh", "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Rohan ke liye ek follow-up task schedule karo kal shaam ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Rohan", "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Amit ko bolo baaki ₹20000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Amit", "amount": 20000}, "language": "Hinglish"}
+{"text": "I will pay ₹120000 kal shaam via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 120000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Ananya ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Ananya"}, "language": "Hinglish"}
+{"text": "Fatima ka trade license kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Fatima", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "kal shaam ko subah Rajesh ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Rajesh", "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Create a new lead for Rohan with budget of ₹15000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rohan", "amount": 15000}, "language": "English"}
+{"text": "Imran ka trade license renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Imran", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Rohan ka aadhaar card renew karwana hai, naya order daal do ₹15000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rohan", "document_type": "aadhaar card", "amount": 15000}, "language": "Hinglish"}
+{"text": "Imran ka ₹1500 payment today aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Imran", "amount": 1500, "date": "today"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Kavita ka pan card kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Kavita", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Rajesh ne pucha gumasta license ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rajesh", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Imran ko bolo baaki ₹25000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Imran", "amount": 25000}, "language": "Hinglish"}
+{"text": "Amit ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Amit"}, "language": "Hinglish"}
+{"text": "Manish ko bolo baaki ₹7500 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Manish", "amount": 7500}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹50000 balance tomorrow", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 50000, "date": "tomorrow"}, "language": "English"}
+{"text": "Fatima ka inquiry aaya hai ₹75000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Fatima", "amount": 75000}, "language": "Hinglish"}
+{"text": "Rohan ne bola ₹35000 this weekend tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rohan", "amount": 35000, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "I will pay ₹3500 next week via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 3500, "date": "next week"}, "language": "English"}
+{"text": "Fatima ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Fatima"}, "language": "Hinglish"}
+{"text": "Amit promised to transfer ₹35000 on kal shaam", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Amit", "amount": 35000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "somvaar ko subah Imran ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Imran", "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Priya ne bola ₹20000 agle hafte tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Priya", "amount": 20000, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "Faisal ke liye ₹15000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Faisal", "amount": 15000}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Priya ke gst certificate ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Priya", "document_type": "gst certificate"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Sameer expecting ₹5000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sameer", "amount": 5000}, "language": "English"}
+{"text": "Harsh ke liye ek follow-up task schedule karo aaj ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Harsh", "date": "aaj"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Faisal expecting ₹35000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Faisal", "amount": 35000}, "language": "English"}
+{"text": "Sameer ka ₹25000 payment kal aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sameer", "amount": 25000, "date": "kal"}, "language": "Hinglish"}
+{"text": "Check which client files are stuck in Al Uzer approval.", "intent": "JOB_STATUS_INQUIRY", "entities": {}, "language": "English"}
+{"text": "Kavita ne pucha driving license ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Kavita", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Rajesh ko bolo baaki ₹3500 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Rajesh", "amount": 3500}, "language": "Hinglish"}
+{"text": "Ahmed ka pan card renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ahmed", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Sameer promised to transfer ₹1500 on somvaar", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sameer", "amount": 1500, "date": "somvaar"}, "language": "English"}
+{"text": "Bhai kal ko ₹1500 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 1500, "date": "kal"}, "language": "Hinglish"}
+{"text": "Harsh ka inquiry aaya hai ₹120000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "amount": 120000}, "language": "Hinglish"}
+{"text": "Sameer ka rc book kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Sameer", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Show me documents expiring soon for Amit", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Amit"}, "language": "English"}
+{"text": "I will pay ₹1500 today via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 1500, "date": "today"}, "language": "English"}
+{"text": "Harsh ke liye ₹120000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "amount": 120000}, "language": "Hinglish"}
+{"text": "Harsh ne bola ₹5000 agle hafte tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Harsh", "amount": 5000, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Ahmed ke trade license ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Ahmed", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "List all customer passports and visas expiring within 30 days", "intent": "DOCUMENT_EXPIRATION", "entities": {}, "language": "English"}
+{"text": "Bhai dekhna zara, Sneha ka gumasta license kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Sneha", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Faisal ka gst certificate kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Faisal", "document_type": "gst certificate"}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹25000 balance today", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 25000, "date": "today"}, "language": "English"}
+{"text": "Check if Rahul's job card is ready for delivery", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rahul"}, "language": "English"}
+{"text": "Manish ke liye ek follow-up task schedule karo monday ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Manish", "date": "monday"}, "language": "Hinglish"}
+{"text": "Create a new lead for Pooja with budget of ₹120000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Pooja", "amount": 120000}, "language": "English"}
+{"text": "Settling the remaining ₹75000 balance tomorrow", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 75000, "date": "tomorrow"}, "language": "English"}
+{"text": "kal ko subah Rahul ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Rahul", "date": "kal"}, "language": "Hinglish"}
+{"text": "Imran ne pucha gumasta license ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Imran", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Imran ka churn risk aur next best action kya hai?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Imran"}, "language": "Hinglish"}
+{"text": "Check when Rajesh's aadhaar card is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rajesh", "document_type": "aadhaar card"}, "language": "English"}
+{"text": "Suresh ka visa renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Suresh", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Vikram ka driving license job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Vikram", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Rajesh ke liye ₹5000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rajesh", "amount": 5000}, "language": "Hinglish"}
+{"text": "What was our net margin after deducting operational rent and work expenses?", "intent": "FINANCIAL_STATEMENT", "entities": {}, "language": "English"}
+{"text": "I will pay ₹3500 tomorrow via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 3500, "date": "tomorrow"}, "language": "English"}
+{"text": "Rohan ne pucha gst certificate ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rohan", "document_type": "gst certificate"}, "language": "Hinglish"}
+{"text": "Amit ne pucha gst certificate ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Amit", "document_type": "gst certificate"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Kavita ka passport kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Kavita", "document_type": "passport"}, "language": "Hinglish"}
+{"text": "Harsh ke liye ₹20000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "amount": 20000}, "language": "Hinglish"}
+{"text": "Create a new lead for Vikram with budget of ₹12000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Vikram", "amount": 12000}, "language": "English"}
+{"text": "Sneha ne bola ₹7500 today tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sneha", "amount": 7500, "date": "today"}, "language": "Hinglish"}
+{"text": "Ahmed ke liye ek follow-up task schedule karo aaj ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Ahmed", "date": "aaj"}, "language": "Hinglish"}
+{"text": "Harsh ka trade license renew karwana hai, naya order daal do ₹3500 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "document_type": "trade license", "amount": 3500}, "language": "Hinglish"}
+{"text": "somvaar ko subah Zaid ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Zaid", "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Pooja ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Pooja"}, "language": "Hinglish"}
+{"text": "Create a new lead for Fatima with budget of ₹15000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Fatima", "amount": 15000}, "language": "English"}
+{"text": "Pooja ne bola ₹5000 this weekend tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Pooja", "amount": 5000, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Priya expecting ₹3500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Priya", "amount": 3500}, "language": "English"}
+{"text": "Capture new sales prospect Ahmed expecting ₹20000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ahmed", "amount": 20000}, "language": "English"}
+{"text": "Rajesh ke liye ek follow-up task schedule karo this weekend ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Rajesh", "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Sameer ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sameer"}, "language": "Hinglish"}
+{"text": "next week tak 7500 account me aa jayenge Kavita ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Kavita", "amount": 7500, "date": "next week"}, "language": "Hinglish"}
+{"text": "Rohan ne pucha driving license ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rohan", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Manish ke passport ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Manish", "document_type": "passport"}, "language": "Hinglish"}
+{"text": "Manish ke liye ₹120000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Manish", "amount": 120000}, "language": "Hinglish"}
+{"text": "I will pay ₹15000 monday via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 15000, "date": "monday"}, "language": "English"}
+{"text": "Capture new sales prospect Zaid expecting ₹50000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Zaid", "amount": 50000}, "language": "English"}
+{"text": "Ananya ka visa renew karwana hai, naya order daal do ₹3500 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ananya", "document_type": "visa", "amount": 3500}, "language": "Hinglish"}
+{"text": "Kavita promised to transfer ₹75000 on this weekend", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Kavita", "amount": 75000, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Amit ke liye ₹120000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Amit", "amount": 120000}, "language": "Hinglish"}
+{"text": "Suresh ka inquiry aaya hai ₹15000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Suresh", "amount": 15000}, "language": "Hinglish"}
+{"text": "Manish ka inquiry aaya hai ₹12000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Manish", "amount": 12000}, "language": "Hinglish"}
+{"text": "Sneha ke liye ek follow-up task schedule karo monday ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Sneha", "date": "monday"}, "language": "Hinglish"}
+{"text": "Amit ke liye ₹7500 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Amit", "amount": 7500}, "language": "Hinglish"}
+{"text": "Manish ka visa renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Manish", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Show me documents expiring soon for Rahul", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rahul"}, "language": "English"}
+{"text": "Bhai dekhna zara, Imran ka trade license kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Imran", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Rajesh ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rajesh"}, "language": "Hinglish"}
+{"text": "Suresh ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Suresh"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Ahmed ke visa ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Ahmed", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Zaid ke aadhaar card ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Zaid", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "kal tak 3500 account me aa jayenge Zaid ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Zaid", "amount": 3500, "date": "kal"}, "language": "Hinglish"}
+{"text": "Amit ka aadhaar card renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Amit", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Bhai kal shaam ko ₹7500 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 7500, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Check when Priya's rc book is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Priya", "document_type": "rc book"}, "language": "English"}
+{"text": "What is the current stage of Sameer's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sameer"}, "language": "English"}
+{"text": "What is the lifetime value and transaction history of Priya?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Priya"}, "language": "English"}
+{"text": "tomorrow ko subah Kavita ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Kavita", "date": "tomorrow"}, "language": "Hinglish"}
+{"text": "Vikram ka passport kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Vikram", "document_type": "passport"}, "language": "Hinglish"}
+{"text": "kal tak 5000 account me aa jayenge Ahmed ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Ahmed", "amount": 5000, "date": "kal"}, "language": "Hinglish"}
+{"text": "Bhai today ko ₹7500 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 7500, "date": "today"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Imran ka driving license kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Imran", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Ananya ke passport ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Ananya", "document_type": "passport"}, "language": "Hinglish"}
+{"text": "Vikram ka rc book job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Vikram", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "What is the lifetime value and transaction history of Rohan?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Rohan"}, "language": "English"}
+{"text": "Imran ka aadhaar card renew karwana hai, naya order daal do ₹75000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Imran", "document_type": "aadhaar card", "amount": 75000}, "language": "Hinglish"}
+{"text": "What is the lifetime value and transaction history of Zaid?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Zaid"}, "language": "English"}
+{"text": "Create a new lead for Amit with budget of ₹25000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Amit", "amount": 25000}, "language": "English"}
+{"text": "Deepak promised to transfer ₹25000 on somvaar", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Deepak", "amount": 25000, "date": "somvaar"}, "language": "English"}
+{"text": "agle hafte tak 1500 account me aa jayenge Rohan ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rohan", "amount": 1500, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "kal shaam tak 120000 account me aa jayenge Zaid ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Zaid", "amount": 120000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Deepak expecting ₹50000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Deepak", "amount": 50000}, "language": "English"}
+{"text": "Zaid ka inquiry aaya hai ₹1500 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Zaid", "amount": 1500}, "language": "Hinglish"}
+{"text": "Deepak ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Deepak"}, "language": "Hinglish"}
+{"text": "Bhai kal shaam ko ₹5000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 5000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "this weekend tak 12000 account me aa jayenge Ahmed ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Ahmed", "amount": 12000, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Rajesh ka driving license kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rajesh", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Create a new lead for Harsh with budget of ₹12000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "amount": 12000}, "language": "English"}
+{"text": "Rohan ka ₹75000 payment monday aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rohan", "amount": 75000, "date": "monday"}, "language": "Hinglish"}
+{"text": "Check when Vikram's aadhaar card is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Vikram", "document_type": "aadhaar card"}, "language": "English"}
+{"text": "Rohan promised to transfer ₹35000 on agle hafte", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rohan", "amount": 35000, "date": "agle hafte"}, "language": "English"}
+{"text": "Amit ka ₹35000 payment agle hafte aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Amit", "amount": 35000, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "I will pay ₹35000 next week via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 35000, "date": "next week"}, "language": "English"}
+{"text": "Priya ka pan card renew karwana hai, naya order daal do ₹15000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Priya", "document_type": "pan card", "amount": 15000}, "language": "Hinglish"}
+{"text": "aaj tak 50000 account me aa jayenge Rahul ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rahul", "amount": 50000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Priya expecting ₹1500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Priya", "amount": 1500}, "language": "English"}
+{"text": "Fatima ka rc book kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Fatima", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Harsh ke liye ₹5000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "amount": 5000}, "language": "Hinglish"}
+{"text": "Harsh ka pan card kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Harsh", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Create an urgent delivery task for operator today", "intent": "TASK_SCHEDULING", "entities": {"date": "monday"}, "language": "English"}
+{"text": "Harsh ka inquiry aaya hai ₹15000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "amount": 15000}, "language": "Hinglish"}
+{"text": "Show me the total net profit and margin for this month", "intent": "FINANCIAL_STATEMENT", "entities": {"period": "this_month"}, "language": "English"}
+{"text": "Rohan ka trade license kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rohan", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Rajesh promised to transfer ₹25000 on kal shaam", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rajesh", "amount": 25000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Rohan ka inquiry aaya hai ₹35000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rohan", "amount": 35000}, "language": "Hinglish"}
+{"text": "What is the lifetime value and transaction history of Manish?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Manish"}, "language": "English"}
+{"text": "Create a new lead for Suresh with budget of ₹5000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Suresh", "amount": 5000}, "language": "English"}
+{"text": "Check when Sameer's visa is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Sameer", "document_type": "visa"}, "language": "English"}
+{"text": "Capture new sales prospect Ahmed expecting ₹7500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ahmed", "amount": 7500}, "language": "English"}
+{"text": "this weekend ko subah Rajesh ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Rajesh", "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Sameer ke aadhaar card ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sameer", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Zaid ke liye ₹120000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Zaid", "amount": 120000}, "language": "Hinglish"}
+{"text": "Ananya ka ₹120000 payment agle hafte aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Ananya", "amount": 120000, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "Fatima ke liye ₹25000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Fatima", "amount": 25000}, "language": "Hinglish"}
+{"text": "Manish ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Manish"}, "language": "Hinglish"}
+{"text": "Faisal ko bolo baaki ₹25000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Faisal", "amount": 25000}, "language": "Hinglish"}
+{"text": "Rohan ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rohan"}, "language": "Hinglish"}
+{"text": "Amit ka inquiry aaya hai ₹1500 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Amit", "amount": 1500}, "language": "Hinglish"}
+{"text": "Deepak ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Deepak"}, "language": "Hinglish"}
+{"text": "this weekend ko subah Zaid ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Zaid", "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Bhai kal shaam ko ₹3500 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 3500, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Sameer ka visa kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Sameer", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Suresh promised to transfer ₹7500 on kal shaam", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Suresh", "amount": 7500, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹7500 balance kal shaam", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 7500, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Sneha ko bolo baaki ₹5000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Sneha", "amount": 5000}, "language": "Hinglish"}
+{"text": "Faisal ka ₹35000 payment somvaar aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Faisal", "amount": 35000, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "this weekend tak 75000 account me aa jayenge Vikram ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Vikram", "amount": 75000, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Faisal ke driving license ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Faisal", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "today tak 75000 account me aa jayenge Rahul ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rahul", "amount": 75000, "date": "today"}, "language": "Hinglish"}
+{"text": "Bhai aaj ko ₹50000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 50000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Rajesh ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Rajesh"}, "language": "Hinglish"}
+{"text": "Kavita ke liye ₹25000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Kavita", "amount": 25000}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Rahul expecting ₹5000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rahul", "amount": 5000}, "language": "English"}
+{"text": "Imran ko bolo baaki ₹120000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Imran", "amount": 120000}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Manish expecting ₹1500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Manish", "amount": 1500}, "language": "English"}
+{"text": "Bhai dekhna zara, Ahmed ka gumasta license kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ahmed", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Pooja ka ₹5000 payment tomorrow aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Pooja", "amount": 5000, "date": "tomorrow"}, "language": "Hinglish"}
+{"text": "kal shaam ko subah Faisal ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Faisal", "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Manish ka inquiry aaya hai ₹120000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Manish", "amount": 120000}, "language": "Hinglish"}
+{"text": "Faisal ka aadhaar card renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Faisal", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Sneha promised to transfer ₹25000 on somvaar", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sneha", "amount": 25000, "date": "somvaar"}, "language": "English"}
+{"text": "Settling the remaining ₹12000 balance aaj", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 12000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Suresh ka churn risk aur next best action kya hai?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Suresh"}, "language": "Hinglish"}
+{"text": "Sameer ka rc book job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sameer", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Pooja ne bola ₹1500 today tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Pooja", "amount": 1500, "date": "today"}, "language": "Hinglish"}
+{"text": "Rohan ko bolo baaki ₹7500 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Rohan", "amount": 7500}, "language": "Hinglish"}
+{"text": "Deepak ka pan card renew karwana hai, naya order daal do ₹120000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Deepak", "document_type": "pan card", "amount": 120000}, "language": "Hinglish"}
+{"text": "I will pay ₹75000 aaj via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 75000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Register fresh sales lead for Fatima from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Fatima"}, "language": "English"}
+{"text": "Bhai dekhna zara, Rahul ka aadhaar card kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rahul", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Harsh ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Harsh"}, "language": "Hinglish"}
+{"text": "Faisal ne bola ₹7500 this weekend tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Faisal", "amount": 7500, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹12000 balance kal shaam", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 12000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Fatima ka ₹75000 payment monday aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Fatima", "amount": 75000, "date": "monday"}, "language": "Hinglish"}
+{"text": "Rajesh ka ₹15000 payment this weekend aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rajesh", "amount": 15000, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Faisal expecting ₹50000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Faisal", "amount": 50000}, "language": "English"}
+{"text": "What is the current stage of Amit's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Amit"}, "language": "English"}
+{"text": "Suresh ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Suresh"}, "language": "Hinglish"}
+{"text": "Kavita ka inquiry aaya hai ₹12000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Kavita", "amount": 12000}, "language": "Hinglish"}
+{"text": "Register fresh sales lead for Zaid from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Zaid"}, "language": "English"}
+{"text": "Pooja ka ₹1500 payment today aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Pooja", "amount": 1500, "date": "today"}, "language": "Hinglish"}
+{"text": "Pooja ka rc book renew karwana hai, naya order daal do ₹3500 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Pooja", "document_type": "rc book", "amount": 3500}, "language": "Hinglish"}
+{"text": "Create a new lead for Deepak with budget of ₹75000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Deepak", "amount": 75000}, "language": "English"}
+{"text": "Ananya ka inquiry aaya hai ₹1500 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ananya", "amount": 1500}, "language": "Hinglish"}
+{"text": "Rajesh ka inquiry aaya hai ₹12000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rajesh", "amount": 12000}, "language": "Hinglish"}
+{"text": "Bhai today ko ₹5000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 5000, "date": "today"}, "language": "Hinglish"}
+{"text": "Sneha ka visa renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Sneha", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "today ko subah Ananya ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Ananya", "date": "today"}, "language": "Hinglish"}
+{"text": "Rahul ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rahul"}, "language": "Hinglish"}
+{"text": "Fatima ka visa job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Fatima", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Amit ka trade license kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Amit", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Faisal ka rc book renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Faisal", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Deepak ka trade license renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Deepak", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Bhai agle hafte ko ₹25000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 25000, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "I will pay ₹3500 this weekend via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 3500, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Zaid ne pucha gst certificate ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Zaid", "document_type": "gst certificate"}, "language": "Hinglish"}
+{"text": "Vikram ka passport job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Vikram", "document_type": "passport"}, "language": "Hinglish"}
+{"text": "Zaid ka ₹50000 payment aaj aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Zaid", "amount": 50000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Register fresh sales lead for Deepak from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Deepak"}, "language": "English"}
+{"text": "Priya ko bolo baaki ₹25000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Priya", "amount": 25000}, "language": "Hinglish"}
+{"text": "Sameer ko bolo baaki ₹15000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Sameer", "amount": 15000}, "language": "Hinglish"}
+{"text": "Faisal ke aadhaar card ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Faisal", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Manish ke visa ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Manish", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Check when Imran's passport is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Imran", "document_type": "passport"}, "language": "English"}
+{"text": "Sameer ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Sameer"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Amit ke rc book ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Amit", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "What is the current stage of Deepak's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Deepak"}, "language": "English"}
+{"text": "Settling the remaining ₹15000 balance this weekend", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 15000, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Check when Rajesh's trade license is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rajesh", "document_type": "trade license"}, "language": "English"}
+{"text": "Capture new sales prospect Imran expecting ₹25000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Imran", "amount": 25000}, "language": "English"}
+{"text": "Zaid ka rc book job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Zaid", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "What is the current stage of Rahul's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rahul"}, "language": "English"}
+{"text": "Capture new sales prospect Ananya expecting ₹1500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ananya", "amount": 1500}, "language": "English"}
+{"text": "Bhai dekhna zara, Deepak ka gumasta license kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Deepak", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Imran ne pucha pan card ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Imran", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Check if Harsh's job card is ready for delivery", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Harsh"}, "language": "English"}
+{"text": "Kavita ke pan card ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Kavita", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹20000 balance this weekend", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 20000, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "tomorrow tak 120000 account me aa jayenge Rahul ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rahul", "amount": 120000, "date": "tomorrow"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Ananya ka aadhaar card kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ananya", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Manish ka driving license job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Manish", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Kavita ke driving license ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Kavita", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "next week ko subah Ahmed ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Ahmed", "date": "next week"}, "language": "Hinglish"}
+{"text": "Manish ka visa job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Manish", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Deepak expecting ₹15000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Deepak", "amount": 15000}, "language": "English"}
+{"text": "Rahul ka churn risk aur next best action kya hai?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Rahul"}, "language": "Hinglish"}
+{"text": "Sneha ke trade license ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Sneha", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Vikram ke rc book ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Vikram", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Fatima ke visa ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Fatima", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹35000 balance tomorrow", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 35000, "date": "tomorrow"}, "language": "English"}
+{"text": "Sneha ke liye ₹7500 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sneha", "amount": 7500}, "language": "Hinglish"}
+{"text": "Rajesh ka churn risk aur next best action kya hai?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Rajesh"}, "language": "Hinglish"}
+{"text": "Kavita ka pan card job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Kavita", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Harsh ka rc book job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Harsh", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Faisal promised to transfer ₹75000 on agle hafte", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Faisal", "amount": 75000, "date": "agle hafte"}, "language": "English"}
+{"text": "What is the current stage of Fatima's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Fatima"}, "language": "English"}
+{"text": "Vikram ka rc book renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Vikram", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Sameer ka inquiry aaya hai ₹15000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sameer", "amount": 15000}, "language": "Hinglish"}
+{"text": "Faisal ne pucha gst certificate ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Faisal", "document_type": "gst certificate"}, "language": "Hinglish"}
+{"text": "Bhai next week ko ₹120000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 120000, "date": "next week"}, "language": "Hinglish"}
+{"text": "Check when Priya's passport is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Priya", "document_type": "passport"}, "language": "English"}
+{"text": "Settling the remaining ₹15000 balance kal shaam", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 15000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Register fresh sales lead for Rahul from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rahul"}, "language": "English"}
+{"text": "Rajesh ne pucha aadhaar card ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rajesh", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "What is the lifetime value and transaction history of Kavita?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Kavita"}, "language": "Hinglish"}
+{"text": "Amit ka churn risk aur next best action kya hai?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Amit"}, "language": "Hinglish"}
+{"text": "I will pay ₹20000 kal shaam via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 20000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Pooja promised to transfer ₹20000 on monday", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Pooja", "amount": 20000, "date": "monday"}, "language": "English"}
+{"text": "Create a new lead for Harsh with budget of ₹15000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "amount": 15000}, "language": "English"}
+{"text": "Rohan ne pucha pan card ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rohan", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Check if Rajesh's job card is ready for delivery", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rajesh"}, "language": "English"}
+{"text": "Bhai dekhna zara, Sneha ka visa kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Sneha", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Register fresh sales lead for Rohan from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rohan"}, "language": "English"}
+{"text": "Settling the remaining ₹15000 balance next week", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 15000, "date": "next week"}, "language": "English"}
+{"text": "Imran ke aadhaar card ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Imran", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Harsh ke liye ₹35000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "amount": 35000}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Harsh ke driving license ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Harsh", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "What is the current stage of Zaid's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Zaid"}, "language": "English"}
+{"text": "Suresh ka pan card job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Suresh", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Rajesh ne bola ₹1500 somvaar tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rajesh", "amount": 1500, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Imran ka ₹5000 payment today aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Imran", "amount": 5000, "date": "today"}, "language": "Hinglish"}
+{"text": "Faisal ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Faisal"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Rahul ka passport kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rahul", "document_type": "passport"}, "language": "Hinglish"}
+{"text": "Sameer ke liye ek follow-up task schedule karo next week ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Sameer", "date": "next week"}, "language": "Hinglish"}
+{"text": "Zaid ke visa ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Zaid", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Priya ka visa kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Priya", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Ananya ke liye ₹5000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ananya", "amount": 5000}, "language": "Hinglish"}
+{"text": "Deepak ka inquiry aaya hai ₹35000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Deepak", "amount": 35000}, "language": "Hinglish"}
+{"text": "Show me documents expiring soon for Rohan", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rohan"}, "language": "English"}
+{"text": "Show me documents expiring soon for Deepak", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Deepak"}, "language": "English"}
+{"text": "Register fresh sales lead for Ananya from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ananya"}, "language": "English"}
+{"text": "Imran ke visa ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Imran", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Zaid ka driving license kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Zaid", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Ahmed ka visa renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ahmed", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Create a new lead for Faisal with budget of ₹75000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Faisal", "amount": 75000}, "language": "English"}
+{"text": "Faisal promised to transfer ₹3500 on agle hafte", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Faisal", "amount": 3500, "date": "agle hafte"}, "language": "English"}
+{"text": "Harsh ke visa ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Harsh", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Vikram ka driving license kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Vikram", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Check when Kavita's rc book is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Kavita", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Ahmed ko bolo baaki ₹35000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Ahmed", "amount": 35000}, "language": "Hinglish"}
+{"text": "Kiska payment baaki hai last 30 days se?", "intent": "OVERDUE_INVOICES", "entities": {"period_days": 30}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Sneha expecting ₹3500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sneha", "amount": 3500}, "language": "English"}
+{"text": "Faisal ke liye ek follow-up task schedule karo today ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Faisal", "date": "today"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Rahul expecting ₹50000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rahul", "amount": 50000}, "language": "English"}
+{"text": "aaj ko subah Rohan ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Rohan", "date": "aaj"}, "language": "Hinglish"}
+{"text": "Priya ka trade license renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Priya", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "agle hafte ko subah Manish ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Manish", "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "somvaar ko subah Pooja ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Pooja", "date": "somvaar"}, "language": "Hinglish"}
+{"text": "What is the current stage of Rohan's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rohan"}, "language": "English"}
+{"text": "Pooja ke liye ek follow-up task schedule karo somvaar ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Pooja", "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Check if Sameer's job card is ready for delivery", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sameer"}, "language": "English"}
+{"text": "Amit ka rc book renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Amit", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Deepak ka inquiry aaya hai ₹75000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Deepak", "amount": 75000}, "language": "Hinglish"}
+{"text": "Imran ne bola ₹20000 kal shaam tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Imran", "amount": 20000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Pooja ka ₹20000 payment today aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Pooja", "amount": 20000, "date": "today"}, "language": "Hinglish"}
+{"text": "Manish ka pan card renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Manish", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Pooja ka trade license renew karwana hai, naya order daal do ₹75000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Pooja", "document_type": "trade license", "amount": 75000}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹3500 balance this weekend", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 3500, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Pooja ka churn risk aur next best action kya hai?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Pooja"}, "language": "Hinglish"}
+{"text": "Faisal ka gumasta license job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Faisal", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Register fresh sales lead for Vikram from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Vikram"}, "language": "English"}
+{"text": "kal tak 12000 account me aa jayenge Faisal ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Faisal", "amount": 12000, "date": "kal"}, "language": "Hinglish"}
+{"text": "Harsh ne pucha driving license ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Harsh", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Imran ke liye ₹50000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Imran", "amount": 50000}, "language": "Hinglish"}
+{"text": "Ahmed ne pucha trade license ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Ahmed", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Vikram ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Vikram"}, "language": "Hinglish"}
+{"text": "Ahmed ka gumasta license renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ahmed", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "today tak 1500 account me aa jayenge Sameer ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sameer", "amount": 1500, "date": "today"}, "language": "Hinglish"}
+{"text": "Sameer ka ₹50000 payment aaj aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sameer", "amount": 50000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Sameer ke liye ek follow-up task schedule karo agle hafte ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Sameer", "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "Rahul ka driving license renew karwana hai, naya order daal do ₹12000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rahul", "document_type": "driving license", "amount": 12000}, "language": "Hinglish"}
+{"text": "Create a new lead for Sneha with budget of ₹75000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sneha", "amount": 75000}, "language": "English"}
+{"text": "Register fresh sales lead for Pooja from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Pooja"}, "language": "English"}
+{"text": "Zaid promised to transfer ₹1500 on monday", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Zaid", "amount": 1500, "date": "monday"}, "language": "English"}
+{"text": "Rohan ka driving license renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rohan", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Check when Manish's gst certificate is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Manish", "document_type": "gst certificate"}, "language": "English"}
+{"text": "Settling the remaining ₹75000 balance kal", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 75000, "date": "kal"}, "language": "Hinglish"}
+{"text": "Bhai aaj ko ₹3500 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 3500, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Imran ke gst certificate ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Imran", "document_type": "gst certificate"}, "language": "Hinglish"}
+{"text": "Bhai monday ko ₹75000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 75000, "date": "monday"}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹5000 balance somvaar", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 5000, "date": "somvaar"}, "language": "English"}
+{"text": "Faisal ne pucha visa ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Faisal", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Priya ka inquiry aaya hai ₹1500 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Priya", "amount": 1500}, "language": "Hinglish"}
+{"text": "Create a new lead for Ahmed with budget of ₹5000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ahmed", "amount": 5000}, "language": "English"}
+{"text": "Amit ne pucha rc book ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Amit", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "today tak 35000 account me aa jayenge Sameer ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sameer", "amount": 35000, "date": "today"}, "language": "Hinglish"}
+{"text": "somvaar tak 15000 account me aa jayenge Imran ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Imran", "amount": 15000, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Rohan ka aadhaar card renew karwana hai, naya order daal do ₹35000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rohan", "document_type": "aadhaar card", "amount": 35000}, "language": "Hinglish"}
+{"text": "Rohan promised to transfer ₹7500 on next week", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rohan", "amount": 7500, "date": "next week"}, "language": "English"}
+{"text": "Fatima promised to transfer ₹3500 on monday", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Fatima", "amount": 3500, "date": "monday"}, "language": "English"}
+{"text": "What is the current stage of Kavita's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Kavita"}, "language": "Hinglish"}
+{"text": "Harsh ne pucha aadhaar card ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Harsh", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Kaunse clients ne abhi tak invoice pay nahi kiya?", "intent": "OVERDUE_INVOICES", "entities": {}, "language": "Hinglish"}
+{"text": "Sneha ka inquiry aaya hai ₹3500 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sneha", "amount": 3500}, "language": "Hinglish"}
+{"text": "Sameer ke visa ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Sameer", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Kiska aadhaar card agle 30 din me expire hoga?", "intent": "DOCUMENT_EXPIRATION", "entities": {"document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Pooja ne bola ₹75000 tomorrow tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Pooja", "amount": 75000, "date": "tomorrow"}, "language": "Hinglish"}
+{"text": "Sneha ka ₹120000 payment next week aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sneha", "amount": 120000, "date": "next week"}, "language": "Hinglish"}
+{"text": "Bhai kal shaam ko ₹120000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 120000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Imran promised to transfer ₹120000 on aaj", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Imran", "amount": 120000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Rahul ne bola ₹5000 somvaar tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rahul", "amount": 5000, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "What is the lifetime value and transaction history of Deepak?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Deepak"}, "language": "English"}
+{"text": "Manish ka trade license renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Manish", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "kal shaam ko subah Suresh ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Suresh", "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Faisal ka trade license renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Faisal", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Suresh ka gst certificate job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Suresh", "document_type": "gst certificate"}, "language": "Hinglish"}
+{"text": "Fatima ke liye ek follow-up task schedule karo kal ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Fatima", "date": "kal"}, "language": "Hinglish"}
+{"text": "Zaid ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Zaid"}, "language": "Hinglish"}
+{"text": "Amit ke liye ₹75000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Amit", "amount": 75000}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Priya ke trade license ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Priya", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Manish ne bola ₹3500 agle hafte tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Manish", "amount": 3500, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "Create a new lead for Sameer with budget of ₹12000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sameer", "amount": 12000}, "language": "English"}
+{"text": "Priya ke gst certificate ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Priya", "document_type": "gst certificate"}, "language": "Hinglish"}
+{"text": "Register fresh sales lead for Suresh from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Suresh"}, "language": "English"}
+{"text": "Kavita ka gumasta license kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Kavita", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Manish ke liye ek follow-up task schedule karo next week ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Manish", "date": "next week"}, "language": "Hinglish"}
+{"text": "Sneha ke liye ek follow-up task schedule karo somvaar ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Sneha", "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Sneha ko bolo baaki ₹20000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Sneha", "amount": 20000}, "language": "Hinglish"}
+{"text": "What is the lifetime value and transaction history of Imran?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Imran"}, "language": "English"}
+{"text": "Sneha promised to transfer ₹3500 on tomorrow", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sneha", "amount": 3500, "date": "tomorrow"}, "language": "English"}
+{"text": "Settling the remaining ₹75000 balance agle hafte", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 75000, "date": "agle hafte"}, "language": "English"}
+{"text": "Kavita ke liye ₹5000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Kavita", "amount": 5000}, "language": "Hinglish"}
+{"text": "Priya ke liye ₹7500 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Priya", "amount": 7500}, "language": "Hinglish"}
+{"text": "Bhai somvaar ko ₹120000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 120000, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Rahul ka driving license kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rahul", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Check if Vikram's job card is ready for delivery", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Vikram"}, "language": "English"}
+{"text": "Check if Kavita's job card is ready for delivery", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Kavita"}, "language": "Hinglish"}
+{"text": "Deepak ka ₹7500 payment tomorrow aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Deepak", "amount": 7500, "date": "tomorrow"}, "language": "Hinglish"}
+{"text": "Kiska passport agle 30 din me expire hoga?", "intent": "DOCUMENT_EXPIRATION", "entities": {"document_type": "passport"}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹120000 balance kal shaam", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 120000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Suresh expecting ₹25000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Suresh", "amount": 25000}, "language": "English"}
+{"text": "What is the current stage of Sneha's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sneha"}, "language": "English"}
+{"text": "Sameer ke aadhaar card ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Sameer", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Create a new lead for Faisal with budget of ₹20000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Faisal", "amount": 20000}, "language": "English"}
+{"text": "Agar koi invoice 45 din se zyada pending hai to list nikalo.", "intent": "OVERDUE_INVOICES", "entities": {"period_days": 30}, "language": "Hinglish"}
+{"text": "What is the current stage of Pooja's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Pooja"}, "language": "English"}
+{"text": "Kavita ka rc book renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Kavita", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Kavita ke liye ek follow-up task schedule karo today ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Kavita", "date": "today"}, "language": "Hinglish"}
+{"text": "Imran ke liye ₹7500 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Imran", "amount": 7500}, "language": "Hinglish"}
+{"text": "Sameer ka churn risk aur next best action kya hai?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Sameer"}, "language": "Hinglish"}
+{"text": "Show me documents expiring soon for Manish", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Manish"}, "language": "English"}
+{"text": "Suresh ka trade license job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Suresh", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Rohan ke liye ek follow-up task schedule karo tomorrow ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Rohan", "date": "tomorrow"}, "language": "Hinglish"}
+{"text": "Rajesh ka ₹20000 payment agle hafte aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rajesh", "amount": 20000, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "Sameer ko bolo baaki ₹3500 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Sameer", "amount": 3500}, "language": "Hinglish"}
+{"text": "aaj tak 35000 account me aa jayenge Rajesh ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rajesh", "amount": 35000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Bhai somvaar ko ₹75000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 75000, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Rohan ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Rohan"}, "language": "Hinglish"}
+{"text": "Amit ke trade license ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Amit", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Create a new lead for Ahmed with budget of ₹25000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ahmed", "amount": 25000}, "language": "English"}
+{"text": "Create a new lead for Manish with budget of ₹3500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Manish", "amount": 3500}, "language": "English"}
+{"text": "Bhai today ko ₹1500 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 1500, "date": "today"}, "language": "Hinglish"}
+{"text": "monday tak 120000 account me aa jayenge Imran ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Imran", "amount": 120000, "date": "monday"}, "language": "Hinglish"}
+{"text": "Ahmed ko bolo baaki ₹120000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Ahmed", "amount": 120000}, "language": "Hinglish"}
+{"text": "Faisal ka ₹7500 payment agle hafte aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Faisal", "amount": 7500, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "Bhai next week ko ₹3500 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 3500, "date": "next week"}, "language": "Hinglish"}
+{"text": "Sneha ka inquiry aaya hai ₹15000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sneha", "amount": 15000}, "language": "Hinglish"}
+{"text": "Bhai aaj ko ₹5000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 5000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Check when Kavita's aadhaar card is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Kavita", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Sneha ka trade license kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Sneha", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Kavita ka ₹50000 payment kal aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Kavita", "amount": 50000, "date": "kal"}, "language": "Hinglish"}
+{"text": "Check when Priya's gst certificate is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Priya", "document_type": "gst certificate"}, "language": "English"}
+{"text": "Fatima ke liye ₹15000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Fatima", "amount": 15000}, "language": "Hinglish"}
+{"text": "Aaj counter pe total kitna cash jama hua?", "intent": "FINANCIAL_STATEMENT", "entities": {"channel": "kirkol_pos"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Sneha ke visa ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sneha", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Vikram ke liye ₹35000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Vikram", "amount": 35000}, "language": "Hinglish"}
+{"text": "Rajesh ke trade license ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rajesh", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Check when Pooja's aadhaar card is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Pooja", "document_type": "aadhaar card"}, "language": "English"}
+{"text": "Bhai kal ko ₹50000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 50000, "date": "kal"}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹12000 balance agle hafte", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 12000, "date": "agle hafte"}, "language": "English"}
+{"text": "What is the current stage of Harsh's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Harsh"}, "language": "English"}
+{"text": "Create a new lead for Harsh with budget of ₹20000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "amount": 20000}, "language": "English"}
+{"text": "Imran ka inquiry aaya hai ₹15000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Imran", "amount": 15000}, "language": "Hinglish"}
+{"text": "Ahmed ne bola ₹3500 aaj tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Ahmed", "amount": 3500, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Register fresh sales lead for Ahmed from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ahmed"}, "language": "English"}
+{"text": "Suresh ka ₹120000 payment next week aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Suresh", "amount": 120000, "date": "next week"}, "language": "Hinglish"}
+{"text": "Zaid ka driving license renew karwana hai, naya order daal do ₹12000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Zaid", "document_type": "driving license", "amount": 12000}, "language": "Hinglish"}
+{"text": "kal shaam tak 12000 account me aa jayenge Zaid ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Zaid", "amount": 12000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "agle hafte ko subah Vikram ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Vikram", "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "monday tak 75000 account me aa jayenge Rohan ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rohan", "amount": 75000, "date": "monday"}, "language": "Hinglish"}
+{"text": "Show me documents expiring soon for Faisal", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Faisal"}, "language": "English"}
+{"text": "Ananya ka ₹12000 payment today aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Ananya", "amount": 12000, "date": "today"}, "language": "Hinglish"}
+{"text": "Create a new lead for Rohan with budget of ₹12000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rohan", "amount": 12000}, "language": "English"}
+{"text": "Ananya ka aadhaar card kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ananya", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Priya ke liye ₹12000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Priya", "amount": 12000}, "language": "Hinglish"}
+{"text": "Iss hafte total kitna kamaya business me?", "intent": "FINANCIAL_STATEMENT", "entities": {"period": "this_month"}, "language": "Hinglish"}
+{"text": "Create a new lead for Deepak with budget of ₹35000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Deepak", "amount": 35000}, "language": "English"}
+{"text": "Ananya ka ₹50000 payment somvaar aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Ananya", "amount": 50000, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Harsh ka aadhaar card renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Harsh", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Sneha ka visa job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sneha", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Sneha ke pan card ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sneha", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Amit ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Amit"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Suresh expecting ₹15000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Suresh", "amount": 15000}, "language": "English"}
+{"text": "Amit ka inquiry aaya hai ₹75000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Amit", "amount": 75000}, "language": "Hinglish"}
+{"text": "Manish ne bola ₹12000 today tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Manish", "amount": 12000, "date": "today"}, "language": "Hinglish"}
+{"text": "Fatima ka ₹1500 payment agle hafte aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Fatima", "amount": 1500, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "Deepak ke liye ₹12000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Deepak", "amount": 12000}, "language": "Hinglish"}
+{"text": "Amit ka visa kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Amit", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Amit ne bola ₹35000 kal tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Amit", "amount": 35000, "date": "kal"}, "language": "Hinglish"}
+{"text": "Check when Imran's visa is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Imran", "document_type": "visa"}, "language": "English"}
+{"text": "Kaam kahan tak pahucha Harsh ke visa ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Harsh", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "tomorrow tak 25000 account me aa jayenge Rahul ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rahul", "amount": 25000, "date": "tomorrow"}, "language": "Hinglish"}
+{"text": "Create a new lead for Ahmed with budget of ₹15000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ahmed", "amount": 15000}, "language": "English"}
+{"text": "Zaid ka inquiry aaya hai ₹15000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Zaid", "amount": 15000}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Rahul ka pan card kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rahul", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Ananya ke liye ek follow-up task schedule karo kal ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Ananya", "date": "kal"}, "language": "Hinglish"}
+{"text": "Harsh ka visa kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Harsh", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Kavita ne bola ₹7500 this weekend tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Kavita", "amount": 7500, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Amit ka driving license renew karwana hai, naya order daal do ₹5000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Amit", "document_type": "driving license", "amount": 5000}, "language": "Hinglish"}
+{"text": "somvaar tak 120000 account me aa jayenge Ahmed ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Ahmed", "amount": 120000, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Fatima ne bola ₹12000 somvaar tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Fatima", "amount": 12000, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "I will pay ₹12000 aaj via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 12000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Rahul ke liye ek follow-up task schedule karo somvaar ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Rahul", "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Vikram ka gst certificate renew karwana hai, naya order daal do ₹1500 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Vikram", "document_type": "gst certificate", "amount": 1500}, "language": "Hinglish"}
+{"text": "Check if Sneha's job card is ready for delivery", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sneha"}, "language": "English"}
+{"text": "Zaid ka inquiry aaya hai ₹5000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Zaid", "amount": 5000}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹20000 balance today", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 20000, "date": "today"}, "language": "English"}
+{"text": "Check when Vikram's visa is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Vikram", "document_type": "visa"}, "language": "English"}
+{"text": "Kavita ne pucha passport ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Kavita", "document_type": "passport"}, "language": "Hinglish"}
+{"text": "Faisal ka churn risk aur next best action kya hai?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Faisal"}, "language": "Hinglish"}
+{"text": "Pooja ka gumasta license kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Pooja", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Imran ka pan card kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Imran", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Sameer ne bola ₹1500 tomorrow tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sameer", "amount": 1500, "date": "tomorrow"}, "language": "Hinglish"}
+{"text": "aaj ko subah Ahmed ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Ahmed", "date": "aaj"}, "language": "Hinglish"}
+{"text": "Rahul ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Rahul"}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Ananya ka pan card kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ananya", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Sameer ne pucha aadhaar card ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sameer", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "What is the current stage of Imran's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Imran"}, "language": "English"}
+{"text": "What is the lifetime value and transaction history of Faisal?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Faisal"}, "language": "English"}
+{"text": "Capture new sales prospect Amit expecting ₹50000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Amit", "amount": 50000}, "language": "English"}
+{"text": "Ahmed ka ₹25000 payment kal aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Ahmed", "amount": 25000, "date": "kal"}, "language": "Hinglish"}
+{"text": "next week tak 3500 account me aa jayenge Sameer ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sameer", "amount": 3500, "date": "next week"}, "language": "Hinglish"}
+{"text": "I will pay ₹35000 kal shaam via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 35000, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Manish ne bola ₹15000 monday tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Manish", "amount": 15000, "date": "monday"}, "language": "Hinglish"}
+{"text": "Imran ne bola ₹3500 next week tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Imran", "amount": 3500, "date": "next week"}, "language": "Hinglish"}
+{"text": "Kavita ka complete history aur purchase profile dikhao.", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Kavita"}, "language": "Hinglish"}
+{"text": "Show me documents expiring soon for Rajesh", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rajesh"}, "language": "English"}
+{"text": "Priya ke rc book ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Priya", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "somvaar ko subah Suresh ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Suresh", "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Manish ke passport ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Manish", "document_type": "passport"}, "language": "Hinglish"}
+{"text": "Show me documents expiring soon for Kavita", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Kavita"}, "language": "Hinglish"}
+{"text": "Imran ne bola ₹1500 this weekend tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Imran", "amount": 1500, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Fatima ka gumasta license kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Fatima", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Sneha ne bola ₹25000 agle hafte tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sneha", "amount": 25000, "date": "agle hafte"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Manish ke aadhaar card ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Manish", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Pooja ne pucha gumasta license ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Pooja", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Ananya ne bola ₹25000 next week tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Ananya", "amount": 25000, "date": "next week"}, "language": "Hinglish"}
+{"text": "Bhai today ko ₹3500 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 3500, "date": "today"}, "language": "Hinglish"}
+{"text": "Amit ke liye ek follow-up task schedule karo next week ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Amit", "date": "next week"}, "language": "Hinglish"}
+{"text": "Register fresh sales lead for Sameer from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sameer"}, "language": "English"}
+{"text": "this weekend tak 12000 account me aa jayenge Zaid ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Zaid", "amount": 12000, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Pooja ka rc book job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Pooja", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Rajesh ka trade license renew karwana hai, naya order daal do ₹12000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rajesh", "document_type": "trade license", "amount": 12000}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Sneha expecting ₹1500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sneha", "amount": 1500}, "language": "English"}
+{"text": "Ananya ko bolo baaki ₹12000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Ananya", "amount": 12000}, "language": "Hinglish"}
+{"text": "Check when Suresh's gst certificate is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Suresh", "document_type": "gst certificate"}, "language": "English"}
+{"text": "Show me documents expiring soon for Fatima", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Fatima"}, "language": "English"}
+{"text": "Check if Faisal's job card is ready for delivery", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Faisal"}, "language": "English"}
+{"text": "Manish ka visa kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Manish", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Check when Ananya's trade license is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ananya", "document_type": "trade license"}, "language": "English"}
+{"text": "Harsh ka aadhaar card renew karwana hai, naya order daal do ₹25000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "document_type": "aadhaar card", "amount": 25000}, "language": "Hinglish"}
+{"text": "Create a new lead for Suresh with budget of ₹75000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Suresh", "amount": 75000}, "language": "English"}
+{"text": "Amit ne bola ₹25000 today tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Amit", "amount": 25000, "date": "today"}, "language": "Hinglish"}
+{"text": "Manish ke gst certificate ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Manish", "document_type": "gst certificate"}, "language": "Hinglish"}
+{"text": "Check if Manish's job card is ready for delivery", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Manish"}, "language": "English"}
+{"text": "Register fresh sales lead for Faisal from WhatsApp", "intent": "CREATE_LEAD", "entities": {"customer_name": "Faisal"}, "language": "English"}
+{"text": "Ahmed promised to transfer ₹15000 on tomorrow", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Ahmed", "amount": 15000, "date": "tomorrow"}, "language": "English"}
+{"text": "Kaam kahan tak pahucha Suresh ke driving license ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Suresh", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Sameer ka ₹50000 payment somvaar aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Sameer", "amount": 50000, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Imran promised to transfer ₹25000 on this weekend", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Imran", "amount": 25000, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Pooja ke liye ek follow-up task schedule karo aaj ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Pooja", "date": "aaj"}, "language": "Hinglish"}
+{"text": "Capture new sales prospect Priya expecting ₹7500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Priya", "amount": 7500}, "language": "English"}
+{"text": "What is the lifetime value and transaction history of Ananya?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Ananya"}, "language": "English"}
+{"text": "Check when Rajesh's pan card is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Rajesh", "document_type": "pan card"}, "language": "English"}
+{"text": "Bhai dekhna zara, Faisal ka pan card kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Faisal", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Check if Ahmed's job card is ready for delivery", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Ahmed"}, "language": "English"}
+{"text": "Sameer ke driving license ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Sameer", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Rahul ke liye ₹35000 ka naya lead banado", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rahul", "amount": 35000}, "language": "Hinglish"}
+{"text": "I will pay ₹5000 monday via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 5000, "date": "monday"}, "language": "English"}
+{"text": "Zaid ke liye ek follow-up task schedule karo aaj ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Zaid", "date": "aaj"}, "language": "Hinglish"}
+{"text": "Kaam kahan tak pahucha Imran ke gumasta license ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Imran", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Rohan ka ₹12000 payment kal aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rohan", "amount": 12000, "date": "kal"}, "language": "Hinglish"}
+{"text": "Check when Zaid's pan card is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Zaid", "document_type": "pan card"}, "language": "English"}
+{"text": "Capture new sales prospect Suresh expecting ₹20000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Suresh", "amount": 20000}, "language": "English"}
+{"text": "Amit ka passport renew karwana hai, naya order daal do ₹75000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Amit", "document_type": "passport", "amount": 75000}, "language": "Hinglish"}
+{"text": "Sneha ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Sneha"}, "language": "Hinglish"}
+{"text": "What is the current stage of Faisal's application?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Faisal"}, "language": "English"}
+{"text": "Capture new sales prospect Suresh expecting ₹7500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Suresh", "amount": 7500}, "language": "English"}
+{"text": "Kavita ka inquiry aaya hai ₹35000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Kavita", "amount": 35000}, "language": "Hinglish"}
+{"text": "Imran ko bolo baaki ₹1500 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Imran", "amount": 1500}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Imran ka aadhaar card kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Imran", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Settling the remaining ₹25000 balance aaj", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 25000, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Fatima ko bolo baaki ₹35000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Fatima", "amount": 35000}, "language": "Hinglish"}
+{"text": "Ananya ka pan card renew karwana hai, naya order daal do ₹35000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ananya", "document_type": "pan card", "amount": 35000}, "language": "Hinglish"}
+{"text": "Amit ke liye ek follow-up task schedule karo monday ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Amit", "date": "monday"}, "language": "Hinglish"}
+{"text": "I will pay ₹75000 next week via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 75000, "date": "next week"}, "language": "English"}
+{"text": "Fatima ne bola ₹7500 somvaar tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Fatima", "amount": 7500, "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Kavita ko bolo baaki ₹25000 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Kavita", "amount": 25000}, "language": "Hinglish"}
+{"text": "Ananya ka visa renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ananya", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "Ahmed ka inquiry aaya hai ₹7500 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ahmed", "amount": 7500}, "language": "Hinglish"}
+{"text": "Ananya ka gst certificate renew karwana hai, naya order daal do ₹50000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Ananya", "document_type": "gst certificate", "amount": 50000}, "language": "Hinglish"}
+{"text": "somvaar ko subah Ananya ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Ananya", "date": "somvaar"}, "language": "Hinglish"}
+{"text": "Rahul ne bola ₹1500 aaj tak transfer karega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rahul", "amount": 1500, "date": "aaj"}, "language": "Hinglish"}
+{"text": "Create a new lead for Harsh with budget of ₹120000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "amount": 120000}, "language": "English"}
+{"text": "Kaam kahan tak pahucha Rahul ke passport ka?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Rahul", "document_type": "passport"}, "language": "Hinglish"}
+{"text": "Bhai tomorrow ko ₹5000 GPay kar dunga", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 5000, "date": "tomorrow"}, "language": "Hinglish"}
+{"text": "Amit ka passport kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Amit", "document_type": "passport"}, "language": "Hinglish"}
+{"text": "Faisal ke liye ek follow-up task schedule karo next week ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Faisal", "date": "next week"}, "language": "Hinglish"}
+{"text": "Harsh ka passport renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Harsh", "document_type": "passport"}, "language": "Hinglish"}
+{"text": "Faisal ka driving license job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Faisal", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "somvaar ko subah Sameer ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Sameer", "date": "somvaar"}, "language": "Hinglish"}
+{"text": "I will pay ₹25000 this weekend via UPI", "intent": "PAYMENT_COMMITMENT", "entities": {"amount": 25000, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Fatima ka inquiry aaya hai ₹35000 value ka", "intent": "CREATE_LEAD", "entities": {"customer_name": "Fatima", "amount": 35000}, "language": "Hinglish"}
+{"text": "Amit ka trade license job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Amit", "document_type": "trade license"}, "language": "Hinglish"}
+{"text": "Zaid ka aadhaar card job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Zaid", "document_type": "aadhaar card"}, "language": "Hinglish"}
+{"text": "Ananya ka rc book renew karwana hai, validity check karo.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ananya", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Rohan promised to transfer ₹15000 on kal", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Rohan", "amount": 15000, "date": "kal"}, "language": "Hinglish"}
+{"text": "What is the lifetime value and transaction history of Sameer?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Sameer"}, "language": "English"}
+{"text": "Fatima ka pan card kab expire ho raha hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Fatima", "document_type": "pan card"}, "language": "Hinglish"}
+{"text": "Rohan ka gst certificate renew karwana hai, naya order daal do ₹75000 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Rohan", "document_type": "gst certificate", "amount": 75000}, "language": "Hinglish"}
+{"text": "Bhai dekhna zara, Ananya ka rc book kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ananya", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "Rajesh ko bolo baaki ₹1500 jaldi bhej de.", "intent": "OVERDUE_INVOICES", "entities": {"customer_name": "Rajesh", "amount": 1500}, "language": "Hinglish"}
+{"text": "Harsh ka trade license renew karwana hai, naya order daal do ₹7500 ka.", "intent": "CREATE_LEAD", "entities": {"customer_name": "Harsh", "document_type": "trade license", "amount": 7500}, "language": "Hinglish"}
+{"text": "Create a new lead for Kavita with budget of ₹5000", "intent": "CREATE_LEAD", "entities": {"customer_name": "Kavita", "amount": 5000}, "language": "Hinglish"}
+{"text": "Check when Priya's pan card is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Priya", "document_type": "pan card"}, "language": "English"}
+{"text": "Zaid promised to transfer ₹35000 on monday", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Zaid", "amount": 35000, "date": "monday"}, "language": "English"}
+{"text": "Sameer ke liye ek follow-up task schedule karo this weekend ko.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Sameer", "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Fatima ka gumasta license job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Fatima", "document_type": "gumasta license"}, "language": "Hinglish"}
+{"text": "Faisal ka ₹35000 payment tomorrow aayega", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Faisal", "amount": 35000, "date": "tomorrow"}, "language": "Hinglish"}
+{"text": "Zaid ne pucha driving license ready ho gaya kya dispatch ke liye.", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Zaid", "document_type": "driving license"}, "language": "Hinglish"}
+{"text": "Faisal ke rc book ki renewal date kya hai?", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Faisal", "document_type": "rc book"}, "language": "Hinglish"}
+{"text": "What is the lifetime value and transaction history of Sneha?", "intent": "CUSTOMER_360_QUERY", "entities": {"customer_name": "Sneha"}, "language": "English"}
+{"text": "Ahmed ka order Al Uzer me pending hai kya?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Ahmed"}, "language": "Hinglish"}
+{"text": "Suresh ka visa job status kya hai?", "intent": "JOB_STATUS_INQUIRY", "entities": {"customer_name": "Suresh", "document_type": "visa"}, "language": "Hinglish"}
+{"text": "today ko subah Amit ko call karne ka reminder set karo.", "intent": "TASK_SCHEDULING", "entities": {"customer_name": "Amit", "date": "today"}, "language": "Hinglish"}
+{"text": "Kavita promised to transfer ₹7500 on this weekend", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Kavita", "amount": 7500, "date": "this weekend"}, "language": "Hinglish"}
+{"text": "Show me documents expiring soon for Harsh", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Harsh"}, "language": "English"}
+{"text": "kal shaam tak 1500 account me aa jayenge Suresh ke", "intent": "PAYMENT_COMMITMENT", "entities": {"customer_name": "Suresh", "amount": 1500, "date": "kal shaam"}, "language": "Hinglish"}
+{"text": "Total business income aur net margin ka breakdown do", "intent": "FINANCIAL_STATEMENT", "entities": {}, "language": "Hinglish"}
+{"text": "Check when Faisal's trade license is expiring", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Faisal", "document_type": "trade license"}, "language": "English"}
+{"text": "Show me documents expiring soon for Ahmed", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ahmed"}, "language": "English"}
+{"text": "Bhai dekhna zara, Ananya ka gst certificate kab khatam ho raha hai.", "intent": "DOCUMENT_EXPIRATION", "entities": {"customer_name": "Ananya", "document_type": "gst certificate"}, "language": "Hinglish"}
+{"text": "Create a new lead for Sameer with budget of ₹1500", "intent": "CREATE_LEAD", "entities": {"customer_name": "Sameer", "amount": 1500}, "language": "English"}

@@ -1,0 +1,18 @@
+{
+  "total_unique_samples": 904,
+  "splits": {
+    "train": 632,
+    "validation": 136,
+    "test": 136
+  },
+  "intents_covered": [
+    "DOCUMENT_EXPIRATION",
+    "PAYMENT_COMMITMENT",
+    "FINANCIAL_STATEMENT",
+    "CREATE_LEAD",
+    "OVERDUE_INVOICES",
+    "JOB_STATUS_INQUIRY",
+    "TASK_SCHEDULING",
+    "CUSTOMER_360_QUERY"
+  ]
+}

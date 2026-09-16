@@ -1,0 +1,8 @@
+{
+  "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "adapter_type": "FUNCTION_CALLING_LORA",
+  "registered_schemas_count": 8,
+  "samples_trained": 5,
+  "enforce_json_grammar": true,
+  "status": "TRAINED_READY"
+}

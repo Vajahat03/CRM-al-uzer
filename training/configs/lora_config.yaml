@@ -1,0 +1,32 @@
+# Al Uzer Domain-Fine-Tuned Transformer LoRA Configuration
+base_model: "Qwen/Qwen2.5-0.5B-Instruct"  # Lightweight base Transformer for CPU/GPU fine-tuning
+output_dir: "models/aluzer-model"
+
+lora:
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  bias: "none"
+  task_type: "CAUSAL_LM"
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+training:
+  learning_rate: 2.0e-4
+  num_epochs: 3
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 4
+  warmup_ratio: 0.05
+  logging_steps: 10
+  save_strategy: "epoch"
+  evaluation_strategy: "epoch"
+  max_seq_length: 1024
+  fp16: false  # Set true if running on NVIDIA GPU with CUDA
+  bf16: false

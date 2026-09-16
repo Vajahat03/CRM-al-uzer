@@ -1,0 +1,174 @@
+{
+  "get_customer": {
+    "description": "Fetch customer master record, past jobs, and contact details by name or mobile",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "customerName": {
+          "type": "string"
+        },
+        "mobile": {
+          "type": "string"
+        }
+      }
+    },
+    "requires_confirmation": false
+  },
+  "get_overdue_invoices": {
+    "description": "Query tenant ledger for unpaid invoices exceeding payment terms",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "customerName": {
+          "type": "string"
+        },
+        "daysThreshold": {
+          "type": "integer",
+          "default": 30
+        },
+        "minAmount": {
+          "type": "number",
+          "default": 0
+        }
+      }
+    },
+    "requires_confirmation": false
+  },
+  "draft_payment_reminder": {
+    "description": "Prepare and queue a personalized WhatsApp payment chaser message",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "customerName": {
+          "type": "string"
+        },
+        "invoiceId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "channel": {
+          "type": "string",
+          "enum": [
+            "whatsapp",
+            "sms",
+            "email"
+          ]
+        }
+      },
+      "required": [
+        "customerName"
+      ]
+    },
+    "requires_confirmation": true
+  },
+  "create_lead": {
+    "description": "Register a new sales prospect into the pipeline",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "mobile": {
+          "type": "string"
+        },
+        "estimatedValue": {
+          "type": "number"
+        },
+        "source": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "requires_confirmation": true
+  },
+  "get_financial_statement": {
+    "description": "Calculate deterministic financial summary: job margins, Kirkol counter sales, and net profit",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "string",
+          "enum": [
+            "today",
+            "this_week",
+            "this_month",
+            "all_time"
+          ]
+        },
+        "includeKirkol": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "requires_confirmation": false
+  },
+  "get_expiring_documents": {
+    "description": "Search document vault for customer IDs, passports, or licenses expiring within threshold",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "customerName": {
+          "type": "string"
+        },
+        "documentType": {
+          "type": "string"
+        },
+        "daysThreshold": {
+          "type": "integer",
+          "default": 30
+        }
+      }
+    },
+    "requires_confirmation": false
+  },
+  "send_document_reminder": {
+    "description": "Dispatch automated WhatsApp renewal notice for an expiring document",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "customerName": {
+          "type": "string"
+        },
+        "documentType": {
+          "type": "string"
+        },
+        "documentId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "customerName",
+        "documentType"
+      ]
+    },
+    "requires_confirmation": true
+  },
+  "get_job_status": {
+    "description": "Check current 8-stage operational Kanban status of a job application",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "customerName": {
+          "type": "string"
+        },
+        "jobId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "customerName"
+      ]
+    },
+    "requires_confirmation": false
+  }
+}
