@@ -126,11 +126,8 @@ function saveToLocalStorage<T>(key: string, value: T): void {
   }
 }
 
-const defaultSupabaseUrl = 'https://bmcjnkginwdcljxcsrhy.supabase.co';
-const defaultSupabaseKey = 'sb_publishable_i_ENmcFg14Zdu90OxBW_Og_S9rj6QF_';
-
-const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string | undefined) || (import.meta.env.NEXT_PUBLIC_SUPABASE_URL as string | undefined) || defaultSupabaseUrl;
-const supabaseKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) || (import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY as string | undefined) || defaultSupabaseKey;
+const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string | undefined) || (import.meta.env.NEXT_PUBLIC_SUPABASE_URL as string | undefined);
+const supabaseKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) || (import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY as string | undefined);
 const supabase: SupabaseClient | null = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 function App() {
