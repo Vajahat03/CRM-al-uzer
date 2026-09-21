@@ -203,3 +203,5 @@ npm run build
 #### Q: Where is data stored if Google Sheets is offline?
 - The app stores all data locally in the browser (`localStorage`) and in your Supabase database. You can click **"Sync To Google Sheets"** at any time to push all records.
 >>>>>>> b4377bb (Add project files and features)
+#   a l - u z e r - w e b - a p p  
+ 
