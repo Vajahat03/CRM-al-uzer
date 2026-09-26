@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { KeyRound, Check, X, ShieldCheck, AlertCircle } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { KeyRound, Check, X, ShieldCheck, AlertCircle, BellRing, Volume2, VolumeX } from 'lucide-react';
 import { getOwnerPin, setOwnerPin, verifyOwnerPin } from './securityService';
 
 type Props = {
@@ -8,12 +8,116 @@ type Props = {
   onSuccess: () => void;
 };
 
+// High-Volume 5-Second Pulsing Security Alert Siren Synthesizer
+function start5SecondAlertSiren(): () => void {
+  try {
+    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContext) return () => {};
+    const ctx = new AudioContext();
+
+    // Master High-Gain Node (Maximal volume alert)
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(1.0, ctx.currentTime);
+    masterGain.connect(ctx.destination);
+
+    let isStopped = false;
+    const oscillators: OscillatorNode[] = [];
+
+    // Pulse 5 distinct high-pitch alarm bursts over 5 seconds (1 burst per second)
+    for (let i = 0; i < 5; i++) {
+      const startTime = ctx.currentTime + i * 1.0;
+      
+      // Dual-tone piercing alarm: 1100Hz primary + 1450Hz overtone
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const pulseGain = ctx.createGain();
+
+      osc1.type = 'sawtooth';
+      osc1.frequency.setValueAtTime(1100, startTime);
+      osc1.frequency.linearRampToValueAtTime(880, startTime + 0.4);
+
+      osc2.type = 'square';
+      osc2.frequency.setValueAtTime(1450, startTime);
+      osc2.frequency.linearRampToValueAtTime(1150, startTime + 0.4);
+
+      pulseGain.gain.setValueAtTime(0, startTime);
+      pulseGain.gain.linearRampToValueAtTime(0.7, startTime + 0.05);
+      pulseGain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.55);
+
+      osc1.connect(pulseGain);
+      osc2.connect(pulseGain);
+      pulseGain.connect(masterGain);
+
+      osc1.start(startTime);
+      osc1.stop(startTime + 0.6);
+      osc2.start(startTime);
+      osc2.stop(startTime + 0.6);
+
+      oscillators.push(osc1, osc2);
+    }
+
+    return () => {
+      if (!isStopped) {
+        isStopped = true;
+        try {
+          masterGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+          setTimeout(() => ctx.close(), 150);
+        } catch {
+          // ignore
+        }
+      }
+    };
+  } catch {
+    return () => {};
+  }
+}
+
 export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
   const [currentPin, setCurrentPin] = useState('');
   const [newPin, setNewPin] = useState('');
   const [confirmPin, setConfirmPin] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [alarmSecondsLeft, setAlarmSecondsLeft] = useState(5);
+  const [isAlarmActive, setIsAlarmActive] = useState(true);
+  const stopAlarmRef = useRef<(() => void) | null>(null);
+
+  // Trigger loud 5-second owner alert siren whenever modal opens
+  useEffect(() => {
+    if (!isOpen) return;
+
+    setIsAlarmActive(true);
+    setAlarmSecondsLeft(5);
+    stopAlarmRef.current = start5SecondAlertSiren();
+
+    const interval = setInterval(() => {
+      setAlarmSecondsLeft((prev) => {
+        if (prev <= 1) {
+          setIsAlarmActive(false);
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+      if (stopAlarmRef.current) {
+        stopAlarmRef.current();
+        stopAlarmRef.current = null;
+      }
+    };
+  }, [isOpen]);
+
+  const handleMuteAlarm = () => {
+    if (stopAlarmRef.current) {
+      stopAlarmRef.current();
+      stopAlarmRef.current = null;
+    }
+    setIsAlarmActive(false);
+    setAlarmSecondsLeft(0);
+  };
 
   if (!isOpen) return null;
 
@@ -54,8 +158,8 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
       className="modal-backdrop"
       style={{
         zIndex: 99999,
-        background: 'rgba(5, 10, 8, 0.85)',
-        backdropFilter: 'blur(10px)',
+        background: 'rgba(5, 10, 8, 0.88)',
+        backdropFilter: 'blur(12px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -67,13 +171,13 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
     >
       <div
         style={{
-          background: 'linear-gradient(145deg, #121e18 0%, #0d1511 100%)',
-          border: '1px solid rgba(234, 179, 8, 0.35)',
-          borderRadius: '20px',
+          background: 'linear-gradient(155deg, #13241b 0%, #0a140f 100%)',
+          border: '1px solid rgba(0, 255, 136, 0.35)',
+          borderRadius: '24px',
           padding: '28px 24px',
           width: '100%',
-          maxWidth: '400px',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+          maxWidth: '420px',
+          boxShadow: '0 25px 60px rgba(0,0,0,0.7), 0 0 30px rgba(0, 255, 136, 0.15)',
           position: 'relative',
         }}
       >
@@ -87,8 +191,8 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
             border: 'none',
             color: '#94a3b8',
             borderRadius: '50%',
-            width: '30px',
-            height: '30px',
+            width: '32px',
+            height: '32px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -99,23 +203,73 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
           <X size={16} />
         </button>
 
+        {/* 5-Second Loud Alert Siren Notification Banner */}
+        {isAlarmActive && (
+          <div
+            style={{
+              background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(185, 28, 28, 0.35) 100%)',
+              border: '1px solid #ef4444',
+              borderRadius: '12px',
+              padding: '10px 14px',
+              marginBottom: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              animation: 'pulseAlert 0.8s infinite alternate',
+              boxShadow: '0 0 20px rgba(239, 68, 68, 0.3)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <BellRing size={18} style={{ color: '#fca5a5', animation: 'spin 1s ease-in-out infinite' }} />
+              <div>
+                <strong style={{ color: '#ffffff', fontSize: '12px', display: 'block' }}>
+                  🚨 5-SEC SECURITY ALARM ACTIVE
+                </strong>
+                <span style={{ color: '#fecaca', fontSize: '11px' }}>
+                  Audible owner alert sounding ({alarmSecondsLeft}s left)
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleMuteAlarm}
+              style={{
+                background: 'rgba(0, 0, 0, 0.4)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                color: '#ffffff',
+                padding: '4px 8px',
+                borderRadius: '6px',
+                fontSize: '11px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                cursor: 'pointer',
+              }}
+              title="Silence alert tone"
+            >
+              <VolumeX size={13} /> Mute
+            </button>
+          </div>
+        )}
+
         <div style={{ textAlign: 'center', marginBottom: '18px' }}>
           <div
             style={{
               width: '52px',
               height: '52px',
               borderRadius: '50%',
-              background: 'rgba(234, 179, 8, 0.15)',
-              border: '1px solid rgba(234, 179, 8, 0.4)',
-              color: '#facc15',
+              background: 'rgba(0, 255, 136, 0.15)',
+              border: '1px solid rgba(0, 255, 136, 0.4)',
+              color: '#00ff88',
               display: 'grid',
               placeItems: 'center',
               margin: '0 auto 12px',
+              boxShadow: '0 0 16px rgba(0, 255, 136, 0.25)',
             }}
           >
             <KeyRound size={24} />
           </div>
-          <h3 style={{ color: '#ffffff', fontSize: '18px', fontWeight: 800, margin: '0 0 6px' }}>
+          <h3 style={{ color: '#ffffff', fontSize: '19px', fontWeight: 800, margin: '0 0 6px' }}>
             Change Owner Security PIN
           </h3>
           <p style={{ color: '#94a3b8', fontSize: '12.5px', margin: 0 }}>
@@ -177,13 +331,14 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
               placeholder="Enter current PIN"
               style={{
                 width: '100%',
-                padding: '9px 12px',
+                padding: '10px 12px',
                 borderRadius: '8px',
                 background: 'rgba(255, 255, 255, 0.07)',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 color: '#ffffff',
-                fontSize: '14px',
+                fontSize: '15px',
                 letterSpacing: '2px',
+                boxSizing: 'border-box',
               }}
               required
               autoFocus
@@ -200,16 +355,17 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
               maxLength={6}
               value={newPin}
               onChange={(e) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
-              placeholder="Enter new 6-digit PIN"
+              placeholder="Enter 6 new numbers"
               style={{
                 width: '100%',
-                padding: '9px 12px',
+                padding: '10px 12px',
                 borderRadius: '8px',
                 background: 'rgba(255, 255, 255, 0.07)',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 color: '#ffffff',
-                fontSize: '14px',
+                fontSize: '15px',
                 letterSpacing: '2px',
+                boxSizing: 'border-box',
               }}
               required
             />
@@ -228,58 +384,40 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
               placeholder="Re-enter new PIN"
               style={{
                 width: '100%',
-                padding: '9px 12px',
+                padding: '10px 12px',
                 borderRadius: '8px',
                 background: 'rgba(255, 255, 255, 0.07)',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 color: '#ffffff',
-                fontSize: '14px',
+                fontSize: '15px',
                 letterSpacing: '2px',
+                boxSizing: 'border-box',
               }}
               required
             />
           </div>
 
-          <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-            <button
-              type="button"
-              onClick={onClose}
-              style={{
-                flex: 1,
-                padding: '10px',
-                borderRadius: '8px',
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                color: '#cbd5e1',
-                fontSize: '13px',
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              style={{
-                flex: 2,
-                padding: '10px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #d97706 0%, #ea580c 100%)',
-                border: 'none',
-                color: '#ffffff',
-                fontSize: '13px',
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px',
-                boxShadow: '0 4px 14px rgba(234, 88, 12, 0.4)',
-              }}
-            >
-              <Check size={16} /> Save Security PIN
-            </button>
-          </div>
+          <button
+            type="submit"
+            style={{
+              marginTop: '6px',
+              padding: '12px 16px',
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              border: '1px solid rgba(52, 211, 153, 0.5)',
+              color: '#ffffff',
+              fontSize: '14px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              boxShadow: '0 4px 15px rgba(16, 185, 129, 0.35)',
+            }}
+          >
+            <Check size={16} /> Save Security PIN
+          </button>
         </form>
       </div>
     </div>

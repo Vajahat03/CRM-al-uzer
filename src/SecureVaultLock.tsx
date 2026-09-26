@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, ReactNode } from 'react';
-import { Lock, ShieldCheck, KeyRound, CheckCircle2, Sparkles, X } from 'lucide-react';
+import { Lock, ShieldCheck, KeyRound, CheckCircle2, Sparkles, X, Play } from 'lucide-react';
 import './SecureVaultLock.css';
 import { verifyOwnerPin } from './securityService';
 
@@ -43,7 +43,6 @@ function playSound(type: 'type' | 'error' | 'keyTurn' | 'magicalBurst') {
       osc.start();
       osc.stop(ctx.currentTime + 0.35);
     } else if (type === 'keyTurn') {
-      // Precision Metallic Mechanism
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'square';
@@ -56,7 +55,6 @@ function playSound(type: 'type' | 'error' | 'keyTurn' | 'magicalBurst') {
       osc.start();
       osc.stop(ctx.currentTime + 0.22);
     } else if (type === 'magicalBurst') {
-      // Harmonic Chime Fanfare for Magical CRM World Opening
       const chord = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
       chord.forEach((freq, idx) => {
         const osc = ctx.createOscillator();
@@ -109,13 +107,13 @@ export function SecureVaultLock({
 }: SecureVaultLockProps) {
   const [pin, setPin] = useState('');
   const [isError, setIsError] = useState(false);
-  const [isErupting, setIsErupting] = useState(false);
+  const [isPlayingVideoAnimation, setIsPlayingVideoAnimation] = useState(false);
   const [particles, setParticles] = useState<MagicalParticle[]>([]);
   const [dataCards, setDataCards] = useState<EruptingDataCard[]>([]);
   const [showPortalGlow, setShowPortalGlow] = useState(false);
-  const [showKeyAnimation, setShowKeyAnimation] = useState(false);
   const [isExpandingToDashboard, setIsExpandingToDashboard] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   // Focus input automatically on mount
   useEffect(() => {
@@ -124,39 +122,39 @@ export function SecureVaultLock({
     }
   }, [isUnlocked]);
 
-  // Trigger the Magical Neon Eruption & Seamless Dashboard Blend
+  // Trigger the Magical Neon Video Animation & Seamless Dashboard Blend
   const triggerMagicalWorldEruption = useCallback(() => {
-    setIsErupting(true);
-    setShowKeyAnimation(true);
+    setIsPlayingVideoAnimation(true);
+    setShowPortalGlow(true);
     playSound('keyTurn');
 
-    // Stage 1: Key turns in Neon Keyhole, Emerald shockwave expands
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+    }
+
+    // Stage 1: Keyhole Eruption particles + holographic dossier cards bursting outward
     setTimeout(() => {
-      setShowPortalGlow(true);
       playSound('magicalBurst');
 
-      const icons = [
-        '✨', '💎', '📈', '📊', '₹', '🪙', '🧾', '👑', '⚡', '🌟', '💼', '📁', '🟢'
-      ];
+      const icons = ['✨', '💎', '📈', '📊', '₹', '🪙', '🧾', '👑', '⚡', '🌟', '💼', '📁', '🟢'];
       const colors = ['#00ff88', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0', '#ffffff', '#fbbf24'];
       const newParticles: MagicalParticle[] = [];
 
-      // 60 high-velocity emerald crystal particles spraying outwards in all 360 degrees
-      for (let i = 0; i < 60; i++) {
-        const angle = (Math.PI * 2 * i) / 60 + (Math.random() - 0.5) * 0.4;
-        const velocity = 180 + Math.random() * 320;
+      for (let i = 0; i < 65; i++) {
+        const angle = (Math.PI * 2 * i) / 65 + (Math.random() - 0.5) * 0.4;
+        const velocity = 200 + Math.random() * 360;
         newParticles.push({
           id: i,
           icon: icons[Math.floor(Math.random() * icons.length)],
           tx: `${Math.cos(angle) * velocity}px`,
           ty: `${Math.sin(angle) * velocity}px`,
-          scale: `${0.8 + Math.random() * 1.5}`,
+          scale: `${0.9 + Math.random() * 1.5}`,
           rot: `${(Math.random() - 0.5) * 1080}deg`,
           color: colors[Math.floor(Math.random() * colors.length)],
         });
       }
 
-      // Live simulated Customer Cards & Reports bursting out in 3D perspective from keyhole
       const sampleBurstCards = [
         { label: '👤 AYASHA MAZHAR', sub: 'PAN CARD 400', amount: '₹400', tag: 'PAID', tagColor: '#10b981' },
         { label: '👤 NASIR RASHID', sub: 'DRIVING LICENSE', amount: '₹5,500', tag: 'PARTIAL', tagColor: '#f59e0b' },
@@ -168,7 +166,7 @@ export function SecureVaultLock({
 
       const newBurstCards: EruptingDataCard[] = sampleBurstCards.map((card, idx) => {
         const angle = -Math.PI / 2 + ((idx - (sampleBurstCards.length - 1) / 2) * 0.5);
-        const dist = 190 + Math.random() * 120;
+        const dist = 200 + Math.random() * 140;
         return {
           id: idx,
           label: card.label,
@@ -184,23 +182,22 @@ export function SecureVaultLock({
 
       setParticles(newParticles);
       setDataCards(newBurstCards);
-    }, 400);
+    }, 600);
 
-    // Stage 2: Seamless Dashboard Morph & Blend
+    // Stage 2: Seamless Dashboard Morph & Blend into live CRM
     setTimeout(() => {
       setIsExpandingToDashboard(true);
-    }, 1100);
+    }, 1800);
 
     // Stage 3: Complete transition to Unlocked CRM View
     setTimeout(() => {
-      setIsErupting(false);
+      setIsPlayingVideoAnimation(false);
       setShowPortalGlow(false);
-      setShowKeyAnimation(false);
       setIsExpandingToDashboard(false);
       setParticles([]);
       setDataCards([]);
       onUnlock();
-    }, 1600);
+    }, 2400);
   }, [onUnlock]);
 
   const verifyPin = useCallback((currentPin: string) => {
@@ -218,7 +215,7 @@ export function SecureVaultLock({
   }, [triggerMagicalWorldEruption]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isErupting) return;
+    if (isPlayingVideoAnimation) return;
     const clean = e.target.value.replace(/\D/g, '').slice(0, 6);
     playSound('type');
     setPin(clean);
@@ -256,13 +253,27 @@ export function SecureVaultLock({
       {/* Expanding Holographic Portal Shockwave */}
       {showPortalGlow && <div className="neon-emerald-shockwave" />}
 
-      {/* Main Glassmorphic Security Card in Project Neon Emerald Theme */}
-      <div className={`secure-vault-card ${isError ? 'shake' : ''} ${isErupting ? 'erupting' : ''}`}>
+      {/* Main Glassmorphic Security Card */}
+      <div className={`secure-vault-card ${isError ? 'shake' : ''} ${isPlayingVideoAnimation ? 'erupting' : ''}`}>
         
-        {/* 3D Realistic Metallic Padlock with Neon Emerald Glow */}
+        {/* Neon Emerald Themed Video & 3D Padlock Container */}
         <div className="padlock-3d-wrapper">
           
-          {/* Central Laser Beam shooting upward from Keyhole */}
+          {/* Custom Theme Color-Shifted Video Animation */}
+          <div className="video-animation-container">
+            <video
+              ref={videoRef}
+              src="/lock_animation.mp4"
+              playsInline
+              muted
+              loop={!isPlayingVideoAnimation}
+              autoPlay={false}
+              className={`neon-emerald-vault-video ${isPlayingVideoAnimation ? 'playing-burst' : 'idle-preview'}`}
+            />
+            <div className="video-color-filter-overlay" />
+          </div>
+
+          {/* Central Laser Beam shooting upward from Keyhole during unlock */}
           {showPortalGlow && <div className="neon-laser-geyser" />}
 
           {/* Magical Particles Bursting Outward */}
@@ -326,108 +337,6 @@ export function SecureVaultLock({
               ))}
             </div>
           )}
-
-          <svg viewBox="0 0 120 120" width="140" height="140" className="neon-padlock-svg">
-            <defs>
-              {/* Brushed Titanium & Neon Emerald Metallic Gradients */}
-              <linearGradient id="neonEmeraldBody" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#1e3a2b" />
-                <stop offset="35%" stopColor="#14532d" />
-                <stop offset="70%" stopColor="#064e3b" />
-                <stop offset="100%" stopColor="#022c22" />
-              </linearGradient>
-
-              <linearGradient id="neonEmeraldShackle" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#f8fafc" />
-                <stop offset="30%" stopColor="#6ee7b7" />
-                <stop offset="70%" stopColor="#10b981" />
-                <stop offset="100%" stopColor="#064e3b" />
-              </linearGradient>
-
-              <radialGradient id="neonKeyholeGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#ffffff" />
-                <stop offset="30%" stopColor="#00ff88" />
-                <stop offset="70%" stopColor="#10b981" />
-                <stop offset="100%" stopColor="#022c22" />
-              </radialGradient>
-
-              <filter id="neonEmeraldAura" x="-40%" y="-40%" width="180%" height="180%">
-                <feGaussianBlur stdDeviation="5" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
-            </defs>
-
-            {/* Padlock Steel Shackle (Arch) */}
-            <g className={`padlock-svg-shackle ${isErupting ? 'open' : ''}`}>
-              <path
-                d="M 38 60 L 38 34 C 38 20 82 20 82 34 L 82 60"
-                fill="none"
-                stroke="url(#neonEmeraldShackle)"
-                strokeWidth="11"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M 40 60 L 40 35 C 40 23 80 23 80 35 L 80 60"
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth="2"
-                strokeLinecap="round"
-                opacity="0.9"
-              />
-            </g>
-
-            {/* Padlock Body (Titanium Emerald Ingot) */}
-            <rect
-              x="22"
-              y="52"
-              width="76"
-              height="58"
-              rx="16"
-              fill="url(#neonEmeraldBody)"
-              stroke="#00ff88"
-              strokeWidth="2"
-              filter="url(#neonEmeraldAura)"
-            />
-
-            {/* Laser Tech Circuit Inscriptions */}
-            <path
-              d="M 28 64 L 40 64 L 45 70 M 92 64 L 80 64 L 75 70"
-              fill="none"
-              stroke="#00ff88"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              opacity="0.75"
-            />
-            <path
-              d="M 28 98 L 42 98 M 92 98 L 78 98"
-              fill="none"
-              stroke="#10b981"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              opacity="0.7"
-            />
-
-            {/* Glowing Neon Keyhole */}
-            <circle cx="60" cy="74" r="8" fill="url(#neonKeyholeGlow)" />
-            <path d="M 56 74 L 64 74 L 62 92 L 58 92 Z" fill="url(#neonKeyholeGlow)" />
-            <circle cx="60" cy="74" r="3.5" fill="#022c22" />
-            <rect x="58.5" y="74" width="3" height="15" rx="1.5" fill="#022c22" />
-
-            {/* Cyber Emerald Virtual Laser Key */}
-            {showKeyAnimation && (
-              <g className="virtual-laser-key">
-                <path
-                  d="M 60 120 L 60 76 M 60 84 L 66 84 M 60 90 L 65 90"
-                  stroke="#00ff88"
-                  strokeWidth="3.5"
-                  strokeLinecap="round"
-                  filter="url(#neonEmeraldAura)"
-                />
-                <circle cx="60" cy="116" r="6" fill="none" stroke="#00ff88" strokeWidth="3" />
-              </g>
-            )}
-          </svg>
         </div>
 
         {/* Header Titles */}
@@ -442,7 +351,6 @@ export function SecureVaultLock({
 
         {/* Minimalist 6-Digit Neon PIN Indicator (No Bulky Keypad) */}
         <div className="pin-input-section" onClick={() => inputRef.current?.focus()}>
-          {/* Hidden Real Input for Keyboard / Mobile Typing */}
           <input
             ref={inputRef}
             type="password"
@@ -455,7 +363,6 @@ export function SecureVaultLock({
             autoFocus
           />
 
-          {/* 6 Glowing Emerald Pin Dots */}
           <div className="pin-dots-display">
             {[0, 1, 2, 3, 4, 5].map((idx) => {
               const isFilled = idx < pin.length;
@@ -472,7 +379,7 @@ export function SecureVaultLock({
 
           <div className="pin-hint">
             <KeyRound size={14} />
-            <span>Type 6-digit Owner PIN on keyboard or tap above to enter</span>
+            <span>Type 6-digit Owner PIN to trigger lock animation (Default: <code>163692</code>)</span>
           </div>
         </div>
 
