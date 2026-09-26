@@ -329,6 +329,15 @@ export function CRMDashboard({
   };
 
   const handleRequestOwnerAuth = (action: 'edit' | 'delete', customer: CustomerRecord) => {
+    if (isOwnerMode) {
+      if (action === 'edit') {
+        setEditing(customer);
+        setShowForm(true);
+      } else {
+        setDeleting(customer);
+      }
+      return;
+    }
     setOwnerAuth({
       isOpen: true,
       action,

@@ -317,14 +317,21 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <form
+          onSubmit={handleSubmit}
+          style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
+          autoComplete="off"
+          data-lpignore="true"
+          data-form-type="other"
+        >
           <div>
             <label style={{ fontSize: '12px', fontWeight: 700, color: '#cbd5e1', display: 'block', marginBottom: '4px' }}>
               Current 6-Digit PIN
             </label>
             <input
-              type="password"
+              type="text"
               inputMode="numeric"
+              pattern="[0-9]*"
               maxLength={6}
               value={currentPin}
               onChange={(e) => setCurrentPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
@@ -337,9 +344,16 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 color: '#ffffff',
                 fontSize: '15px',
-                letterSpacing: '2px',
+                letterSpacing: '3px',
                 boxSizing: 'border-box',
+                WebkitTextSecurity: 'disc',
               }}
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+              data-lpignore="true"
+              data-form-type="other"
+              name="current_security_pin_field"
               required
               autoFocus
             />
@@ -350,8 +364,9 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
               New 6-Digit PIN
             </label>
             <input
-              type="password"
+              type="text"
               inputMode="numeric"
+              pattern="[0-9]*"
               maxLength={6}
               value={newPin}
               onChange={(e) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
@@ -364,9 +379,16 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 color: '#ffffff',
                 fontSize: '15px',
-                letterSpacing: '2px',
+                letterSpacing: '3px',
                 boxSizing: 'border-box',
+                WebkitTextSecurity: 'disc',
               }}
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+              data-lpignore="true"
+              data-form-type="other"
+              name="new_security_pin_field"
               required
             />
           </div>
@@ -376,8 +398,9 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
               Confirm New 6-Digit PIN
             </label>
             <input
-              type="password"
+              type="text"
               inputMode="numeric"
+              pattern="[0-9]*"
               maxLength={6}
               value={confirmPin}
               onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
@@ -390,9 +413,16 @@ export function ChangePinModal({ isOpen, onClose, onSuccess }: Props) {
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 color: '#ffffff',
                 fontSize: '15px',
-                letterSpacing: '2px',
+                letterSpacing: '3px',
                 boxSizing: 'border-box',
+                WebkitTextSecurity: 'disc',
               }}
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
+              data-lpignore="true"
+              data-form-type="other"
+              name="confirm_security_pin_field"
               required
             />
           </div>

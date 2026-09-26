@@ -124,6 +124,16 @@ export function CustomersPage({
   );
 
   const handleRequestOwnerAuth = (action: 'edit' | 'delete', customer: CustomerRecord) => {
+    if (isOwnerMode) {
+      if (action === 'edit') {
+        setEditing(customer);
+        if (onEdit) onEdit(customer);
+      } else if (action === 'delete') {
+        setDeleting(customer);
+        if (onDelete) onDelete(customer);
+      }
+      return;
+    }
     setOwnerAuth({
       isOpen: true,
       action,

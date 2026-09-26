@@ -251,7 +251,14 @@ export function CustomerModal({
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <form className="modal" style={{ maxWidth: isMultiItem ? '680px' : '560px' }} onSubmit={handleSaveAndClose}>
+      <form
+        className="modal"
+        style={{ maxWidth: isMultiItem ? '680px' : '560px' }}
+        onSubmit={handleSaveAndClose}
+        autoComplete="off"
+        data-lpignore="true"
+        data-form-type="other"
+      >
         <div className="modal-header">
           <div>
             <span className="eyebrow accent">{editing ? 'EDIT TRANSACTION' : 'NEW TRANSACTION'}</span>

@@ -100,7 +100,7 @@ interface EruptingDataCard {
 export function SecureVaultLock({
   children,
   title = 'Confidential Financial & Reports Vault',
-  subtitle = 'Enter 6-digit Security PIN to open the vault (Default: 163692)',
+  subtitle = 'Enter 6-digit Security PIN',
   isUnlocked,
   onUnlock,
   onLock,
@@ -130,7 +130,7 @@ export function SecureVaultLock({
 
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch(() => { });
     }
 
     // Stage 1: Keyhole Eruption particles + holographic dossier cards bursting outward
@@ -255,10 +255,10 @@ export function SecureVaultLock({
 
       {/* Main Glassmorphic Security Card */}
       <div className={`secure-vault-card ${isError ? 'shake' : ''} ${isPlayingVideoAnimation ? 'erupting' : ''}`}>
-        
+
         {/* Neon Emerald Themed Video & 3D Padlock Container */}
         <div className="padlock-3d-wrapper">
-          
+
           {/* Custom Theme Color-Shifted Video Animation */}
           <div className="video-animation-container">
             <video
@@ -353,13 +353,21 @@ export function SecureVaultLock({
         <div className="pin-input-section" onClick={() => inputRef.current?.focus()}>
           <input
             ref={inputRef}
-            type="password"
+            type="text"
             inputMode="numeric"
             pattern="[0-9]*"
             maxLength={6}
             value={pin}
             onChange={handleInputChange}
             className="hidden-pin-input"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            data-lpignore="true"
+            data-form-type="other"
+            name="security_vault_pin_field"
+            id="security_vault_pin_field"
             autoFocus
           />
 
@@ -379,7 +387,7 @@ export function SecureVaultLock({
 
           <div className="pin-hint">
             <KeyRound size={14} />
-            <span>Type 6-digit Owner PIN to trigger lock animation (Default: <code>163692</code>)</span>
+            <span>Type 6-digit Owner PIN to trigger lock animation</span>
           </div>
         </div>
 
@@ -411,7 +419,7 @@ export function SecureReportGateModal({
           onUnlock={onSuccess}
           onLock={onClose}
           title="Owner Security Gate"
-          subtitle="Enter 6-digit PIN to activate full Owner Mode (Default: 163692)"
+          subtitle="Enter 6-digit PIN"
         >
           <div />
         </SecureVaultLock>
