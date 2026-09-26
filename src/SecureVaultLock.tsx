@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, ReactNode } from 'react';
-import { Lock, Flame, KeyRound } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef, ReactNode } from 'react';
+import { Lock, ShieldCheck, KeyRound, CheckCircle2, Sparkles, X } from 'lucide-react';
 import './SecureVaultLock.css';
 import { verifyOwnerPin } from './securityService';
 
@@ -12,8 +12,8 @@ interface SecureVaultLockProps {
   onLock: () => void;
 }
 
-// Cinematic Web Audio Synthesizer for Volcanic Eruption & Mechanical Lock
-function playSound(type: 'type' | 'error' | 'keyTurn' | 'eruption') {
+// Crystalline Web Audio Synthesizer for Neon Mechanical Lock & Magical World Eruption
+function playSound(type: 'type' | 'error' | 'keyTurn' | 'magicalBurst') {
   try {
     const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
     if (!AudioContext) return;
@@ -23,7 +23,7 @@ function playSound(type: 'type' | 'error' | 'keyTurn' | 'eruption') {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(850 + Math.random() * 150, ctx.currentTime);
+      osc.frequency.setValueAtTime(950 + Math.random() * 120, ctx.currentTime);
       gain.gain.setValueAtTime(0.04, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
       osc.connect(gain);
@@ -34,75 +34,50 @@ function playSound(type: 'type' | 'error' | 'keyTurn' | 'eruption') {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(150, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + 0.3);
-      gain.gain.setValueAtTime(0.14, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      osc.frequency.setValueAtTime(140, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.35);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start();
-      osc.stop(ctx.currentTime + 0.3);
+      osc.stop(ctx.currentTime + 0.35);
     } else if (type === 'keyTurn') {
-      // Heavy metallic ratchet and mechanical turn
+      // Precision Metallic Mechanism
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'square';
-      osc.frequency.setValueAtTime(280, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(560, ctx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.08, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+      osc.frequency.setValueAtTime(320, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(640, ctx.currentTime + 0.18);
+      gain.gain.setValueAtTime(0.07, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start();
-      osc.stop(ctx.currentTime + 0.2);
-    } else if (type === 'eruption') {
-      // Subterranean Volcanic Rumble
-      const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 1.5, ctx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      for (let i = 0; i < noiseBuffer.length; i++) {
-        output[i] = Math.random() * 2 - 1;
-      }
-      const whiteNoise = ctx.createBufferSource();
-      whiteNoise.buffer = noiseBuffer;
-
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(100, ctx.currentTime);
-      filter.frequency.linearRampToValueAtTime(800, ctx.currentTime + 0.5);
-      filter.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 1.4);
-
-      const noiseGain = ctx.createGain();
-      noiseGain.gain.setValueAtTime(0.18, ctx.currentTime);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.4);
-
-      whiteNoise.connect(filter);
-      filter.connect(noiseGain);
-      noiseGain.connect(ctx.destination);
-      whiteNoise.start();
-      whiteNoise.stop(ctx.currentTime + 1.4);
-
-      // Crystalline Eruption Fanfare Chime
-      const notes = [440, 554.37, 659.25, 880, 1108.73, 1318.51];
-      notes.forEach((freq, idx) => {
+      osc.stop(ctx.currentTime + 0.22);
+    } else if (type === 'magicalBurst') {
+      // Harmonic Chime Fanfare for Magical CRM World Opening
+      const chord = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+      chord.forEach((freq, idx) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, ctx.currentTime + 0.2 + idx * 0.08);
-        gain.gain.setValueAtTime(0, ctx.currentTime + 0.2 + idx * 0.08);
-        gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.22 + idx * 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2 + idx * 0.08 + 0.6);
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + 0.1 + idx * 0.07);
+        gain.gain.setValueAtTime(0, ctx.currentTime + 0.1 + idx * 0.07);
+        gain.gain.linearRampToValueAtTime(0.1, ctx.currentTime + 0.12 + idx * 0.07);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1 + idx * 0.07 + 0.8);
         osc.connect(gain);
         gain.connect(ctx.destination);
-        osc.start(ctx.currentTime + 0.2 + idx * 0.08);
-        osc.stop(ctx.currentTime + 0.2 + idx * 0.08 + 0.65);
+        osc.start(ctx.currentTime + 0.1 + idx * 0.07);
+        osc.stop(ctx.currentTime + 0.1 + idx * 0.07 + 0.85);
       });
     }
   } catch {
-    // ignore audio blocks
+    // Ignore audio restrictions
   }
 }
 
-interface VolcanoParticle {
+interface MagicalParticle {
   id: number;
   icon: string;
   tx: string;
@@ -126,8 +101,8 @@ interface EruptingDataCard {
 
 export function SecureVaultLock({
   children,
-  title = 'Confidential Income & Financial Reports',
-  subtitle = 'Enter 6-digit security code to trigger keyhole unlock and decrypt data',
+  title = 'Confidential Financial & Reports Vault',
+  subtitle = 'Enter 6-digit Security PIN to open the vault (Default: 163692)',
   isUnlocked,
   onUnlock,
   onLock,
@@ -135,40 +110,47 @@ export function SecureVaultLock({
   const [pin, setPin] = useState('');
   const [isError, setIsError] = useState(false);
   const [isErupting, setIsErupting] = useState(false);
-  const [particles, setParticles] = useState<VolcanoParticle[]>([]);
+  const [particles, setParticles] = useState<MagicalParticle[]>([]);
   const [dataCards, setDataCards] = useState<EruptingDataCard[]>([]);
-  const [showMagmaRing, setShowMagmaRing] = useState(false);
-  const [showGeyserBeam, setShowGeyserBeam] = useState(false);
+  const [showPortalGlow, setShowPortalGlow] = useState(false);
   const [showKeyAnimation, setShowKeyAnimation] = useState(false);
+  const [isExpandingToDashboard, setIsExpandingToDashboard] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // Trigger grand volcanic eruption sequence from keyhole
-  const triggerVolcanicEruption = useCallback(() => {
+  // Focus input automatically on mount
+  useEffect(() => {
+    if (!isUnlocked && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isUnlocked]);
+
+  // Trigger the Magical Neon Eruption & Seamless Dashboard Blend
+  const triggerMagicalWorldEruption = useCallback(() => {
     setIsErupting(true);
     setShowKeyAnimation(true);
     playSound('keyTurn');
 
-    // Stage 1: Key turns, Geyser erupts from keyhole
+    // Stage 1: Key turns in Neon Keyhole, Emerald shockwave expands
     setTimeout(() => {
-      setShowGeyserBeam(true);
-      setShowMagmaRing(true);
-      playSound('eruption');
+      setShowPortalGlow(true);
+      playSound('magicalBurst');
 
       const icons = [
-        '🌋', '🔥', '💥', '✨', '⚡', '₹', '💰', '💵', '🪙', '📈', '📊', '💎', '🧾', '👑'
+        '✨', '💎', '📈', '📊', '₹', '🪙', '🧾', '👑', '⚡', '🌟', '💼', '📁', '🟢'
       ];
-      const colors = ['#ff4500', '#ff8c00', '#ffd700', '#ff3b30', '#34d399', '#fef08a', '#ffffff'];
-      const newParticles: VolcanoParticle[] = [];
+      const colors = ['#00ff88', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0', '#ffffff', '#fbbf24'];
+      const newParticles: MagicalParticle[] = [];
 
-      // Generate 55 high-velocity volcanic particles spraying upward in a geyser cone from the keyhole
-      for (let i = 0; i < 55; i++) {
-        const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.6;
-        const velocity = 200 + Math.random() * 380;
+      // 60 high-velocity emerald crystal particles spraying outwards in all 360 degrees
+      for (let i = 0; i < 60; i++) {
+        const angle = (Math.PI * 2 * i) / 60 + (Math.random() - 0.5) * 0.4;
+        const velocity = 180 + Math.random() * 320;
         newParticles.push({
           id: i,
           icon: icons[Math.floor(Math.random() * icons.length)],
           tx: `${Math.cos(angle) * velocity}px`,
           ty: `${Math.sin(angle) * velocity}px`,
-          scale: `${0.8 + Math.random() * 1.4}`,
+          scale: `${0.8 + Math.random() * 1.5}`,
           rot: `${(Math.random() - 0.5) * 1080}deg`,
           color: colors[Math.floor(Math.random() * colors.length)],
         });
@@ -178,15 +160,15 @@ export function SecureVaultLock({
       const sampleBurstCards = [
         { label: '👤 AYASHA MAZHAR', sub: 'PAN CARD 400', amount: '₹400', tag: 'PAID', tagColor: '#10b981' },
         { label: '👤 NASIR RASHID', sub: 'DRIVING LICENSE', amount: '₹5,500', tag: 'PARTIAL', tagColor: '#f59e0b' },
-        { label: '📊 MONTHLY REVENUE', sub: 'Gross Profit', amount: '₹28,450', tag: '+24%', tagColor: '#3b82f6' },
+        { label: '📊 MONTHLY REVENUE', sub: 'Gross Profit', amount: '₹28,450', tag: '+24%', tagColor: '#10b981' },
         { label: '🧾 THERMAL BILL', sub: 'Al Uzer Receipt', amount: '₹1,200', tag: 'DELIVERED', tagColor: '#10b981' },
         { label: '👤 SAHAIL HAKIM', sub: 'PAN CARD 500', amount: '₹450', tag: 'PAID', tagColor: '#10b981' },
-        { label: '📈 PROFIT MARGIN', sub: 'Total Income', amount: '₹18,900', tag: 'STABLE', tagColor: '#8b5cf6' },
+        { label: '📈 PROFIT MARGIN', sub: 'Total Income', amount: '₹18,900', tag: 'HEALTHY', tagColor: '#00ff88' },
       ];
 
       const newBurstCards: EruptingDataCard[] = sampleBurstCards.map((card, idx) => {
-        const angle = -Math.PI / 2 + ((idx - (sampleBurstCards.length - 1) / 2) * 0.45);
-        const dist = 180 + Math.random() * 140;
+        const angle = -Math.PI / 2 + ((idx - (sampleBurstCards.length - 1) / 2) * 0.5);
+        const dist = 190 + Math.random() * 120;
         return {
           id: idx,
           label: card.label,
@@ -196,120 +178,72 @@ export function SecureVaultLock({
           tagColor: card.tagColor,
           tx: `${Math.cos(angle) * dist}px`,
           ty: `${Math.sin(angle) * dist}px`,
-          rot: `${(Math.random() - 0.5) * 35}deg`,
+          rot: `${(Math.random() - 0.5) * 30}deg`,
         };
       });
 
       setParticles(newParticles);
       setDataCards(newBurstCards);
-    }, 450);
+    }, 400);
 
-    // Stage 2: Data bursts outwards from keyhole and takes over the page
+    // Stage 2: Seamless Dashboard Morph & Blend
+    setTimeout(() => {
+      setIsExpandingToDashboard(true);
+    }, 1100);
+
+    // Stage 3: Complete transition to Unlocked CRM View
     setTimeout(() => {
       setIsErupting(false);
-      setShowGeyserBeam(false);
-      setShowMagmaRing(false);
+      setShowPortalGlow(false);
       setShowKeyAnimation(false);
+      setIsExpandingToDashboard(false);
       setParticles([]);
       setDataCards([]);
       onUnlock();
-    }, 1450);
+    }, 1600);
   }, [onUnlock]);
 
   const verifyPin = useCallback((currentPin: string) => {
     if (verifyOwnerPin(currentPin)) {
-      triggerVolcanicEruption();
+      triggerMagicalWorldEruption();
     } else {
       setIsError(true);
       playSound('error');
       setTimeout(() => {
         setPin('');
         setIsError(false);
+        if (inputRef.current) inputRef.current.focus();
       }, 700);
     }
-  }, [triggerVolcanicEruption]);
+  }, [triggerMagicalWorldEruption]);
 
-  const handleDigit = (digit: string) => {
-    if (pin.length >= 6 || isErupting) return;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isErupting) return;
+    const clean = e.target.value.replace(/\D/g, '').slice(0, 6);
     playSound('type');
-    const nextPin = pin + digit;
-    setPin(nextPin);
-    if (nextPin.length === 6) {
-      verifyPin(nextPin);
+    setPin(clean);
+    if (clean.length === 6) {
+      verifyPin(clean);
     }
   };
-
-  const handleBackspace = () => {
-    if (pin.length === 0 || isErupting) return;
-    playSound('type');
-    setPin(pin.slice(0, -1));
-  };
-
-  const handleClear = () => {
-    if (isErupting) return;
-    playSound('type');
-    setPin('');
-  };
-
-  // Keyboard support for immediate typing
-  useEffect(() => {
-    if (isUnlocked) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key >= '0' && e.key <= '9') {
-        handleDigit(e.key);
-      } else if (e.key === 'Backspace') {
-        handleBackspace();
-      } else if (e.key === 'Escape' || e.key === 'Delete') {
-        handleClear();
-      } else if (e.key === 'Enter') {
-        if (pin.length > 0) verifyPin(pin);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isUnlocked, pin, verifyPin]);
 
   if (isUnlocked) {
     return (
-      <div className="data-volcanic-eruption">
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '16px',
-            padding: '10px 16px',
-            background: 'linear-gradient(135deg, rgba(234, 88, 12, 0.25) 0%, rgba(15, 23, 42, 0.7) 100%)',
-            border: '1px solid rgba(251, 146, 60, 0.4)',
-            borderRadius: '14px',
-            backdropFilter: 'blur(8px)',
-            boxShadow: '0 4px 20px rgba(234, 88, 12, 0.15)',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span
-              style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                background: '#f97316',
-                boxShadow: '0 0 12px #f97316',
-                display: 'inline-block',
-              }}
-            />
-            <span style={{ fontSize: '12px', fontWeight: 800, color: '#fed7aa', letterSpacing: '0.6px' }}>
-              🌋 FINANCIAL VAULT UNLOCKED • LIVE ERUPTION ACTIVE
+      <div className="unlocked-vault-wrapper">
+        <div className="unlocked-banner">
+          <div className="banner-left">
+            <span className="live-emerald-dot" />
+            <span className="banner-title">
+              👑 OWNER MODE ACTIVE • ALL CONFIDENTIAL METRICS UNLOCKED
             </span>
           </div>
           <button
-            className="vault-lock-badge"
+            className="vault-exit-btn"
             onClick={onLock}
-            title="Lock this vault immediately"
+            title="Lock back into restricted Employee Mode"
           >
             <Lock size={13} />
-            <span>Lock Vault</span>
+            <span>Exit Owner Mode</span>
           </button>
         </div>
         {children}
@@ -318,18 +252,20 @@ export function SecureVaultLock({
   }
 
   return (
-    <div className="secure-vault-container">
-      {/* Volcanic Magma Rings */}
-      {showMagmaRing && <div className="volcano-magma-ring" />}
+    <div className={`secure-vault-container ${isExpandingToDashboard ? 'morphing-to-crm' : ''}`}>
+      {/* Expanding Holographic Portal Shockwave */}
+      {showPortalGlow && <div className="neon-emerald-shockwave" />}
 
-      {/* Main Glassmorphic Security Card */}
+      {/* Main Glassmorphic Security Card in Project Neon Emerald Theme */}
       <div className={`secure-vault-card ${isError ? 'shake' : ''} ${isErupting ? 'erupting' : ''}`}>
-        {/* 3D Realistic Padlock & Keyhole */}
+        
+        {/* 3D Realistic Metallic Padlock with Neon Emerald Glow */}
         <div className="padlock-3d-wrapper">
-          {/* Volcanic Geyser Beam Shooting Upwards from Keyhole */}
-          {showGeyserBeam && <div className="volcano-geyser-beam" />}
+          
+          {/* Central Laser Beam shooting upward from Keyhole */}
+          {showPortalGlow && <div className="neon-laser-geyser" />}
 
-          {/* Volcanic Particles Erupting Outward from Keyhole */}
+          {/* Magical Particles Bursting Outward */}
           {particles.length > 0 && (
             <div className="volcano-particle-layer">
               {particles.map((p) => (
@@ -343,7 +279,7 @@ export function SecureVaultLock({
                       '--scale': p.scale,
                       '--rot': p.rot,
                       color: p.color,
-                      filter: `drop-shadow(0 0 10px ${p.color}) drop-shadow(0 0 20px #ff4500)`,
+                      filter: `drop-shadow(0 0 12px ${p.color}) drop-shadow(0 0 24px #00ff88)`,
                     } as React.CSSProperties
                   }
                 >
@@ -353,7 +289,7 @@ export function SecureVaultLock({
             </div>
           )}
 
-          {/* Holographic Customer Records & Charts Erupting out from Keyhole */}
+          {/* Holographic CRM Dossiers & Charts Erupting out */}
           {dataCards.length > 0 && (
             <div className="volcano-particle-layer">
               {dataCards.map((card) => (
@@ -369,59 +305,64 @@ export function SecureVaultLock({
                   }
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                    <span>{card.label}</span>
+                    <span style={{ fontWeight: 700 }}>{card.label}</span>
                     <span
                       style={{
                         fontSize: '9px',
-                        padding: '1px 5px',
+                        padding: '2px 6px',
                         borderRadius: '4px',
                         background: card.tagColor,
-                        color: '#ffffff',
+                        color: '#091811',
+                        fontWeight: 800,
                       }}
                     >
                       {card.tag}
                     </span>
                   </div>
-                  <div style={{ fontSize: '9.5px', color: '#94a3b8', marginTop: '2px' }}>
-                    {card.sub} • <strong style={{ color: '#facc15' }}>{card.amount}</strong>
+                  <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '3px' }}>
+                    {card.sub} • <strong style={{ color: '#00ff88' }}>{card.amount}</strong>
                   </div>
                 </div>
               ))}
             </div>
           )}
 
-          <svg viewBox="0 0 120 120" width="130" height="130" style={{ filter: 'drop-shadow(0 12px 24px rgba(0,0,0,0.6))' }}>
+          <svg viewBox="0 0 120 120" width="140" height="140" className="neon-padlock-svg">
             <defs>
-              <linearGradient id="goldMetallic" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#fef08a" />
-                <stop offset="30%" stopColor="#f59e0b" />
-                <stop offset="70%" stopColor="#ea580c" />
-                <stop offset="100%" stopColor="#7c2d12" />
+              {/* Brushed Titanium & Neon Emerald Metallic Gradients */}
+              <linearGradient id="neonEmeraldBody" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#1e3a2b" />
+                <stop offset="35%" stopColor="#14532d" />
+                <stop offset="70%" stopColor="#064e3b" />
+                <stop offset="100%" stopColor="#022c22" />
               </linearGradient>
-              <linearGradient id="shackleChrome" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ffffff" />
-                <stop offset="40%" stopColor="#cbd5e1" />
-                <stop offset="70%" stopColor="#64748b" />
-                <stop offset="100%" stopColor="#334155" />
+
+              <linearGradient id="neonEmeraldShackle" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#f8fafc" />
+                <stop offset="30%" stopColor="#6ee7b7" />
+                <stop offset="70%" stopColor="#10b981" />
+                <stop offset="100%" stopColor="#064e3b" />
               </linearGradient>
-              <radialGradient id="magmaCore" cx="50%" cy="50%" r="50%">
+
+              <radialGradient id="neonKeyholeGlow" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stopColor="#ffffff" />
-                <stop offset="35%" stopColor="#ffd700" />
-                <stop offset="70%" stopColor="#ff4500" />
-                <stop offset="100%" stopColor="#8b0000" />
+                <stop offset="30%" stopColor="#00ff88" />
+                <stop offset="70%" stopColor="#10b981" />
+                <stop offset="100%" stopColor="#022c22" />
               </radialGradient>
-              <filter id="volcanoGlow" x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur stdDeviation="4" result="blur" />
+
+              <filter id="neonEmeraldAura" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="5" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
               </filter>
             </defs>
 
-            {/* Padlock Shackle (Steel Arch) */}
+            {/* Padlock Steel Shackle (Arch) */}
             <g className={`padlock-svg-shackle ${isErupting ? 'open' : ''}`}>
               <path
                 d="M 38 60 L 38 34 C 38 20 82 20 82 34 L 82 60"
                 fill="none"
-                stroke="url(#shackleChrome)"
+                stroke="url(#neonEmeraldShackle)"
                 strokeWidth="11"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -430,142 +371,117 @@ export function SecureVaultLock({
                 d="M 40 60 L 40 35 C 40 23 80 23 80 35 L 80 60"
                 fill="none"
                 stroke="#ffffff"
-                strokeWidth="2.5"
+                strokeWidth="2"
                 strokeLinecap="round"
-                opacity="0.85"
+                opacity="0.9"
               />
             </g>
 
-            {/* Padlock Body (3D Gold Ingot Look) */}
+            {/* Padlock Body (Titanium Emerald Ingot) */}
             <rect
               x="22"
               y="52"
               width="76"
               height="58"
               rx="16"
-              fill="url(#goldMetallic)"
-              stroke="#fef08a"
-              strokeWidth="1.5"
-              filter="url(#volcanoGlow)"
+              fill="url(#neonEmeraldBody)"
+              stroke="#00ff88"
+              strokeWidth="2"
+              filter="url(#neonEmeraldAura)"
             />
-            {/* Inner bevel */}
-            <rect
-              x="26"
-              y="56"
-              width="68"
-              height="50"
-              rx="12"
+
+            {/* Laser Tech Circuit Inscriptions */}
+            <path
+              d="M 28 64 L 40 64 L 45 70 M 92 64 L 80 64 L 75 70"
               fill="none"
-              stroke="rgba(255,255,255,0.4)"
-              strokeWidth="1"
+              stroke="#00ff88"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              opacity="0.75"
+            />
+            <path
+              d="M 28 98 L 42 98 M 92 98 L 78 98"
+              fill="none"
+              stroke="#10b981"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              opacity="0.7"
             />
 
-            {/* Glowing Volcanic Keyhole */}
-            <circle
-              className={`keyhole-core ${isErupting ? 'erupting' : ''}`}
-              cx="60"
-              cy="74"
-              r="7"
-              fill="url(#magmaCore)"
-            />
-            <polygon
-              points="56,76 64,76 62,90 58,90"
-              fill="url(#magmaCore)"
-            />
+            {/* Glowing Neon Keyhole */}
+            <circle cx="60" cy="74" r="8" fill="url(#neonKeyholeGlow)" />
+            <path d="M 56 74 L 64 74 L 62 92 L 58 92 Z" fill="url(#neonKeyholeGlow)" />
+            <circle cx="60" cy="74" r="3.5" fill="#022c22" />
+            <rect x="58.5" y="74" width="3" height="15" rx="1.5" fill="#022c22" />
 
-            {/* Animated Golden Key inserting and turning */}
+            {/* Cyber Emerald Virtual Laser Key */}
             {showKeyAnimation && (
-              <g className="virtual-key">
-                <circle cx="60" cy="56" r="8" fill="none" stroke="#ffd700" strokeWidth="3" filter="drop-shadow(0 0 6px #ff8c00)" />
-                <line x1="60" y1="64" x2="60" y2="78" stroke="#ffd700" strokeWidth="4" strokeLinecap="round" />
-                <line x1="60" y1="74" x2="65" y2="74" stroke="#ffd700" strokeWidth="3" strokeLinecap="round" />
-                <line x1="60" y1="78" x2="66" y2="78" stroke="#ffd700" strokeWidth="3" strokeLinecap="round" />
+              <g className="virtual-laser-key">
+                <path
+                  d="M 60 120 L 60 76 M 60 84 L 66 84 M 60 90 L 65 90"
+                  stroke="#00ff88"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  filter="url(#neonEmeraldAura)"
+                />
+                <circle cx="60" cy="116" r="6" fill="none" stroke="#00ff88" strokeWidth="3" />
               </g>
             )}
           </svg>
         </div>
 
-        {/* Header Badges & Title */}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(234, 88, 12, 0.2)', border: '1px solid rgba(251, 146, 60, 0.5)', padding: '4px 14px', borderRadius: '20px', marginBottom: '12px' }}>
-          <Flame size={14} style={{ color: '#fb923c' }} />
-          <span style={{ fontSize: '11px', fontWeight: 800, color: '#fdba74', letterSpacing: '1px' }}>
-            {isErupting ? '🌋 VOLCANIC DATA ERUPTION IN PROGRESS' : 'RESTRICTED FINANCIAL VAULT'}
-          </span>
+        {/* Header Titles */}
+        <div className="vault-header-text">
+          <div className="vault-shield-badge">
+            <ShieldCheck size={14} />
+            <span>EXECUTIVE OWNER VAULT</span>
+          </div>
+          <h2>{title}</h2>
+          <p>{subtitle}</p>
         </div>
 
-        <h2 style={{ fontSize: '21px', fontWeight: 800, color: '#ffffff', margin: '0 0 6px', letterSpacing: '-0.4px' }}>
-          {title}
-        </h2>
-        <p style={{ fontSize: '13px', color: '#cbd5e1', margin: '0 0 16px', lineHeight: 1.4 }}>
-          {subtitle}
-        </p>
+        {/* Minimalist 6-Digit Neon PIN Indicator (No Bulky Keypad) */}
+        <div className="pin-input-section" onClick={() => inputRef.current?.focus()}>
+          {/* Hidden Real Input for Keyboard / Mobile Typing */}
+          <input
+            ref={inputRef}
+            type="password"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={6}
+            value={pin}
+            onChange={handleInputChange}
+            className="hidden-pin-input"
+            autoFocus
+          />
 
-        {/* 6-Digit PIN Capsules Indicator */}
-        <div className="pin-capsules">
-          {[0, 1, 2, 3, 4, 5].map((index) => {
-            const isFilled = pin.length > index;
-            return (
-              <div
-                key={index}
-                className={`pin-capsule ${isFilled ? 'filled' : ''} ${isError ? 'error' : ''}`}
-              />
-            );
-          })}
+          {/* 6 Glowing Emerald Pin Dots */}
+          <div className="pin-dots-display">
+            {[0, 1, 2, 3, 4, 5].map((idx) => {
+              const isFilled = idx < pin.length;
+              return (
+                <div
+                  key={idx}
+                  className={`pin-dot ${isFilled ? 'filled' : ''} ${idx === pin.length ? 'current' : ''}`}
+                >
+                  {isFilled && <span className="pin-dot-glow" />}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="pin-hint">
+            <KeyRound size={14} />
+            <span>Type 6-digit Owner PIN on keyboard or tap above to enter</span>
+          </div>
         </div>
 
-        {/* Numeric Security Keypad */}
-        <div className="vault-keypad">
-          {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((digit) => (
-            <button
-              key={digit}
-              className="vault-key-btn"
-              onClick={() => handleDigit(digit)}
-              disabled={isErupting}
-              type="button"
-            >
-              {digit}
-            </button>
-          ))}
-          <button
-            className="vault-key-btn action clear"
-            onClick={handleClear}
-            disabled={isErupting}
-            type="button"
-            title="Clear code"
-          >
-            CLEAR
-          </button>
-          <button
-            className="vault-key-btn"
-            onClick={() => handleDigit('0')}
-            disabled={isErupting}
-            type="button"
-          >
-            0
-          </button>
-          <button
-            className="vault-key-btn action submit"
-            onClick={() => verifyPin(pin)}
-            disabled={isErupting || pin.length === 0}
-            type="button"
-            title="Unlock Vault"
-          >
-            <KeyRound size={18} />
-          </button>
-        </div>
-
-        {/* Quick hint & keyboard support note */}
-        <div style={{ marginTop: '20px', fontSize: '11px', color: '#94a3b8' }}>
-          <span>⌨ Press 0-9 on your keyboard for rapid unlock</span>
-        </div>
       </div>
     </div>
   );
 }
 
-/**
- * Modal Wrapper to protect PDF report generation with the same passcode
- */
+// Modal Gate Wrapper for Triggering Owner Mode
 export function SecureReportGateModal({
   isOpen,
   onClose,
@@ -578,50 +494,17 @@ export function SecureReportGateModal({
   if (!isOpen) return null;
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.88)',
-        backdropFilter: 'blur(12px)',
-        zIndex: 99999,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '16px',
-      }}
-    >
-      <div style={{ position: 'relative', width: '100%', maxWidth: '500px' }}>
-        <button
-          onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '-44px',
-            right: '0',
-            background: 'rgba(255,255,255,0.15)',
-            color: '#ffffff',
-            border: '1px solid rgba(255,255,255,0.3)',
-            borderRadius: '50%',
-            width: '36px',
-            height: '36px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            zIndex: 100,
-          }}
-          title="Close"
-        >
-          ✕
-        </button>
+    <div className="secure-modal-overlay">
+      <button className="secure-modal-close-btn" onClick={onClose} title="Cancel">
+        <X size={22} />
+      </button>
+      <div className="secure-modal-content">
         <SecureVaultLock
-          title="Protected Monthly PDF Report"
-          subtitle="Enter passcode to erupt and download business financial reports"
           isUnlocked={false}
-          onUnlock={() => {
-            onSuccess();
-          }}
+          onUnlock={onSuccess}
           onLock={onClose}
+          title="Owner Security Gate"
+          subtitle="Enter 6-digit PIN to activate full Owner Mode (Default: 163692)"
         >
           <div />
         </SecureVaultLock>

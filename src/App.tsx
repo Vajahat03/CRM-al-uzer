@@ -134,7 +134,11 @@ const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string | undefined) ||
 const supabaseKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) || (import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY as string | undefined);
 const supabase: SupabaseClient | null = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
+import { RolePortalPage } from './RolePortalPage';
+import { LogOut } from 'lucide-react';
+
 function App() {
+  const [showRolePortal, setShowRolePortal] = useState(false);
   const [page, setPage] = useState<Page>('dashboard');
   const [workTypes, setWorkTypes] = useState<WorkType[]>(() =>
     loadFromLocalStorage(LOCAL_STORAGE_KEYS.WORK_TYPES, seedWorkTypes)
@@ -172,7 +176,7 @@ function App() {
     setAppRole('employee');
     setStoredAppRole('employee');
     setIsVaultUnlocked(false);
-    notify('Switched to Employee Mode. Confidential metrics locked.');
+    notify('🔒 Exited Owner Mode. You are now in Employee Mode.');
   };
 
   const handleUnlockOwner = () => {
@@ -818,6 +822,28 @@ function App() {
     { label: 'Income & Reports', page: 'income', icon: BarChart3, requiresOwner: true },
   ];
 
+  if (showRolePortal) {
+    return (
+      <RolePortalPage
+        onSelectEmployee={() => {
+          setAppRole('employee');
+          setStoredAppRole('employee');
+          setIsVaultUnlocked(false);
+          setShowRolePortal(false);
+          notify('👷 Entered as Employee. Operational mode ready.');
+        }}
+        onSelectOwner={() => {
+          setAppRole('owner');
+          setStoredAppRole('owner');
+          setIsVaultUnlocked(true);
+          setShowRolePortal(false);
+          notify('👑 Entered as Owner. All permissions unlocked.');
+        }}
+        customerCount={customers.length}
+      />
+    );
+  }
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -839,7 +865,7 @@ function App() {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   {target === 'customers' && <small>{customers.length}</small>}
-                  {isLocked && <span title="Owner Protected" style={{ fontSize: '11px', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>🔒 Lock</span>}
+                  {isLocked && <Lock size={13} style={{ color: '#94a3b8', opacity: 0.8 }} title="Owner Protected" />}
                 </div>
               </button>
             );
@@ -850,13 +876,13 @@ function App() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <FileSpreadsheet size={18} /><span>Google Sheets</span><span className="connected-dot" />
             </div>
-            {!isOwnerMode && <span style={{ fontSize: '11px', color: '#ef4444' }}>🔒</span>}
+            {!isOwnerMode && <Lock size={13} style={{ color: '#94a3b8', opacity: 0.8 }} />}
           </button>
           <button className="nav-item" onClick={handleOpenMonthlyReport} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <FileDown size={18} /><span>Monthly PDF Report</span>
             </div>
-            {!isOwnerMode && <span style={{ fontSize: '11px', color: '#ef4444' }}>🔒</span>}
+            {!isOwnerMode && <Lock size={13} style={{ color: '#94a3b8', opacity: 0.8 }} />}
           </button>
           <button className="nav-item" onClick={downloadBackup} title="Download a complete offline backup file of all records">
             <Download size={18} /><span>Backup Data (JSON)</span>
@@ -865,7 +891,7 @@ function App() {
             <Upload size={18} /><span>Restore Backup</span>
             <input type="file" accept=".json" onChange={handleRestoreFile} style={{ display: 'none' }} />
           </label>
-          <div className="profile" style={{ cursor: 'pointer', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '10px' }}>
+          <div className="profile" style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '10px' }}>
             <div className="avatar" style={{ background: isOwnerMode ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #f59e0b, #d97706)' }}>
               {isOwnerMode ? '👑' : '👷'}
             </div>
@@ -875,6 +901,13 @@ function App() {
                 {isOwnerMode ? 'Full Admin Access' : 'Restricted (Add Only)'}
               </span>
             </div>
+            <button
+              onClick={() => setShowRolePortal(true)}
+              title="Switch Role Portal"
+              style={{ background: 'transparent', padding: '6px', color: '#94a3b8', borderRadius: '6px', display: 'grid', placeItems: 'center' }}
+            >
+              <LogOut size={16} />
+            </button>
           </div>
         </div>
       </aside>
@@ -895,8 +928,31 @@ function App() {
                 <button className="button secondary" style={{ padding: '6px 10px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }} onClick={() => setShowChangePinModal(true)} title="Change 6-digit Owner Security PIN">
                   <KeyRound size={13} /> <span>Change PIN</span>
                 </button>
-                <button className="button secondary" style={{ padding: '6px 10px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(239, 68, 68, 0.08)', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.2)' }} onClick={handleSwitchToEmployee} title="Lock and switch back to Employee Mode">
-                  <Lock size={13} /> <span>Lock Mode</span>
+                <button
+                  className="button secondary"
+                  style={{
+                    padding: '6px 12px',
+                    fontSize: '11px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    background: 'rgba(239, 68, 68, 0.12)',
+                    color: '#f87171',
+                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                    fontWeight: 700,
+                  }}
+                  onClick={handleSwitchToEmployee}
+                  title="Lock and exit Owner Mode immediately (safe when leaving desk)"
+                >
+                  <Lock size={13} /> <span>Exit Owner Mode</span>
+                </button>
+                <button
+                  className="button secondary"
+                  style={{ padding: '6px 10px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                  onClick={() => setShowRolePortal(true)}
+                  title="Open Role Selection Gateway"
+                >
+                  <LogOut size={13} /> <span>Switch Role</span>
                 </button>
               </div>
             ) : (
@@ -904,11 +960,20 @@ function App() {
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '5px 10px', borderRadius: '20px', background: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', border: '1px solid rgba(245, 158, 11, 0.3)', fontSize: '12px', fontWeight: 700 }}>
                   <UserCheck size={14} /> 👷 EMPLOYEE MODE
                 </span>
-                <button className="button primary" style={{ padding: '6px 12px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '5px', background: 'linear-gradient(135deg, #f59e0b, #d97706)', border: 'none', boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)' }} onClick={() => setShowUnlockOwnerModal(true)}>
+                <button className="button primary" style={{ padding: '6px 12px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '5px', background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none', boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)' }} onClick={() => setShowUnlockOwnerModal(true)}>
                   <Unlock size={13} /> <span>Unlock Owner</span>
+                </button>
+                <button
+                  className="button secondary"
+                  style={{ padding: '6px 10px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                  onClick={() => setShowRolePortal(true)}
+                  title="Open Role Selection Gateway"
+                >
+                  <LogOut size={13} /> <span>Switch Role</span>
                 </button>
               </div>
             )}
+
 
             <button className="button secondary" style={{ padding: '7px 12px', fontSize: '11px' }} onClick={downloadBackup} title="Download instant offline backup">
               <Download size={14} /> <span>Backup</span>
