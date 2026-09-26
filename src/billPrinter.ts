@@ -36,6 +36,11 @@ export function printThermalBill(
   
   const services: BillItem[] = options?.services && options.services.length > 0
     ? options.services
+    : customer.items && customer.items.length > 0
+    ? customer.items.map((it) => ({
+        service: it.work_type || 'General Service',
+        amount: Number(it.amount || 0),
+      }))
     : [
         {
           service: customer.work_type || 'General Service',
@@ -47,7 +52,11 @@ export function printThermalBill(
     ? options.totalAmount
     : Number(customer.total_amount || 0);
 
+  const paidAmount = Number(customer.paid ?? totalAmount);
+  const balanceDue = Math.max(totalAmount - paidAmount, 0);
+
   const paymentMode = (options?.paymentMode || customer.payment_mode || (customer.payment_status === 'PAID' ? 'Cash' : customer.payment_status === 'PARTIAL' ? 'Partial / Cash' : 'Pending')).toUpperCase();
+  const paymentStatus = customer.payment_status || (paidAmount >= totalAmount ? 'PAID' : paidAmount > 0 ? 'PARTIAL' : 'PENDING');
 
   const iframe = document.createElement('iframe');
   iframe.style.position = 'fixed';
@@ -242,8 +251,24 @@ export function printThermalBill(
   <div class="divider"></div>
 
   <div class="total-container">
-    TOTAL: ₹${Number(totalAmount).toLocaleString('en-IN')}
+    TOTAL BILL: ₹${Number(totalAmount).toLocaleString('en-IN')}
   </div>
+
+  <div class="divider"></div>
+
+  <div class="meta-row" style="font-size: 11px;">
+    <span>Amount Paid : <strong>₹${Number(paidAmount).toLocaleString('en-IN')}</strong></span>
+    <span>Status: <strong>${paymentStatus}</strong></span>
+  </div>
+  ${
+    balanceDue > 0
+      ? `
+  <div class="meta-row" style="font-size: 11.5px; color: #000; font-weight: 800; margin-top: 4px;">
+    <span>BALANCE DUE :</span>
+    <span>₹${Number(balanceDue).toLocaleString('en-IN')}</span>
+  </div>`
+      : ''
+  }
 
   <div class="divider"></div>
 

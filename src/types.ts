@@ -1,4 +1,13 @@
 export type WorkType = { id: string; name: string; expense: number; is_active: boolean };
+
+export type CustomerWorkItem = {
+  id: string;
+  work_type: string;
+  amount: number;
+  expense: number;
+  work_status: string;
+};
+
 export type CustomerRecord = {
   id: string;
   customer_name: string;
@@ -12,6 +21,7 @@ export type CustomerRecord = {
   payment_status: string;
   work_status: string;
   payment_mode?: string;
+  items?: CustomerWorkItem[];
   created_at: string;
 };
 export type Spending = { id: string; expense_name: string; amount: number; category: string; created_at: string };

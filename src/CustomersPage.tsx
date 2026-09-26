@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react';
-import { Plus, Search, Printer, Calendar } from 'lucide-react';
+import { Plus, Search, Printer, Calendar, CheckCircle2, Layers, Pencil, Trash2 } from 'lucide-react';
 import { CustomerRecord, WorkType, WorkStatus, formatCurrency, formatDate, MONTH_NAMES } from './types';
 import { RowMenu } from './RowMenu';
 import { ConfirmDialog } from './ConfirmDialog';
 import { CustomerModal } from './CustomerModal';
+import { OwnerAuthModal } from './OwnerAuthModal';
+import { QuickPayModal } from './QuickPayModal';
 import { printThermalBill } from './billPrinter';
 
 type Props = {
@@ -41,6 +43,16 @@ export function CustomersPage({
   const [statusFilter, setStatusFilter] = useState('all');
   const [editing, setEditing] = useState<CustomerRecord | null>(null);
   const [deleting, setDeleting] = useState<CustomerRecord | null>(null);
+  const [quickPayCustomer, setQuickPayCustomer] = useState<CustomerRecord | null>(null);
+  const [ownerAuth, setOwnerAuth] = useState<{
+    isOpen: boolean;
+    action: 'edit' | 'delete';
+    customer: CustomerRecord | null;
+  }>({
+    isOpen: false,
+    action: 'edit',
+    customer: null,
+  });
 
   // Generate available Month & Year options from recorded customer dates + current & recent months
   const monthOptions = useMemo(() => {
@@ -108,6 +120,28 @@ export function CustomersPage({
     () => monthFilteredCustomers.reduce((sum, r) => sum + Math.max((Number(r.total_amount) || 0) - (Number(r.paid) || 0), 0), 0),
     [monthFilteredCustomers]
   );
+
+  const handleRequestOwnerAuth = (action: 'edit' | 'delete', customer: CustomerRecord) => {
+    setOwnerAuth({
+      isOpen: true,
+      action,
+      customer,
+    });
+  };
+
+  const handleOwnerVerified = () => {
+    const { action, customer } = ownerAuth;
+    setOwnerAuth({ isOpen: false, action: 'edit', customer: null });
+    if (!customer) return;
+
+    if (action === 'edit') {
+      setEditing(customer);
+      if (onEdit) onEdit(customer);
+    } else if (action === 'delete') {
+      setDeleting(customer);
+      if (onDelete) onDelete(customer);
+    }
+  };
 
   return (
     <>
@@ -241,73 +275,119 @@ export function CustomersPage({
               </tr>
             </thead>
             <tbody>
-              {filtered.map((row) => (
-                <tr key={row.id}>
-                  <td>
-                    <div className="customer-cell">
-                      <div className="table-avatar">{row.customer_name.slice(0, 2).toUpperCase()}</div>
-                      <div>
-                        <strong>{row.customer_name}</strong>
-                        <span>{row.mobile || 'No mobile added'}</span>
+              {filtered.map((row) => {
+                const balance = (Number(row.total_amount) || 0) - (Number(row.paid) || 0);
+                return (
+                  <tr key={row.id}>
+                    <td>
+                      <div className="customer-cell">
+                        <div className="table-avatar">{row.customer_name.slice(0, 2).toUpperCase()}</div>
+                        <div>
+                          <strong>{row.customer_name}</strong>
+                          <span>{row.mobile || 'No mobile added'}</span>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td>
-                    <span className="work-pill">{row.work_type}</span>
-                  </td>
-                  <td>
-                    <strong>{formatCurrency(row.total_amount)}</strong>
-                  </td>
-                  <td>{formatCurrency(row.charges)}</td>
-                  <td>{formatCurrency(row.paid)}</td>
-                  <td>{formatCurrency(row.expense)}</td>
-                  <td>
-                    <span className={`status ${row.payment_status.toLowerCase()}`}>{row.payment_status}</span>
-                  </td>
-                  <td>
-                    <span
-                      className="work-pill"
-                      style={{
-                        fontSize: '11px',
-                        background: row.payment_mode === 'Online' ? '#e0f2fe' : '#f0fdf4',
-                        color: row.payment_mode === 'Online' ? '#0369a1' : '#15803d',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {row.payment_mode === 'Online' ? '💳 Online' : '💵 Cash'}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="work-status">{row.work_status}</span>
-                  </td>
-                  <td>{formatDate(row.created_at)}</td>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
-                      <button
-                        type="button"
-                        className="crm-action-btn"
-                        onClick={() => printThermalBill(row)}
-                        title="Print Thermal Bill"
-                        style={{ color: '#167c57', borderColor: '#b2dfcb', background: '#f0f9f4' }}
+                    </td>
+                    <td>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                        <span className="work-pill">{row.work_type}</span>
+                        {row.items && row.items.length > 1 && (
+                          <span
+                            style={{
+                              fontSize: '10px',
+                              color: '#059669',
+                              background: '#ecfdf5',
+                              border: '1px solid #a7f3d0',
+                              borderRadius: '6px',
+                              padding: '1px 6px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '3px',
+                              width: 'fit-content',
+                              fontWeight: 700,
+                            }}
+                          >
+                            <Layers size={10} /> {row.items.length} works itemized
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td>
+                      <strong>{formatCurrency(row.total_amount)}</strong>
+                    </td>
+                    <td>{formatCurrency(row.charges)}</td>
+                    <td>{formatCurrency(row.paid)}</td>
+                    <td>{formatCurrency(row.expense)}</td>
+                    <td>
+                      <span className={`status ${row.payment_status.toLowerCase()}`}>{row.payment_status}</span>
+                    </td>
+                    <td>
+                      <span
+                        className="work-pill"
+                        style={{
+                          fontSize: '11px',
+                          background: row.payment_mode === 'Online' ? '#e0f2fe' : '#f0fdf4',
+                          color: row.payment_mode === 'Online' ? '#0369a1' : '#15803d',
+                          fontWeight: 600,
+                        }}
                       >
-                        <Printer size={13} />
-                      </button>
-                      <RowMenu
-                        onEdit={() => {
-                          setEditing(row);
-                          if (onEdit) onEdit(row);
-                        }}
-                        onDelete={() => {
-                          setDeleting(row);
-                          if (onDelete) onDelete(row);
-                        }}
-                        onSendSMS={onSendSMS ? () => onSendSMS(row) : undefined}
-                        onPrint={() => printThermalBill(row)}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        {row.payment_mode === 'Online' ? '💳 Online' : '💵 Cash'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="work-status">{row.work_status}</span>
+                    </td>
+                    <td>{formatDate(row.created_at)}</td>
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
+                        {/* Quick Pay / Paid Button */}
+                        <button
+                          type="button"
+                          className="crm-action-btn"
+                          onClick={() => setQuickPayCustomer(row)}
+                          title={balance > 0 ? `Collect remaining balance (${formatCurrency(balance)})` : 'Customer has paid in full'}
+                          style={
+                            balance > 0
+                              ? { color: '#059669', borderColor: '#6ee7b7', background: '#ecfdf5', fontWeight: 700 }
+                              : { color: '#64748b', borderColor: '#cbd5e1', background: '#f8fafc' }
+                          }
+                        >
+                          <CheckCircle2 size={13} />
+                          <span style={{ fontSize: '11px', marginLeft: '3px' }}>{balance > 0 ? 'Pay' : 'Paid'}</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          className="crm-action-btn"
+                          onClick={() => printThermalBill(row)}
+                          title="Print Thermal Bill"
+                          style={{ color: '#167c57', borderColor: '#b2dfcb', background: '#f0f9f4' }}
+                        >
+                          <Printer size={13} />
+                        </button>
+
+                        <button
+                          type="button"
+                          className="crm-action-btn"
+                          onClick={() => handleRequestOwnerAuth('edit', row)}
+                          title="Edit (Requires Owner PIN)"
+                        >
+                          <Pencil size={13} />
+                        </button>
+
+                        <button
+                          type="button"
+                          className="crm-action-btn danger"
+                          onClick={() => handleRequestOwnerAuth('delete', row)}
+                          title="Delete (Requires Owner PIN)"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
           {!filtered.length && <div className="empty-state">No customer records match your search and filters.</div>}
@@ -324,6 +404,27 @@ export function CustomersPage({
           onSubmit={saveCustomer}
         />
       )}
+
+      {quickPayCustomer && (
+        <QuickPayModal
+          customer={quickPayCustomer}
+          onClose={() => setQuickPayCustomer(null)}
+          onSavePayment={saveCustomer}
+        />
+      )}
+
+      <OwnerAuthModal
+        isOpen={ownerAuth.isOpen}
+        actionTitle={ownerAuth.action === 'delete' ? 'Owner Authorization: Delete Customer' : 'Owner Authorization: Edit Customer'}
+        actionDescription={
+          ownerAuth.action === 'delete'
+            ? `Enter Owner PIN (163692) to delete "${ownerAuth.customer?.customer_name}"'s record.`
+            : `Enter Owner PIN (163692) to edit "${ownerAuth.customer?.customer_name}"'s record.`
+        }
+        onClose={() => setOwnerAuth({ isOpen: false, action: 'edit', customer: null })}
+        onVerified={handleOwnerVerified}
+      />
+
       {deleting && (
         <ConfirmDialog
           title="Delete customer?"

@@ -1,15 +1,17 @@
-import { useMemo, useState, FormEvent } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Plus, Search, Pencil, Trash2, X, Check, Filter, Wand, FileDown,
   Sparkles, Bot, Smartphone, Calendar, Printer, PieChart, ArrowRight,
-  TrendingUp, Wallet, ArrowDownRight, ArrowUpRight, DollarSign, Save
+  TrendingUp, Wallet, ArrowDownRight, ArrowUpRight, DollarSign, Save,
+  CheckCircle2, Layers
 } from 'lucide-react';
 import {
   CustomerRecord, Spending, Kirkol, Category, WorkType, WorkStatus,
   formatCurrency, formatDate, getStatus, todayISO, MONTH_NAMES
 } from './types';
-import { WorkTypeField } from './WorkTypeField';
-import { CustomerNameField } from './CustomerNameField';
+import { CustomerModal } from './CustomerModal';
+import { OwnerAuthModal } from './OwnerAuthModal';
+import { QuickPayModal } from './QuickPayModal';
 import { ConfirmDialog } from './ConfirmDialog';
 import { printThermalBill } from './billPrinter';
 
@@ -57,6 +59,16 @@ export function CRMDashboard({
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<CustomerRecord | null>(null);
   const [deleting, setDeleting] = useState<CustomerRecord | null>(null);
+  const [quickPayCustomer, setQuickPayCustomer] = useState<CustomerRecord | null>(null);
+  const [ownerAuth, setOwnerAuth] = useState<{
+    isOpen: boolean;
+    action: 'edit' | 'delete';
+    customer: CustomerRecord | null;
+  }>({
+    isOpen: false,
+    action: 'edit',
+    customer: null,
+  });
 
   // Generate available Month & Year options from recorded customer, spending, and kirkol dates
   const monthOptions = useMemo(() => {
@@ -314,9 +326,25 @@ export function CRMDashboard({
     }
   };
 
-  const openEdit = (row: CustomerRecord): void => {
-    setEditing(row);
-    setShowForm(true);
+  const handleRequestOwnerAuth = (action: 'edit' | 'delete', customer: CustomerRecord) => {
+    setOwnerAuth({
+      isOpen: true,
+      action,
+      customer,
+    });
+  };
+
+  const handleOwnerVerified = () => {
+    const { action, customer } = ownerAuth;
+    setOwnerAuth({ isOpen: false, action: 'edit', customer: null });
+    if (!customer) return;
+
+    if (action === 'edit') {
+      setEditing(customer);
+      setShowForm(true);
+    } else if (action === 'delete') {
+      setDeleting(customer);
+    }
   };
 
   const handleSave = async (data: Partial<CustomerRecord>, editingId?: string): Promise<void> => {
@@ -695,7 +723,28 @@ export function CRMDashboard({
                       </div>
                     </td>
                     <td>
-                      <span className="work-pill">{row.work_type}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                        <span className="work-pill">{row.work_type}</span>
+                        {row.items && row.items.length > 1 && (
+                          <span
+                            style={{
+                              fontSize: '10px',
+                              color: '#059669',
+                              background: '#ecfdf5',
+                              border: '1px solid #a7f3d0',
+                              borderRadius: '6px',
+                              padding: '1px 6px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '3px',
+                              width: 'fit-content',
+                              fontWeight: 700,
+                            }}
+                          >
+                            <Layers size={10} /> {row.items.length} works itemized
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td>
                       <span className={`crm-job-status ${row.work_status.toLowerCase().replace(/\s+/g, '-')}`}>
@@ -725,6 +774,21 @@ export function CRMDashboard({
                     <td>{formatDate(row.created_at)}</td>
                     <td>
                       <div className="crm-row-actions" style={{ justifyContent: 'flex-end', gap: '4px' }}>
+                        {/* Quick Pay / Paid Button */}
+                        <button
+                          className="crm-action-btn"
+                          onClick={() => setQuickPayCustomer(row)}
+                          title={balance > 0 ? `Collect remaining balance (${formatCurrency(balance)})` : 'Customer has paid in full'}
+                          style={
+                            balance > 0
+                              ? { color: '#059669', borderColor: '#6ee7b7', background: '#ecfdf5', fontWeight: 700 }
+                              : { color: '#64748b', borderColor: '#cbd5e1', background: '#f8fafc' }
+                          }
+                        >
+                          <CheckCircle2 size={13} />
+                          <span style={{ fontSize: '11px', marginLeft: '3px' }}>{balance > 0 ? 'Pay' : 'Paid'}</span>
+                        </button>
+
                         <button
                           className="crm-action-btn"
                           onClick={() => printThermalBill(row)}
@@ -733,13 +797,21 @@ export function CRMDashboard({
                         >
                           <Printer size={13} />
                         </button>
-                        <button className="crm-action-btn" onClick={() => openEdit(row)} title="Edit">
+
+                        {/* Owner PIN protected Edit */}
+                        <button
+                          className="crm-action-btn"
+                          onClick={() => handleRequestOwnerAuth('edit', row)}
+                          title="Edit (Requires Owner PIN)"
+                        >
                           <Pencil size={13} />
                         </button>
+
+                        {/* Owner PIN protected Delete */}
                         <button
                           className="crm-action-btn danger"
-                          onClick={() => setDeleting(row)}
-                          title="Delete"
+                          onClick={() => handleRequestOwnerAuth('delete', row)}
+                          title="Delete (Requires Owner PIN)"
                         >
                           <Trash2 size={13} />
                         </button>
@@ -761,8 +833,9 @@ export function CRMDashboard({
         </div>
       </section>
 
+      {/* Modals */}
       {showForm && (
-        <CRMJobModal
+        <CustomerModal
           workTypes={workTypes}
           workStatuses={workStatuses}
           customers={customers}
@@ -775,6 +848,26 @@ export function CRMDashboard({
         />
       )}
 
+      {quickPayCustomer && (
+        <QuickPayModal
+          customer={quickPayCustomer}
+          onClose={() => setQuickPayCustomer(null)}
+          onSavePayment={onSaveCustomer}
+        />
+      )}
+
+      <OwnerAuthModal
+        isOpen={ownerAuth.isOpen}
+        actionTitle={ownerAuth.action === 'delete' ? 'Owner Authorization: Delete Record' : 'Owner Authorization: Edit Record'}
+        actionDescription={
+          ownerAuth.action === 'delete'
+            ? `Enter Owner PIN (163692) to delete "${ownerAuth.customer?.customer_name}"'s record.`
+            : `Enter Owner PIN (163692) to edit "${ownerAuth.customer?.customer_name}"'s record.`
+        }
+        onClose={() => setOwnerAuth({ isOpen: false, action: 'edit', customer: null })}
+        onVerified={handleOwnerVerified}
+      />
+
       {deleting && (
         <ConfirmDialog
           title="Delete job?"
@@ -784,319 +877,5 @@ export function CRMDashboard({
         />
       )}
     </>
-  );
-}
-
-function CRMJobModal({
-  workTypes,
-  workStatuses,
-  customers = [],
-  editing,
-  onClose,
-  onSubmit,
-}: {
-  workTypes: WorkType[];
-  workStatuses: WorkStatus[];
-  customers?: CustomerRecord[];
-  editing: CustomerRecord | null;
-  onClose: () => void;
-  onSubmit: (data: Partial<CustomerRecord>, editingId?: string) => Promise<void>;
-}) {
-  const [customerName, setCustomerName] = useState(editing?.customer_name ?? '');
-  const [selected, setSelected] = useState(editing?.work_type ?? '');
-  const [mobile, setMobile] = useState(editing?.mobile ?? '');
-  const [total, setTotal] = useState(String(editing?.total_amount ?? ''));
-  const [received, setReceived] = useState(String(editing?.paid ?? ''));
-  const [date, setDate] = useState(editing ? editing.created_at.slice(0, 10) : todayISO());
-  const [status, setStatus] = useState(editing?.work_status ?? workStatuses[0]?.name ?? 'Pending');
-  const [paymentMode, setPaymentMode] = useState(editing?.payment_mode ?? 'Cash');
-  const [saveSuccessMsg, setSaveSuccessMsg] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const expense = workTypes.find((row) => row.name === selected)?.expense ?? 0;
-  const totalValue = Number(total) || 0;
-  const receivedValue = Number(received) || 0;
-  const balance = totalValue - receivedValue;
-
-  const handleNameSelect = (name: string, matchingMobile?: string) => {
-    setCustomerName(name);
-    if (matchingMobile && !mobile) {
-      setMobile(matchingMobile);
-    }
-  };
-
-  const validateAndBuildData = (): Partial<CustomerRecord> | null => {
-    const name = customerName.trim();
-    const mobileValue = mobile.replace(/\D/g, '').slice(0, 10);
-    const totalAmount = Number(total) || 0;
-    const receivedAmount = Number(received) || 0;
-    const match = workTypes.find((row) => row.name === selected);
-
-    if (!match || !selected || !name || totalAmount <= 0 || receivedAmount < 0 || receivedAmount > totalAmount) {
-      return null;
-    }
-
-    return {
-      customer_name: name,
-      mobile: mobileValue,
-      work_type: match.name,
-      total_amount: totalAmount,
-      charges: editing?.charges ?? 0,
-      paid: receivedAmount,
-      expense: match.expense,
-      income: totalAmount - match.expense,
-      payment_status: getStatus(receivedAmount, totalAmount),
-      work_status: status,
-      payment_mode: paymentMode,
-      created_at: new Date(date + 'T' + new Date().toTimeString().slice(0, 8)).toISOString(),
-    };
-  };
-
-  const handleSaveAndClose = async (e?: FormEvent) => {
-    if (e) e.preventDefault();
-    const data = validateAndBuildData();
-    if (!data || isSubmitting) return;
-
-    setIsSubmitting(true);
-    try {
-      await onSubmit(data, editing?.id);
-      onClose();
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleSaveAndNext = async () => {
-    const data = validateAndBuildData();
-    if (!data || isSubmitting) return;
-
-    setIsSubmitting(true);
-    try {
-      await onSubmit(data, editing?.id);
-      const savedName = data.customer_name;
-      setCustomerName('');
-      setMobile('');
-      setSelected('');
-      setTotal('');
-      setReceived('');
-      setStatus(workStatuses[0]?.name ?? 'Pending');
-      setPaymentMode('Cash');
-      setSaveSuccessMsg(`✓ Saved ${savedName}! Ready for next customer.`);
-      setTimeout(() => setSaveSuccessMsg(''), 4000);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleSaveAndPrint = async () => {
-    const data = validateAndBuildData();
-    if (!data || isSubmitting) return;
-
-    setIsSubmitting(true);
-    try {
-      await onSubmit(data, editing?.id);
-      printThermalBill(data);
-      onClose();
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  return (
-    <div
-      className="modal-backdrop"
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <form className="modal" onSubmit={handleSaveAndClose}>
-        <div className="modal-header">
-          <div>
-            <span className="eyebrow accent">{editing ? 'EDIT JOB' : 'CREATE JOB'}</span>
-            <h2>{editing ? 'Edit job details' : 'Create a new job'}</h2>
-            <p>Enter customer details, work type, and payment information.</p>
-          </div>
-          <button type="button" className="close-button" onClick={onClose}>
-            <X size={18} />
-          </button>
-        </div>
-
-        {saveSuccessMsg && (
-          <div
-            style={{
-              background: '#e6f5ee',
-              border: '1px solid #a3dfc2',
-              color: '#0d6648',
-              padding: '8px 12px',
-              borderRadius: '8px',
-              fontSize: '13px',
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              marginBottom: '12px',
-            }}
-          >
-            <Check size={16} /> {saveSuccessMsg}
-          </div>
-        )}
-
-        <div className="form-grid">
-          <label>
-            Customer name
-            <CustomerNameField
-              value={customerName}
-              onChange={handleNameSelect}
-              customers={customers}
-              placeholder="Search or enter customer name"
-              autoFocus
-              required
-            />
-          </label>
-          <label>
-            Mobile number
-            <input
-              name="mobile"
-              type="tel"
-              inputMode="numeric"
-              value={mobile}
-              maxLength={10}
-              placeholder="10 digit mobile number"
-              onChange={(e) => {
-                const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
-                setMobile(digits);
-              }}
-            />
-          </label>
-          <label className="span-two">
-            Work type
-            <WorkTypeField workTypes={workTypes} selected={selected} onSelect={setSelected} />
-            <input type="hidden" name="workType" value={selected} />
-          </label>
-          <label>
-            Work status
-            <select name="workStatus" value={status} onChange={(e) => setStatus(e.target.value)}>
-              {workStatuses.map((ws) => (
-                <option key={ws.id} value={ws.name}>
-                  {ws.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            Payment mode
-            <select name="paymentMode" value={paymentMode} onChange={(e) => setPaymentMode(e.target.value)}>
-              <option value="Cash">💵 Cash</option>
-              <option value="Online">💳 Online</option>
-            </select>
-          </label>
-          <label>
-            Date
-            <input name="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-          </label>
-          <label>
-            Total amount
-            <input
-              name="totalAmount"
-              type="number"
-              min="1"
-              value={total}
-              onChange={(e) => setTotal(e.target.value)}
-              placeholder="₹ 0"
-              required
-            />
-          </label>
-          <label>
-            Received amount
-            <input
-              name="received"
-              type="number"
-              min="0"
-              max={totalValue || undefined}
-              value={received}
-              onChange={(e) => setReceived(e.target.value)}
-              placeholder="₹ 0"
-              required
-            />
-          </label>
-        </div>
-        <div className="calculation-card">
-          <div>
-            <span>Expense</span>
-            <strong>{formatCurrency(expense)}</strong>
-          </div>
-          <div>
-            <span>Income</span>
-            <strong className="success-text">{formatCurrency(totalValue - expense)}</strong>
-          </div>
-          <div>
-            <span>Balance amount</span>
-            <strong className="warning-text">{formatCurrency(Math.max(balance, 0))}</strong>
-          </div>
-          <div>
-            <span>Payment status</span>
-            <strong className={`status ${getStatus(receivedValue, totalValue).toLowerCase()}`}>
-              {getStatus(receivedValue, totalValue)}
-            </strong>
-          </div>
-        </div>
-        <div className="lookup-note">
-          <Check size={15} /> Balance = Total Amount - Received Amount. Calculated automatically.
-        </div>
-        <div className="modal-actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'flex-end' }}>
-          <button type="button" className="button secondary" onClick={onClose} disabled={isSubmitting}>
-            Cancel
-          </button>
-
-          <button
-            type="button"
-            className="button secondary"
-            style={{
-              borderColor: '#b2c7bd',
-              background: '#f1f7f4',
-              color: '#135c3f',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}
-            onClick={handleSaveAndPrint}
-            disabled={isSubmitting || !customerName.trim() || !selected || totalValue <= 0}
-            title="Save job and print thermal bill receipt"
-          >
-            <Printer size={15} /> Save & Print
-          </button>
-
-          {!editing && (
-            <button
-              type="button"
-              className="button secondary"
-              style={{
-                borderColor: '#167c57',
-                background: '#eaf6ef',
-                color: '#126e4e',
-                fontWeight: 600,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-              }}
-              onClick={handleSaveAndNext}
-              disabled={isSubmitting || !customerName.trim() || !selected || totalValue <= 0}
-              title="Save this job and immediately start next job"
-            >
-              <ArrowRight size={15} /> Save & Next
-            </button>
-          )}
-
-          <button
-            className="button primary"
-            type="submit"
-            disabled={isSubmitting || !customerName.trim() || !selected || totalValue <= 0}
-            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-          >
-            <Save size={15} /> {editing ? 'Update job' : 'Create job'}
-          </button>
-        </div>
-      </form>
-    </div>
   );
 }
