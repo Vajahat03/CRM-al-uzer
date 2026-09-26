@@ -47,7 +47,20 @@ export class CRMToolRouter {
       return this.handleCustomerLookup(matchedCustomerName, ctx);
     }
 
-    // 2. Overdue inquiries (e.g. "5 din se jinka paisa atka hai", "overdue customers")
+    // 2. Cash vs Online Payment inquiries ("how much online and cash payment", "aaj kitna cash online payment", "specific date online cash", "this month cash online")
+    const isPaymentModeQuery =
+      q.includes('cash') ||
+      q.includes('online') ||
+      q.includes('payment mode') ||
+      q.includes('upi') ||
+      q.includes('qr') ||
+      q.includes('mode of payment');
+
+    if (isPaymentModeQuery) {
+      return this.handlePaymentModeCollection(query, ctx);
+    }
+
+    // 3. Overdue inquiries (e.g. "5 din se jinka paisa atka hai", "overdue customers")
     const daysMatch = q.match(/(\d+)\s*(?:din|days|day)/);
     if (daysMatch || q.includes('overdue') || q.includes('unpaid bills') || q.includes('hafte') || q.includes('week')) {
       const days = daysMatch ? parseInt(daysMatch[1], 10) : (q.includes('hafte') || q.includes('week') ? 7 : 5);
@@ -146,6 +159,207 @@ export class CRMToolRouter {
   }
 
   // --- CRM Handlers ---
+
+  private handlePaymentModeCollection(query: string, ctx: AIDataContext): AIToolResult {
+    const q = query.toLowerCase().trim();
+    const now = new Date();
+    const formatLocalDate = (d: Date) => {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    let targetType: 'date' | 'month' | 'all' = 'today';
+    let targetDateStr = formatLocalDate(now);
+    let targetMonthStr = `${now.getFullYear()}-${String(now.getMonth()).padStart(2, '0')}`;
+    let periodLabel = `Today (${targetDateStr})`;
+
+    // Check for explicit ISO or YYYY-MM-DD date: e.g. 2026-09-20
+    const isoMatch = q.match(/\b(20\d{2})[-/.](0?[1-9]|1[0-2])[-/.](0?[1-9]|[12]\d|3[01])\b/);
+    // Check for DD-MM-YYYY or DD/MM/YYYY date: e.g. 20-09-2026
+    const dmyMatch = q.match(/\b(0?[1-9]|[12]\d|3[01])[-/.](0?[1-9]|1[0-2])[-/.](20\d{2})\b/);
+    // Check for Day + Month name: e.g. 20 Sept, 15 August, 5th October
+    const textualDateMatch = q.match(/\b(0?[1-9]|[12]\d|3[01])(?:st|nd|rd|th)?\s*(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\b/i);
+
+    const monthNamesMap: Record<string, number> = {
+      january: 0, jan: 0,
+      february: 1, feb: 1,
+      march: 2, mar: 2,
+      april: 3, apr: 3,
+      may: 4,
+      june: 5, jun: 5,
+      july: 6, jul: 6,
+      august: 7, aug: 7,
+      september: 8, sept: 8, sep: 8,
+      october: 9, oct: 9,
+      november: 10, nov: 10,
+      december: 11, dec: 11,
+    };
+
+    if (isoMatch) {
+      const y = isoMatch[1];
+      const m = String(isoMatch[2]).padStart(2, '0');
+      const d = String(isoMatch[3]).padStart(2, '0');
+      targetDateStr = `${y}-${m}-${d}`;
+      targetType = 'date';
+      periodLabel = `Specific Date: ${targetDateStr}`;
+    } else if (dmyMatch) {
+      const d = String(dmyMatch[1]).padStart(2, '0');
+      const m = String(dmyMatch[2]).padStart(2, '0');
+      const y = dmyMatch[3];
+      targetDateStr = `${y}-${m}-${d}`;
+      targetType = 'date';
+      periodLabel = `Specific Date: ${targetDateStr}`;
+    } else if (textualDateMatch) {
+      const d = String(textualDateMatch[1]).padStart(2, '0');
+      const mName = textualDateMatch[2].toLowerCase();
+      const mIdx = monthNamesMap[mName] !== undefined ? monthNamesMap[mName] : now.getMonth();
+      const m = String(mIdx + 1).padStart(2, '0');
+      targetDateStr = `${now.getFullYear()}-${m}-${d}`;
+      targetType = 'date';
+      periodLabel = `Specific Date: ${targetDateStr}`;
+    } else if (q.includes('yesterday') || q.includes('kal')) {
+      const yDate = new Date(now.getTime() - 86400000);
+      targetDateStr = formatLocalDate(yDate);
+      targetType = 'date';
+      periodLabel = `Yesterday (${targetDateStr})`;
+    } else if (q.includes('today') || q.includes('aaj') || q.includes('aajka')) {
+      targetDateStr = formatLocalDate(now);
+      targetType = 'date';
+      periodLabel = `Today (${targetDateStr})`;
+    } else if (q.includes('this month') || q.includes('is mahine') || q.includes('current month') || q.includes('month') || q.includes('mahine')) {
+      let matchedMonthIdx = -1;
+      for (const [key, idx] of Object.entries(monthNamesMap)) {
+        if (q.includes(key)) {
+          matchedMonthIdx = idx;
+          break;
+        }
+      }
+      const mIdx = matchedMonthIdx !== -1 ? matchedMonthIdx : now.getMonth();
+      targetMonthStr = `${now.getFullYear()}-${String(mIdx).padStart(2, '0')}`;
+      targetType = 'month';
+      periodLabel = `Month: ${MONTH_NAMES[mIdx]} ${now.getFullYear()}`;
+    } else {
+      let matchedMonthIdx = -1;
+      for (const [key, idx] of Object.entries(monthNamesMap)) {
+        if (q.includes(key)) {
+          matchedMonthIdx = idx;
+          break;
+        }
+      }
+      if (matchedMonthIdx !== -1) {
+        targetMonthStr = `${now.getFullYear()}-${String(matchedMonthIdx).padStart(2, '0')}`;
+        targetType = 'month';
+        periodLabel = `Month: ${MONTH_NAMES[matchedMonthIdx]} ${now.getFullYear()}`;
+      } else if (q.includes('all') || q.includes('total') || q.includes('sab') || q.includes('history')) {
+        targetType = 'all';
+        periodLabel = 'All Time Records';
+      } else {
+        targetDateStr = formatLocalDate(now);
+        targetType = 'date';
+        periodLabel = `Today (${targetDateStr})`;
+      }
+    }
+
+    let targetCustomers: CustomerRecord[] = [];
+    if (targetType === 'date') {
+      targetCustomers = ctx.customers.filter((c) => c.created_at && c.created_at.slice(0, 10) === targetDateStr);
+    } else if (targetType === 'month') {
+      targetCustomers = ctx.customers.filter((c) => {
+        if (!c.created_at) return false;
+        const d = new Date(c.created_at);
+        const key = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
+        return key === targetMonthStr;
+      });
+    } else {
+      targetCustomers = ctx.customers;
+    }
+
+    const cashRecords = targetCustomers.filter(
+      (c) => (c.payment_mode || 'Cash').toLowerCase() === 'cash' && (Number(c.paid) || 0) > 0
+    );
+    const onlineRecords = targetCustomers.filter(
+      (c) => (c.payment_mode || '').toLowerCase() === 'online' && (Number(c.paid) || 0) > 0
+    );
+
+    const cashTotal = targetCustomers
+      .filter((c) => (c.payment_mode || 'Cash').toLowerCase() === 'cash')
+      .reduce((sum, c) => sum + (Number(c.paid) || 0), 0);
+
+    const onlineTotal = targetCustomers
+      .filter((c) => (c.payment_mode || '').toLowerCase() === 'online')
+      .reduce((sum, c) => sum + (Number(c.paid) || 0), 0);
+
+    const totalCollected = cashTotal + onlineTotal;
+    const totalBilled = targetCustomers.reduce((sum, c) => sum + (Number(c.total_amount) || 0), 0);
+    const totalPending = targetCustomers.reduce(
+      (sum, c) => sum + Math.max((Number(c.total_amount) || 0) - (Number(c.paid) || 0), 0),
+      0
+    );
+
+    const cashPct = totalCollected > 0 ? ((cashTotal / totalCollected) * 100).toFixed(1) : '0.0';
+    const onlinePct = totalCollected > 0 ? ((onlineTotal / totalCollected) * 100).toFixed(1) : '0.0';
+
+    const recentTxns = targetCustomers.slice(0, 8).map((c, i) => {
+      const mode = (c.payment_mode || 'Cash') === 'Online' ? '💳 Online' : '💵 Cash';
+      return `${i + 1}. **${c.customer_name}** — ${c.work_type} | Paid: **${formatCurrency(c.paid)}** (${mode}) | Total: ${formatCurrency(c.total_amount)} [${c.work_status}]`;
+    }).join('\n');
+
+    const summary =
+      `### 💳 Cash & Online Payment Collection Breakdown\n` +
+      `**Selected Timeframe:** \`${periodLabel}\`\n\n` +
+      `| Payment Mode | Total Received | Share | Number of Transactions |\n` +
+      `|---|---|---|---|\n` +
+      `| 💵 **Cash Payment** | **${formatCurrency(cashTotal)}** | **${cashPct}%** | ${cashRecords.length} jobs |\n` +
+      `| 💳 **Online Payment (UPI / QR)** | **${formatCurrency(onlineTotal)}** | **${onlinePct}%** | ${onlineRecords.length} jobs |\n` +
+      `| 💰 **Total Received Collections** | **${formatCurrency(totalCollected)}** | **100%** | **${cashRecords.length + onlineRecords.length} jobs** |\n\n` +
+      `**Summary Metrics for ${periodLabel}:**\n` +
+      `• 📋 **Total Billed Value:** **${formatCurrency(totalBilled)}** across **${targetCustomers.length} jobs**\n` +
+      `• ✅ **Total Amount Received:** **${formatCurrency(totalCollected)}**\n` +
+      `• ⚠️ **Unpaid Pending Receivables:** **${formatCurrency(totalPending)}**\n\n` +
+      (recentTxns ? `**Transactions in ${periodLabel}:**\n${recentTxns}` : `*No customer payment transactions recorded for ${periodLabel}.*`);
+
+    return {
+      success: true,
+      toolName: 'getPaymentModeBreakdown',
+      data: {
+        periodLabel,
+        targetType,
+        cashTotal,
+        onlineTotal,
+        totalCollected,
+        totalBilled,
+        totalPending,
+        cashCount: cashRecords.length,
+        onlineCount: onlineRecords.length,
+      },
+      summaryText: summary,
+      suggestedActions: [
+        {
+          id: 'act-filter-online',
+          label: 'Filter Online Payments in CRM',
+          actionType: 'filter_customers',
+          payload: { search: 'Online' },
+          variant: 'primary',
+        },
+        {
+          id: 'act-filter-cash',
+          label: 'Filter Cash Payments in CRM',
+          actionType: 'filter_customers',
+          payload: { search: 'Cash' },
+          variant: 'secondary',
+        },
+        {
+          id: 'act-nav-income',
+          label: 'View Income Dashboard',
+          actionType: 'navigate',
+          payload: { page: 'income' },
+          variant: 'secondary',
+        },
+      ],
+    };
+  }
 
   private handleCustomerLookup(customerName: string, ctx: AIDataContext): AIToolResult {
     if (!customerName) {

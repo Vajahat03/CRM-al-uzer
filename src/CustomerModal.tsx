@@ -29,6 +29,7 @@ export function CustomerModal({
   const [paid, setPaid] = useState(String(editing?.paid ?? ''));
   const [date, setDate] = useState(editing ? editing.created_at.slice(0, 10) : todayISO());
   const [status, setStatus] = useState(editing?.work_status ?? workStatuses[0]?.name ?? 'Pending');
+  const [paymentMode, setPaymentMode] = useState(editing?.payment_mode ?? 'Cash');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -65,6 +66,7 @@ export function CustomerModal({
       income: totalAmount - match.expense,
       payment_status: getStatus(paidAmount, totalAmount),
       work_status: status,
+      payment_mode: paymentMode,
       created_at: new Date(date + 'T' + new Date().toTimeString().slice(0, 8)).toISOString(),
     };
   };
@@ -99,6 +101,7 @@ export function CustomerModal({
       setSelected('');
       setTotal('');
       setPaid('');
+      setPaymentMode('Cash');
       setStatus(workStatuses[0]?.name ?? 'Pending');
       setSaveSuccessMsg(`✓ Saved ${savedName}! Ready for next customer.`);
       setTimeout(() => setSaveSuccessMsg(''), 4000);
@@ -232,6 +235,17 @@ export function CustomerModal({
               placeholder="₹ 0"
               required
             />
+          </label>
+          <label>
+            Payment mode
+            <select
+              name="paymentMode"
+              value={paymentMode}
+              onChange={(event) => setPaymentMode(event.target.value)}
+            >
+              <option value="Cash">💵 Cash</option>
+              <option value="Online">💳 Online / UPI</option>
+            </select>
           </label>
         </div>
         <div className="calculation-card">

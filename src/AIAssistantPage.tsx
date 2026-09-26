@@ -50,6 +50,8 @@ interface AIAssistantPageProps {
 }
 
 const QUICK_PROMPTS = [
+  { label: '💳 Today Cash & Online Payment', query: 'How much online and cash payment taken today?' },
+  { label: '💵 This Month Cash vs Online Total', query: 'How much online and cash payment taken this month?' },
   { label: '⚠️ Overdue Debtors (5+ Days)', query: 'Bhai dekh kaun kaun se customers ka paisa 5 din se atka hua hai' },
   { label: '👤 Check Vajahat Record', query: 'Show Vajahats work and pending balance' },
   { label: '💰 Today Business & Profit', query: 'Aaj kitni kamai hui aur kitna kharcha hua?' },
@@ -385,7 +387,7 @@ export const AIAssistantPage: React.FC<AIAssistantPageProps> = ({
 
       {/* Main Clean Light Panel matching CRM Table & Form Style */}
       <section className="panel" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 210px)', minHeight: '600px', background: '#ffffff', border: '1px solid var(--line)', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-        
+
         {/* Quick Inquiries Strip */}
         <div style={{ padding: '12px 18px', borderBottom: '1px solid var(--line)', background: '#fafcfa' }}>
           <span className="eyebrow" style={{ marginBottom: '8px', color: '#78847d' }}>

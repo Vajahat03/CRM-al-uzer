@@ -11,6 +11,7 @@ export type CustomerRecord = {
   income: number;
   payment_status: string;
   work_status: string;
+  payment_mode?: string;
   created_at: string;
 };
 export type Spending = { id: string; expense_name: string; amount: number; category: string; created_at: string };

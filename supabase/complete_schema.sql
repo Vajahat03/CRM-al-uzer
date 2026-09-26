@@ -35,10 +35,11 @@ CREATE TABLE IF NOT EXISTS public.customer_records (
   income numeric(12,2) NOT NULL DEFAULT 0,
   payment_status text NOT NULL DEFAULT 'PENDING',
   work_status text NOT NULL DEFAULT 'Pending',
+  payment_mode text NOT NULL DEFAULT 'Cash',
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
--- Ensure charges column exists if table was created previously
+-- Ensure charges and payment_mode columns exist if table was created previously
 DO $$
 BEGIN
   IF NOT EXISTS (
@@ -46,6 +47,13 @@ BEGIN
     WHERE table_schema = 'public' AND table_name = 'customer_records' AND column_name = 'charges'
   ) THEN
     ALTER TABLE public.customer_records ADD COLUMN charges numeric(12,2) NOT NULL DEFAULT 0 CHECK (charges >= 0);
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' AND table_name = 'customer_records' AND column_name = 'payment_mode'
+  ) THEN
+    ALTER TABLE public.customer_records ADD COLUMN payment_mode text NOT NULL DEFAULT 'Cash';
   END IF;
 END $$;
 

@@ -47,8 +47,7 @@ export function printThermalBill(
     ? options.totalAmount
     : Number(customer.total_amount || 0);
 
-  const paymentMode = options?.paymentMode || 
-    (customer.payment_status === 'PAID' ? 'CASH' : customer.payment_status === 'PARTIAL' ? 'PARTIAL / CASH' : 'PENDING');
+  const paymentMode = (options?.paymentMode || customer.payment_mode || (customer.payment_status === 'PAID' ? 'Cash' : customer.payment_status === 'PARTIAL' ? 'Partial / Cash' : 'Pending')).toUpperCase();
 
   const iframe = document.createElement('iframe');
   iframe.style.position = 'fixed';

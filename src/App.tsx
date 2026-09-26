@@ -4,12 +4,12 @@ import {
   ArrowUpRight, BarChart3, Bell, BriefcaseBusiness, Check, ChevronDown, CircleDollarSign,
   ClipboardList, FileSpreadsheet, LayoutDashboard, ListChecks, Menu, MoreHorizontal, Plus,
   Receipt, Search, Settings, ShoppingBag, Sparkles, Users, WalletCards, Wand, FileDown,
-  Pencil, Trash2, Download, Upload, Bot, Smartphone,
+  Pencil, Trash2, Download, Upload, Bot, Smartphone, Calendar, PieChart, Filter,
 } from 'lucide-react';
 import './index.css';
 import {
   CustomerRecord, Spending, WorkType, Category, WorkStatus, Page, Kirkol, TotalsSummary,
-  calculateTotals, formatCurrency, formatDate, makeId,
+  calculateTotals, calculateMonthTotals, formatCurrency, formatDate, makeId, MONTH_NAMES,
 } from './types';
 import { autoSyncCustomer, autoSyncSpending, autoSyncKirkol, fullSyncToGoogleSheets } from './googleSheetsSync';
 import { CustomerModal } from './CustomerModal';
@@ -27,6 +27,7 @@ import { ConfirmDialog } from './ConfirmDialog';
 import { AIAssistantPage } from './AIAssistantPage';
 import { SMSDashboardPage } from './sms/SMSDashboardPage';
 import { SendSMSModal } from './sms/SendSMSModal';
+import { SecureVaultLock, SecureReportGateModal } from './SecureVaultLock';
 
 const seedWorkTypes: WorkType[] = [
   { id: 'wt-1', name: 'PAN CARD 500', expense: 320, is_active: true },
@@ -155,7 +156,17 @@ function App() {
   const [showSpendingForm, setShowSpendingForm] = useState(false);
   const [showKirkolForm, setShowKirkolForm] = useState(false);
   const [showMonthlyReportModal, setShowMonthlyReportModal] = useState(false);
+  const [isVaultUnlocked, setIsVaultUnlocked] = useState(false);
+  const [showProtectedReportModal, setShowProtectedReportModal] = useState(false);
   const [editingKirkol, setEditingKirkol] = useState<Kirkol | null>(null);
+
+  const handleOpenMonthlyReport = (): void => {
+    if (isVaultUnlocked) {
+      setShowMonthlyReportModal(true);
+    } else {
+      setShowProtectedReportModal(true);
+    }
+  };
   const [categoryModal, setCategoryModal] = useState<{ open: boolean; editing: Category | null }>({ open: false, editing: null });
   const [statusModal, setStatusModal] = useState<{ open: boolean; editing: WorkStatus | null }>({ open: false, editing: null });
   const [sendingSMSCustomer, setSendingSMSCustomer] = useState<CustomerRecord | null>(null);
@@ -203,11 +214,106 @@ function App() {
           saveToLocalStorage(LOCAL_STORAGE_KEYS.WORK_TYPES, mergedList);
         }
 
-        if (!cust.error && cust.data?.length) setCustomers(cust.data as CustomerRecord[]);
-        if (!spend.error && spend.data?.length) setSpendings(spend.data as Spending[]);
-        if (!cats.error && cats.data?.length) setCategories(cats.data as Category[]);
-        if (!wst.error && wst.data?.length) setWorkStatuses(wst.data as WorkStatus[]);
-        if (!kir.error && kir.data?.length) setKirkol(kir.data as Kirkol[]);
+        if (!cust.error && cust.data) {
+          const remoteCust = cust.data as CustomerRecord[];
+          const localCust = loadFromLocalStorage<CustomerRecord[]>(LOCAL_STORAGE_KEYS.CUSTOMERS, fallbackCustomers);
+          const mergedMap = new Map<string, CustomerRecord>();
+
+          remoteCust.forEach((r) => {
+            mergedMap.set(r.id, { ...r, payment_mode: r.payment_mode || 'Cash' });
+          });
+
+          localCust.forEach((l) => {
+            if (mergedMap.has(l.id)) {
+              const existing = mergedMap.get(l.id)!;
+              mergedMap.set(l.id, { ...existing, payment_mode: l.payment_mode || existing.payment_mode || 'Cash' });
+            } else {
+              mergedMap.set(l.id, l);
+              if (supabase) {
+                const { payment_mode: _, ...supabaseRecord } = l;
+                void supabase.from('customer_records').upsert(supabaseRecord);
+              }
+            }
+          });
+
+          const mergedList = Array.from(mergedMap.values()).sort(
+            (a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
+          );
+          setCustomers(mergedList);
+          saveToLocalStorage(LOCAL_STORAGE_KEYS.CUSTOMERS, mergedList);
+        }
+
+        if (!spend.error && spend.data) {
+          const remoteSpend = spend.data as Spending[];
+          const localSpend = loadFromLocalStorage<Spending[]>(LOCAL_STORAGE_KEYS.SPENDINGS, []);
+          const mergedMap = new Map<string, Spending>();
+          remoteSpend.forEach((s) => mergedMap.set(s.id, s));
+          localSpend.forEach((s) => {
+            if (!mergedMap.has(s.id)) {
+              mergedMap.set(s.id, s);
+              if (supabase) {
+                void supabase.from('spendings').upsert(s);
+              }
+            }
+          });
+          const mergedList = Array.from(mergedMap.values()).sort(
+            (a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
+          );
+          setSpendings(mergedList);
+          saveToLocalStorage(LOCAL_STORAGE_KEYS.SPENDINGS, mergedList);
+        }
+
+        if (!cats.error && cats.data?.length) {
+          const remoteCats = cats.data as Category[];
+          const localCats = loadFromLocalStorage<Category[]>(LOCAL_STORAGE_KEYS.CATEGORIES, defaultCategories);
+          const mergedMap = new Map<string, Category>();
+          remoteCats.forEach((c) => mergedMap.set(c.name.toLowerCase(), c));
+          localCats.forEach((c) => {
+            if (!mergedMap.has(c.name.toLowerCase())) {
+              mergedMap.set(c.name.toLowerCase(), c);
+              if (supabase) void supabase.from('spending_categories').upsert(c);
+            }
+          });
+          const mergedList = Array.from(mergedMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+          setCategories(mergedList);
+          saveToLocalStorage(LOCAL_STORAGE_KEYS.CATEGORIES, mergedList);
+        }
+
+        if (!wst.error && wst.data?.length) {
+          const remoteStatuses = wst.data as WorkStatus[];
+          const localStatuses = loadFromLocalStorage<WorkStatus[]>(LOCAL_STORAGE_KEYS.WORK_STATUSES, defaultStatuses);
+          const mergedMap = new Map<string, WorkStatus>();
+          remoteStatuses.forEach((s) => mergedMap.set(s.name.toLowerCase(), s));
+          localStatuses.forEach((s) => {
+            if (!mergedMap.has(s.name.toLowerCase())) {
+              mergedMap.set(s.name.toLowerCase(), s);
+              if (supabase) void supabase.from('work_statuses').upsert(s);
+            }
+          });
+          const mergedList = Array.from(mergedMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+          setWorkStatuses(mergedList);
+          saveToLocalStorage(LOCAL_STORAGE_KEYS.WORK_STATUSES, mergedList);
+        }
+
+        if (!kir.error && kir.data) {
+          const remoteKir = kir.data as Kirkol[];
+          const localKir = loadFromLocalStorage<Kirkol[]>(LOCAL_STORAGE_KEYS.KIRKOL, fallbackKirkol);
+          const mergedMap = new Map<string, Kirkol>();
+          remoteKir.forEach((k) => mergedMap.set(k.id, k));
+          localKir.forEach((k) => {
+            if (!mergedMap.has(k.id)) {
+              mergedMap.set(k.id, k);
+              if (supabase) {
+                void supabase.from('kirkol').upsert(k);
+              }
+            }
+          });
+          const mergedList = Array.from(mergedMap.values()).sort(
+            (a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
+          );
+          setKirkol(mergedList);
+          saveToLocalStorage(LOCAL_STORAGE_KEYS.KIRKOL, mergedList);
+        }
 
         if (!cust.error && !types.error) {
           setSupabaseConnected(true);
@@ -247,8 +353,14 @@ function App() {
 
       if (supabase) {
         try {
-          const response = await supabase.from('customer_records').update(data).eq('id', editingId).select().maybeSingle();
-          if (response.data) savedRecord = response.data as CustomerRecord;
+          const { payment_mode: _, ...supabaseData } = data;
+          const response = await supabase.from('customer_records').update(supabaseData).eq('id', editingId).select().maybeSingle();
+          if (response.data) {
+            savedRecord = { ...savedRecord, ...(response.data as Partial<CustomerRecord>) };
+          }
+          if (response.error) {
+            console.error('Supabase customer update error:', response.error);
+          }
         } catch (e) {
           console.warn('Supabase customer update error:', e);
         }
@@ -256,6 +368,7 @@ function App() {
 
       nextCustomers = customers.map((row) => (row.id === editingId ? savedRecord : row));
       setCustomers(nextCustomers);
+      saveToLocalStorage(LOCAL_STORAGE_KEYS.CUSTOMERS, nextCustomers);
       notify('Customer record updated.');
     } else {
       const record: CustomerRecord = {
@@ -270,14 +383,21 @@ function App() {
         income: data.income!,
         payment_status: data.payment_status!,
         work_status: data.work_status!,
+        payment_mode: data.payment_mode || 'Cash',
         created_at: data.created_at || new Date().toISOString(),
       };
       savedRecord = record;
 
       if (supabase) {
         try {
-          const response = await supabase.from('customer_records').insert(record).select().maybeSingle();
-          if (response.data) savedRecord = response.data as CustomerRecord;
+          const { payment_mode: _, ...supabaseRecord } = record;
+          const response = await supabase.from('customer_records').insert(supabaseRecord).select().maybeSingle();
+          if (response.data) {
+            savedRecord = { ...record, ...(response.data as Partial<CustomerRecord>) };
+          }
+          if (response.error) {
+            console.error('Supabase customer insert error:', response.error);
+          }
         } catch (e) {
           console.warn('Supabase customer insert error:', e);
         }
@@ -285,6 +405,7 @@ function App() {
 
       nextCustomers = [savedRecord, ...customers];
       setCustomers(nextCustomers);
+      saveToLocalStorage(LOCAL_STORAGE_KEYS.CUSTOMERS, nextCustomers);
       notify('Customer work saved successfully.');
     }
 
@@ -292,7 +413,6 @@ function App() {
       const d = new Date(savedRecord.created_at);
       void fullSyncToGoogleSheets(nextCustomers, spendings, kirkol, totals, d.getFullYear(), d.getMonth(), true);
     }
-    setShowCustomerForm(false);
   };
 
   const deleteCustomer = async (id: string): Promise<void> => {
@@ -306,6 +426,7 @@ function App() {
     }
     const updated = customers.filter((row) => row.id !== id);
     setCustomers(updated);
+    saveToLocalStorage(LOCAL_STORAGE_KEYS.CUSTOMERS, updated);
     notify('Customer record deleted.');
     if (target) {
       const d = new Date(target.created_at);
@@ -328,6 +449,7 @@ function App() {
         try {
           const response = await supabase.from('spendings').update(data).eq('id', editingId).select().maybeSingle();
           if (response.data) savedSpending = response.data as Spending;
+          if (response.error) console.error('Supabase spending update error:', response.error);
         } catch (e) {
           console.warn('Supabase spending update error:', e);
         }
@@ -335,6 +457,7 @@ function App() {
 
       nextSpendings = spendings.map((row) => (row.id === editingId ? savedSpending : row));
       setSpendings(nextSpendings);
+      saveToLocalStorage(LOCAL_STORAGE_KEYS.SPENDINGS, nextSpendings);
       notify('Spending updated.');
     } else {
       const spending: Spending = {
@@ -350,6 +473,7 @@ function App() {
         try {
           const response = await supabase.from('spendings').insert(spending).select().maybeSingle();
           if (response.data) savedSpending = response.data as Spending;
+          if (response.error) console.error('Supabase spending insert error:', response.error);
         } catch (e) {
           console.warn('Supabase spending insert error:', e);
         }
@@ -357,6 +481,7 @@ function App() {
 
       nextSpendings = [savedSpending, ...spendings];
       setSpendings(nextSpendings);
+      saveToLocalStorage(LOCAL_STORAGE_KEYS.SPENDINGS, nextSpendings);
       notify('Spending added to your records.');
     }
 
@@ -364,7 +489,6 @@ function App() {
       const d = new Date(savedSpending.created_at);
       void fullSyncToGoogleSheets(customers, nextSpendings, kirkol, totals, d.getFullYear(), d.getMonth(), true);
     }
-    setShowSpendingForm(false);
   };
 
   const deleteSpending = async (id: string): Promise<void> => {
@@ -378,6 +502,7 @@ function App() {
     }
     const updated = spendings.filter((row) => row.id !== id);
     setSpendings(updated);
+    saveToLocalStorage(LOCAL_STORAGE_KEYS.SPENDINGS, updated);
     notify('Spending deleted.');
     if (target) {
       const d = new Date(target.created_at);
@@ -400,6 +525,7 @@ function App() {
         try {
           const response = await supabase.from('kirkol').update(data).eq('id', editingId).select().maybeSingle();
           if (response.data) savedKirkol = response.data as Kirkol;
+          if (response.error) console.error('Supabase kirkol update error:', response.error);
         } catch (e) {
           console.warn('Supabase kirkol update error:', e);
         }
@@ -407,6 +533,7 @@ function App() {
 
       nextKirkol = kirkol.map((row) => (row.id === editingId ? savedKirkol : row));
       setKirkol(nextKirkol);
+      saveToLocalStorage(LOCAL_STORAGE_KEYS.KIRKOL, nextKirkol);
       notify('Kirkol updated.');
     } else {
       const record: Kirkol = {
@@ -421,6 +548,7 @@ function App() {
         try {
           const response = await supabase.from('kirkol').insert(record).select().maybeSingle();
           if (response.data) savedKirkol = response.data as Kirkol;
+          if (response.error) console.error('Supabase kirkol insert error:', response.error);
         } catch (e) {
           console.warn('Supabase kirkol insert error:', e);
         }
@@ -428,6 +556,7 @@ function App() {
 
       nextKirkol = [savedKirkol, ...kirkol];
       setKirkol(nextKirkol);
+      saveToLocalStorage(LOCAL_STORAGE_KEYS.KIRKOL, nextKirkol);
       notify('Kirkol added successfully.');
     }
 
@@ -435,8 +564,6 @@ function App() {
       const d = new Date(savedKirkol.created_at);
       void fullSyncToGoogleSheets(customers, spendings, nextKirkol, totals, d.getFullYear(), d.getMonth(), true);
     }
-    setShowKirkolForm(false);
-    setEditingKirkol(null);
   };
 
   const deleteKirkol = async (id: string): Promise<void> => {
@@ -450,6 +577,7 @@ function App() {
     }
     const updated = kirkol.filter((row) => row.id !== id);
     setKirkol(updated);
+    saveToLocalStorage(LOCAL_STORAGE_KEYS.KIRKOL, updated);
     notify('Kirkol record deleted.');
     if (target) {
       const d = new Date(target.created_at);
@@ -677,7 +805,7 @@ function App() {
           <button className={`nav-item ${page === 'sheets' ? 'active' : ''}`} onClick={() => setPage('sheets')}>
             <FileSpreadsheet size={18} /><span>Google Sheets</span><span className="connected-dot" />
           </button>
-          <button className="nav-item" onClick={() => setShowMonthlyReportModal(true)}>
+          <button className="nav-item" onClick={handleOpenMonthlyReport}>
             <FileDown size={18} /><span>Monthly PDF Report</span>
           </button>
           <button className="nav-item" onClick={downloadBackup} title="Download a complete offline backup file of all records">
@@ -700,7 +828,7 @@ function App() {
             <button className="button secondary" style={{ padding: '7px 12px', fontSize: '11px' }} onClick={downloadBackup} title="Download instant offline backup">
               <Download size={14} /> <span>Backup</span>
             </button>
-            <button className="button secondary" style={{ padding: '7px 12px', fontSize: '11px' }} onClick={() => setShowMonthlyReportModal(true)} title="Generate Monthly PDF Report">
+            <button className="button secondary" style={{ padding: '7px 12px', fontSize: '11px' }} onClick={handleOpenMonthlyReport} title="Generate Monthly PDF Report">
               <FileDown size={14} /> <span>PDF Report</span>
             </button>
             <button className="icon-button"><Bell size={18} /><i /></button>
@@ -721,7 +849,7 @@ function App() {
               onDeleteCustomer={deleteCustomer}
               onAddCustomer={() => setShowCustomerForm(true)}
               onAddKirkol={() => setShowKirkolForm(true)}
-              onOpenMonthlyReport={() => setShowMonthlyReportModal(true)}
+              onOpenMonthlyReport={handleOpenMonthlyReport}
               onOpenAIAssistant={() => setPage('ai-assistant')}
               onOpenSMSReminders={() => setPage('sms-reminders')}
             />
@@ -774,19 +902,29 @@ function App() {
             />
           )}
           {page === 'income' && (
-            <Income
-              customers={customers}
-              spendings={spendings}
-              kirkol={kirkol}
-              totals={totals}
-              onCustomer={() => setShowCustomerForm(true)}
-              onSpending={() => setShowSpendingForm(true)}
-              onKirkol={() => { setEditingKirkol(null); setShowKirkolForm(true); }}
-              onEditKirkol={(item) => { setEditingKirkol(item); setShowKirkolForm(true); }}
-              onDeleteKirkol={deleteKirkol}
-              onMonthlyReport={() => setShowMonthlyReportModal(true)}
-              onNavigate={setPage}
-            />
+            <SecureVaultLock
+              isUnlocked={isVaultUnlocked}
+              onUnlock={() => setIsVaultUnlocked(true)}
+              onLock={() => setIsVaultUnlocked(false)}
+              title="Financial & Reports Security Vault"
+              subtitle="Confidential business revenue, profit margins, kirkol counter cash, and analytics"
+            >
+              <Income
+                customers={customers}
+                spendings={spendings}
+                kirkol={kirkol}
+                categories={categories}
+                workStatuses={workStatuses}
+                totals={totals}
+                onCustomer={() => setShowCustomerForm(true)}
+                onSpending={() => setShowSpendingForm(true)}
+                onKirkol={() => { setEditingKirkol(null); setShowKirkolForm(true); }}
+                onEditKirkol={(item) => { setEditingKirkol(item); setShowKirkolForm(true); }}
+                onDeleteKirkol={deleteKirkol}
+                onMonthlyReport={handleOpenMonthlyReport}
+                onNavigate={setPage}
+              />
+            </SecureVaultLock>
           )}
           {page === 'sheets' && (
             <GoogleSheetsPage
@@ -816,7 +954,7 @@ function App() {
               supabaseConnected={supabase !== null}
               onNavigate={setPage}
               onFilterCustomers={(q) => setSearch(q)}
-              onOpenMonthlyReport={() => setShowMonthlyReportModal(true)}
+              onOpenMonthlyReport={handleOpenMonthlyReport}
               notify={notify}
             />
           )}
@@ -856,6 +994,17 @@ function App() {
           spendings={spendings}
           kirkol={kirkol}
           onClose={() => setShowMonthlyReportModal(false)}
+        />
+      )}
+      {showProtectedReportModal && (
+        <SecureReportGateModal
+          isOpen={showProtectedReportModal}
+          onClose={() => setShowProtectedReportModal(false)}
+          onSuccess={() => {
+            setShowProtectedReportModal(false);
+            setIsVaultUnlocked(true);
+            setShowMonthlyReportModal(true);
+          }}
         />
       )}
       {sendingSMSCustomer && (
@@ -910,6 +1059,8 @@ function Income({
   customers,
   spendings,
   kirkol,
+  categories = [],
+  workStatuses = [],
   totals,
   onCustomer,
   onSpending,
@@ -922,6 +1073,8 @@ function Income({
   customers: CustomerRecord[];
   spendings: Spending[];
   kirkol: Kirkol[];
+  categories?: Category[];
+  workStatuses?: WorkStatus[];
   totals: TotalsSummary;
   onCustomer: () => void;
   onSpending: () => void;
@@ -933,95 +1086,134 @@ function Income({
 }) {
   const [deletingKirkol, setDeletingKirkol] = useState<Kirkol | null>(null);
 
-  const groups = useMemo(() => {
-    return Array.from(customers.reduce((map, row) => {
-      const current = map.get(row.work_type) ?? { count: 0, total: 0, expense: 0, income: 0 };
-      map.set(row.work_type, { count: current.count + 1, total: current.total + row.total_amount, expense: current.expense + row.expense, income: current.income + row.income });
-      return map;
-    }, new Map<string, { count: number; total: number; expense: number; income: number }>()).entries());
-  }, [customers]);
-
-  // 1. Dynamic Bar Graph Data (Calculated from real records for the last 6 months)
-  const barChartData = useMemo(() => {
+  // Month selector - dynamically defaults to current month (e.g. September 2026 / October 2026)
+  const [selectedMonthKey, setSelectedMonthKey] = useState<string>(() => {
     const now = new Date();
-    const monthsList = [];
-    for (let i = 5; i >= 0; i--) {
+    return `${now.getFullYear()}-${String(now.getMonth()).padStart(2, '0')}`;
+  });
+
+  // Generate available Month & Year options from recorded customer, spending, and kirkol dates
+  const monthOptions = useMemo(() => {
+    const map = new Map<string, { key: string; label: string; year: number; month: number }>();
+    const registerDate = (iso?: string) => {
+      if (!iso) return;
+      try {
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return;
+        const key = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
+        if (!map.has(key)) {
+          const label = `${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
+          map.set(key, { key, label, year: d.getFullYear(), month: d.getMonth() });
+        }
+      } catch {}
+    };
+
+    const now = new Date();
+    for (let i = 0; i < 6; i++) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const year = d.getFullYear();
-      const month = d.getMonth();
-      const monthShort = d.toLocaleString('en-IN', { month: 'short' });
-
-      const monthCustomers = customers.filter((c) => {
-        if (!c.created_at) return false;
-        const cd = new Date(c.created_at);
-        return cd.getFullYear() === year && cd.getMonth() === month;
-      });
-      const monthSpendings = spendings.filter((s) => {
-        if (!s.created_at) return false;
-        const sd = new Date(s.created_at);
-        return sd.getFullYear() === year && sd.getMonth() === month;
-      });
-      const monthKirkol = kirkol.filter((k) => {
-        if (!k.created_at) return false;
-        const kd = new Date(k.created_at);
-        return kd.getFullYear() === year && kd.getMonth() === month;
-      });
-
-      const custIncome = monthCustomers.reduce((sum, r) => sum + (Number(r.income) || 0), 0);
-      const kirIncome = monthKirkol.reduce((sum, r) => sum + (Number(r.price) || 0), 0);
-      const income = custIncome + kirIncome;
-
-      const custExpense = monthCustomers.reduce((sum, r) => sum + (Number(r.expense) || 0), 0);
-      const directSpending = monthSpendings.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
-      const expense = custExpense + directSpending;
-
-      monthsList.push({
-        label: monthShort,
-        fullName: `${d.toLocaleString('en-IN', { month: 'long' })} ${year}`,
-        income,
-        expense,
-      });
+      registerDate(d.toISOString());
     }
 
-    const maxVal = Math.max(...monthsList.map((r) => Math.max(r.income, r.expense)), 5000);
-    return { data: monthsList, maxVal };
+    customers.forEach((c) => registerDate(c.created_at));
+    spendings.forEach((s) => registerDate(s.created_at));
+    kirkol.forEach((k) => registerDate(k.created_at));
+
+    return Array.from(map.values()).sort((a, b) => {
+      if (a.year !== b.year) return b.year - a.year;
+      return b.month - a.month;
+    });
   }, [customers, spendings, kirkol]);
 
-  // 2. Dynamic Pie/Donut Chart Data (Calculated from real service requests)
-  const donutData = useMemo(() => {
-    if (!customers.length) {
-      return {
-        items: [],
-        gradient: '#edf3ef',
-        total: 0,
-      };
-    }
-    const countMap = new Map<string, number>();
-    customers.forEach((c) => {
-      countMap.set(c.work_type, (countMap.get(c.work_type) || 0) + 1);
+  // Month-filtered datasets
+  const monthFilteredCustomers = useMemo(() => {
+    if (selectedMonthKey === 'ALL') return customers;
+    return customers.filter((c) => {
+      if (!c.created_at) return false;
+      const d = new Date(c.created_at);
+      const key = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
+      return key === selectedMonthKey;
     });
-    const sorted = Array.from(countMap.entries()).sort((a, b) => b[1] - a[1]);
-    const top4 = sorted.slice(0, 4);
-    const othersCount = sorted.slice(4).reduce((sum, [, count]) => sum + count, 0);
+  }, [customers, selectedMonthKey]);
 
-    const sliceColors = ['#167c57', '#3b82f6', '#f59e0b', '#8b5cf6', '#64748b'];
-    const total = customers.length;
+  const monthFilteredSpendings = useMemo(() => {
+    if (selectedMonthKey === 'ALL') return spendings;
+    return spendings.filter((s) => {
+      if (!s.created_at) return false;
+      const d = new Date(s.created_at);
+      const key = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
+      return key === selectedMonthKey;
+    });
+  }, [spendings, selectedMonthKey]);
 
-    const items = top4.map(([name, count], index) => ({
-      name,
-      count,
-      pct: Math.round((count / total) * 100),
-      color: sliceColors[index % sliceColors.length],
-    }));
+  const monthFilteredKirkol = useMemo(() => {
+    if (selectedMonthKey === 'ALL') return kirkol;
+    return kirkol.filter((k) => {
+      if (!k.created_at) return false;
+      const d = new Date(k.created_at);
+      const key = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
+      return key === selectedMonthKey;
+    });
+  }, [kirkol, selectedMonthKey]);
 
-    if (othersCount > 0) {
-      items.push({
-        name: 'Other services',
-        count: othersCount,
-        pct: Math.round((othersCount / total) * 100),
-        color: sliceColors[4],
+  // Financial stats for the selected month (Single Source of Truth)
+  const monthFinancials = useMemo(() => {
+    const totalJobs = monthFilteredCustomers.length;
+    const totalAmount = monthFilteredCustomers.reduce((sum, r) => sum + (Number(r.total_amount) || 0), 0);
+    const receivedAmount = monthFilteredCustomers.reduce((sum, r) => sum + (Number(r.paid) || 0), 0);
+    const pendingAmount = monthFilteredCustomers.reduce(
+      (sum, r) => sum + Math.max((Number(r.total_amount) || 0) - (Number(r.paid) || 0), 0),
+      0
+    );
+
+    const customerIncome = monthFilteredCustomers.reduce((sum, r) => sum + (Number(r.income) || 0), 0);
+    const kirkolIncome = monthFilteredKirkol.reduce((sum, r) => sum + (Number(r.price) || 0), 0);
+    const totalIncome = customerIncome + kirkolIncome;
+
+    const totalSpending = monthFilteredSpendings.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
+    const remainingAmount = totalIncome - totalSpending;
+
+    return {
+      totalJobs,
+      totalAmount,
+      receivedAmount,
+      pendingAmount,
+      customerIncome,
+      kirkolIncome,
+      totalIncome,
+      totalSpending,
+      remainingAmount,
+    };
+  }, [monthFilteredCustomers, monthFilteredSpendings, monthFilteredKirkol]);
+
+  // Pie Chart 1: Work Status Distribution for selected month
+  const workStatusPieData = useMemo(() => {
+    const total = monthFilteredCustomers.length;
+    if (!total) return { items: [], gradient: '#e2e8f0', total: 0 };
+
+    const statusCountsMap: Record<string, number> = {};
+    monthFilteredCustomers.forEach((c) => {
+      const st = c.work_status || 'Pending';
+      statusCountsMap[st] = (statusCountsMap[st] || 0) + 1;
+    });
+
+    const statusPalette: Record<string, string> = {
+      Pending: '#eab308',
+      'In Progress': '#3b82f6',
+      Completed: '#10b981',
+      Delivered: '#167c57',
+      'Payment Pending': '#f97316',
+      'Document Required': '#8b5cf6',
+      Rejected: '#ef4444',
+      Cancelled: '#64748b',
+    };
+
+    const items = Object.entries(statusCountsMap)
+      .sort((a, b) => b[1] - a[1])
+      .map(([name, count], idx) => {
+        const pct = Math.round((count / total) * 100);
+        const color = statusPalette[name] || ['#06b6d4', '#ec4899', '#6366f1', '#14b8a6'][idx % 4];
+        return { name, count, pct, color };
       });
-    }
 
     let currentPct = 0;
     const gradientParts = items.map((item) => {
@@ -1035,7 +1227,83 @@ function Income({
       gradient: `conic-gradient(${gradientParts.join(', ')})`,
       total,
     };
-  }, [customers]);
+  }, [monthFilteredCustomers]);
+
+  // Pie Chart 2: Category Spending Distribution for selected month
+  const categoryPieData = useMemo(() => {
+    const total = monthFinancials.totalSpending;
+    if (!total || monthFilteredSpendings.length === 0) {
+      return { items: [], gradient: '#e2e8f0', total: 0 };
+    }
+
+    const catMap: Record<string, number> = {};
+    monthFilteredSpendings.forEach((s) => {
+      const cat = s.category || 'Business';
+      catMap[cat] = (catMap[cat] || 0) + (Number(s.amount) || 0);
+    });
+
+    const categoryColors = ['#e8753a', '#2563eb', '#10b981', '#9333ea', '#06b6d4', '#f59e0b'];
+
+    const items = Object.entries(catMap)
+      .sort((a, b) => b[1] - a[1])
+      .map(([name, amount], idx) => {
+        const pct = Math.round((amount / total) * 100);
+        const color = categoryColors[idx % categoryColors.length];
+        return { name, amount, pct, color };
+      });
+
+    let currentPct = 0;
+    const gradientParts = items.map((item) => {
+      const start = currentPct;
+      currentPct += (item.amount / total) * 100;
+      return `${item.color} ${start.toFixed(1)}% ${currentPct.toFixed(1)}%`;
+    });
+
+    return {
+      items,
+      gradient: `conic-gradient(${gradientParts.join(', ')})`,
+      total,
+    };
+  }, [monthFilteredSpendings, monthFinancials.totalSpending]);
+
+  const groups = useMemo(() => {
+    return Array.from(
+      monthFilteredCustomers.reduce((map, row) => {
+        const current = map.get(row.work_type) ?? { count: 0, total: 0, expense: 0, income: 0 };
+        map.set(row.work_type, {
+          count: current.count + 1,
+          total: current.total + (Number(row.total_amount) || 0),
+          expense: current.expense + (Number(row.expense) || 0),
+          income: current.income + (Number(row.income) || 0),
+        });
+        return map;
+      }, new Map<string, { count: number; total: number; expense: number; income: number }>()).entries()
+    );
+  }, [monthFilteredCustomers]);
+
+  // Dynamic Bar Graph Data (Strictly calculated using calculateMonthTotals for single source of truth)
+  const barChartData = useMemo(() => {
+    const now = new Date();
+    const monthsList = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const year = d.getFullYear();
+      const month = d.getMonth();
+      const monthShort = d.toLocaleString('en-IN', { month: 'short' });
+
+      const monthStats = calculateMonthTotals(customers, spendings, kirkol, year, month);
+
+      monthsList.push({
+        label: monthShort,
+        fullName: `${MONTH_NAMES[month]} ${year}`,
+        income: monthStats.totalIncome,
+        expense: monthStats.totalSpending,
+      });
+    }
+
+    const maxVal = Math.max(...monthsList.map((r) => Math.max(r.income, r.expense)), 5000);
+    return { data: monthsList, maxVal };
+  }, [customers, spendings, kirkol]);
 
   const confirmDeleteKirkol = async (): Promise<void> => {
     if (!deletingKirkol) return;
@@ -1043,78 +1311,424 @@ function Income({
     setDeletingKirkol(null);
   };
 
+  const selectedMonthLabel =
+    selectedMonthKey === 'ALL'
+      ? 'All Months (All Time Records)'
+      : monthOptions.find((m) => m.key === selectedMonthKey)?.label || selectedMonthKey;
+
   return (
     <>
       <div className="page-heading">
         <div>
-          <span className="eyebrow accent">OVERVIEW</span>
+          <span className="eyebrow accent">FINANCIAL INTELLIGENCE</span>
           <h1>Income & Reports</h1>
-          <p>Verified financial metrics with live calculations and breakdown.</p>
+          <p>Verified accounting metrics, monthly financial reports, and spendings breakdown.</p>
         </div>
         <div className="heading-actions">
-          <button className="button secondary" onClick={onMonthlyReport}><FileDown size={16} /> Monthly PDF</button>
-          <button className="button secondary" onClick={onSpending}><Plus size={16} /> Add spending</button>
-          <button className="button kirkol-btn" onClick={onKirkol}><Wand size={16} /> Kirkol</button>
-          <button className="button primary" onClick={onCustomer}><Plus size={16} /> Add customer</button>
+          <button className="button secondary" onClick={onMonthlyReport}>
+            <FileDown size={16} /> Monthly PDF Report
+          </button>
+          <button className="button secondary" onClick={onSpending}>
+            <Plus size={16} /> Add spending
+          </button>
+          <button className="button kirkol-btn" onClick={onKirkol}>
+            <Wand size={16} /> Kirkol
+          </button>
+          <button className="button primary" onClick={onCustomer}>
+            <Plus size={16} /> Add customer
+          </button>
         </div>
       </div>
 
-      <div className="date-strip">
-        <div className="date-range"><span className="calendar-dot" /> Live Financial Breakdown <ChevronDown size={14} /></div>
-        <span className="muted">Single Source of Truth Calculations</span>
+      {/* Month-Wise Selector Bar */}
+      <div
+        className="month-filter-strip"
+        style={{
+          background: '#ffffff',
+          border: '1px solid #e2e8e2',
+          borderRadius: '12px',
+          padding: '12px 16px',
+          marginBottom: '16px',
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '8px',
+              background: '#eaf6ef',
+              color: '#167c57',
+              display: 'grid',
+              placeItems: 'center',
+            }}
+          >
+            <Calendar size={18} />
+          </div>
+          <div>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: '#88958e', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+              Select Month Filter
+            </div>
+            <strong style={{ fontSize: '15px', color: '#16251e' }}>{selectedMonthLabel}</strong>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <select
+            className="filter-select"
+            value={selectedMonthKey}
+            onChange={(e) => setSelectedMonthKey(e.target.value)}
+            style={{
+              padding: '8px 14px',
+              fontSize: '13px',
+              fontWeight: 600,
+              color: '#16251e',
+              background: '#f6f8f6',
+              border: '1.5px solid #167c57',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              outline: 'none',
+            }}
+          >
+            <option value="ALL">📅 All Months (All Time Records)</option>
+            {monthOptions.map((opt) => (
+              <option key={opt.key} value={opt.key}>
+                🗓️ {opt.label}
+              </option>
+            ))}
+          </select>
+
+          {selectedMonthKey !== 'ALL' && (
+            <button
+              className="button secondary"
+              style={{ padding: '8px 12px', fontSize: '12px' }}
+              onClick={() => setSelectedMonthKey('ALL')}
+            >
+              Reset to All
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Verified Core Calculation Summary */}
-      <section className="report-summary-grid">
-        <div className="report-summary-card">
-          <span className="report-summary-label">Total spending</span>
-          <strong className="report-summary-value">{formatCurrency(totals.totalSpending)}</strong>
+      {/* Month-Wise Financial Metrics Cards (7 Cards exactly matching screenshot) */}
+      <div
+        className="month-financial-grid"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+          gap: '12px',
+          marginBottom: '18px',
+        }}
+      >
+        <div
+          className="crm-summary-card"
+          style={{ background: '#ffffff', border: '1px solid #e4e9e4', borderRadius: '12px', padding: '14px 16px' }}
+        >
+          <span className="crm-summary-label" style={{ color: '#78847d', fontSize: '12px', fontWeight: 600 }}>
+            Total Jobs
+          </span>
+          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px' }}>
+            {monthFinancials.totalJobs}
+          </strong>
+          <span style={{ fontSize: '11px', color: '#8b9790' }}>
+            in {selectedMonthKey === 'ALL' ? 'all months' : selectedMonthLabel}
+          </span>
         </div>
-        <div className="report-summary-card">
-          <span className="report-summary-label">Total income</span>
-          <strong className="report-summary-value">{formatCurrency(totals.totalIncome)}</strong>
-        </div>
-        <div className="report-summary-card" style={{ background: '#eaf6ef', borderColor: '#b2e2c8' }}>
-          <span className="report-summary-label" style={{ color: '#167c57', fontWeight: 700 }}>Remaining amount</span>
-          <strong className="report-summary-value remaining">{formatCurrency(totals.remainingAmount)}</strong>
-        </div>
-        <div className="report-summary-card">
-          <span className="report-summary-label">Sum of total amount</span>
-          <strong className="report-summary-value">{formatCurrency(totals.totalAmount)}</strong>
-        </div>
-        <div className="report-summary-card kirkol-card">
-          <span className="report-summary-label">Total kirkol price</span>
-          <strong className="report-summary-value kirkol-text">{formatCurrency(totals.kirkolIncome)}</strong>
-        </div>
-      </section>
 
-      <section className="metric-grid">
-        <Metric icon={CircleDollarSign} label="Total income" value={formatCurrency(totals.totalIncome)} change="12.8%" tone="green" />
-        <Metric icon={WalletCards} label="Total spending" value={formatCurrency(totals.totalSpending)} change="4.2%" tone="amber" down />
-        <Metric icon={ClipboardList} label="Pending payments" value={formatCurrency(totals.pendingAmount)} detail="Needs collection" tone="orange" />
-        <Metric icon={ShoppingBag} label="Pending work" value={String(totals.pendingWorkCount).padStart(2, '0')} detail="Jobs in progress" tone="blue" />
-      </section>
+        <div
+          className="crm-summary-card"
+          style={{ background: '#ffffff', border: '1px solid #e4e9e4', borderRadius: '12px', padding: '14px 16px' }}
+        >
+          <span className="crm-summary-label" style={{ color: '#78847d', fontSize: '12px', fontWeight: 600 }}>
+            Total Amount
+          </span>
+          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px' }}>
+            {formatCurrency(monthFinancials.totalAmount)}
+          </strong>
+          <span style={{ fontSize: '11px', color: '#8b9790' }}>Gross customer billed</span>
+        </div>
+
+        <div
+          className="crm-summary-card"
+          style={{ background: '#ffffff', border: '1px solid #e4e9e4', borderRadius: '12px', padding: '14px 16px' }}
+        >
+          <span className="crm-summary-label" style={{ color: '#78847d', fontSize: '12px', fontWeight: 600 }}>
+            Received Amount
+          </span>
+          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px', color: '#167c57' }}>
+            {formatCurrency(monthFinancials.receivedAmount)}
+          </strong>
+          <span style={{ fontSize: '11px', color: '#167c57' }}>Collected payment</span>
+        </div>
+
+        <div
+          className="crm-summary-card"
+          style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', padding: '14px 16px' }}
+        >
+          <span className="crm-summary-label" style={{ color: '#c2410c', fontSize: '12px', fontWeight: 600 }}>
+            Pending Amount
+          </span>
+          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px', color: '#ea580c' }}>
+            {formatCurrency(monthFinancials.pendingAmount)}
+          </strong>
+          <span style={{ fontSize: '11px', color: '#ea580c' }}>To collect</span>
+        </div>
+
+        <div
+          className="crm-summary-card"
+          style={{ background: '#ffffff', border: '1px solid #bbf7d0', borderRadius: '12px', padding: '14px 16px' }}
+        >
+          <span className="crm-summary-label" style={{ color: '#15803d', fontSize: '12px', fontWeight: 600 }}>
+            Total Income
+          </span>
+          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px', color: '#15803d' }}>
+            {formatCurrency(monthFinancials.totalIncome)}
+          </strong>
+          <span style={{ fontSize: '11px', color: '#15803d' }}>Customer Profit + Kirkol</span>
+        </div>
+
+        <div
+          className="crm-summary-card"
+          style={{ background: '#ffffff', border: '1px solid #fecaca', borderRadius: '12px', padding: '14px 16px' }}
+        >
+          <span className="crm-summary-label" style={{ color: '#b91c1c', fontSize: '12px', fontWeight: 600 }}>
+            Total Spending
+          </span>
+          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px', color: '#dc2626' }}>
+            {formatCurrency(monthFinancials.totalSpending)}
+          </strong>
+          <span style={{ fontSize: '11px', color: '#b91c1c' }}>Direct business expenses</span>
+        </div>
+
+        <div
+          className="crm-summary-card"
+          style={{
+            background: 'linear-gradient(135deg, #eaf6ef, #d4f0df)',
+            border: '2px solid #84cc16',
+            borderRadius: '12px',
+            padding: '14px 16px',
+            boxShadow: '0 4px 12px rgba(22, 124, 87, 0.1)',
+          }}
+        >
+          <span className="crm-summary-label" style={{ color: '#0d6648', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase' }}>
+            ★ Remaining Amount
+          </span>
+          <strong className="crm-summary-value" style={{ fontSize: '22px', display: 'block', marginTop: '4px', color: '#0d6648', fontWeight: 900 }}>
+            {formatCurrency(monthFinancials.remainingAmount)}
+          </strong>
+          <span style={{ fontSize: '11px', color: '#0d6648', fontWeight: 700 }}>Total Income − Spending</span>
+        </div>
+      </div>
+
+      {/* Pie / Donut Charts Section (Work Status & Category Spending Reports) */}
+      <div
+        className="pie-charts-grid"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '16px',
+          marginBottom: '20px',
+        }}
+      >
+        {/* Pie Chart 1: Work Status Distribution */}
+        <section className="panel" style={{ padding: '18px 20px', borderRadius: '12px' }}>
+          <div className="panel-header" style={{ marginBottom: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '7px' }}>
+                <PieChart size={18} color="#167c57" /> Work Status Report
+              </h2>
+              <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#78847d' }}>
+                Breakdown of active vs completed jobs ({selectedMonthLabel})
+              </p>
+            </div>
+          </div>
+          <div className="donut-wrap" style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+            <div
+              className="donut"
+              style={{
+                background: workStatusPieData.gradient,
+                width: '130px',
+                height: '130px',
+                borderRadius: '50%',
+                display: 'grid',
+                placeItems: 'center',
+                flexShrink: 0,
+                position: 'relative',
+              }}
+            >
+              <div
+                style={{
+                  width: '76px',
+                  height: '76px',
+                  background: '#ffffff',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.06)',
+                }}
+              >
+                <strong style={{ fontSize: '18px', color: '#16251e' }}>{workStatusPieData.total}</strong>
+                <span style={{ fontSize: '9.5px', color: '#78847d', fontWeight: 600 }}>Total Jobs</span>
+              </div>
+            </div>
+            <div className="donut-list" style={{ flex: 1, minWidth: '160px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              {workStatusPieData.items.length > 0 ? (
+                workStatusPieData.items.map((item) => (
+                  <div
+                    key={item.name}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      fontSize: '12px',
+                      padding: '3px 0',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span
+                        style={{
+                          width: '10px',
+                          height: '10px',
+                          borderRadius: '50%',
+                          background: item.color,
+                          display: 'inline-block',
+                          flexShrink: 0,
+                        }}
+                      />
+                      <span style={{ color: '#334139', fontWeight: 500 }}>{item.name}</span>
+                    </div>
+                    <div>
+                      <strong style={{ color: '#16251e', marginRight: '6px' }}>{item.count}</strong>
+                      <span style={{ fontSize: '11px', color: '#78847d' }}>({item.pct}%)</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div style={{ color: '#888', fontSize: '12px' }}>No customer jobs recorded for this month.</div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Pie Chart 2: Spending by Category Distribution */}
+        <section className="panel" style={{ padding: '18px 20px', borderRadius: '12px' }}>
+          <div className="panel-header" style={{ marginBottom: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '7px' }}>
+                <PieChart size={18} color="#e8753a" /> Spending by Category Report
+              </h2>
+              <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#78847d' }}>
+                Expense allocation by business categories ({selectedMonthLabel})
+              </p>
+            </div>
+          </div>
+          <div className="donut-wrap" style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+            <div
+              className="donut"
+              style={{
+                background: categoryPieData.gradient,
+                width: '130px',
+                height: '130px',
+                borderRadius: '50%',
+                display: 'grid',
+                placeItems: 'center',
+                flexShrink: 0,
+                position: 'relative',
+              }}
+            >
+              <div
+                style={{
+                  width: '76px',
+                  height: '76px',
+                  background: '#ffffff',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.06)',
+                }}
+              >
+                <strong style={{ fontSize: '14px', color: '#16251e' }}>{formatCurrency(categoryPieData.total)}</strong>
+                <span style={{ fontSize: '9px', color: '#78847d', fontWeight: 600 }}>Total Spent</span>
+              </div>
+            </div>
+            <div className="donut-list" style={{ flex: 1, minWidth: '160px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              {categoryPieData.items.length > 0 ? (
+                categoryPieData.items.map((item) => (
+                  <div
+                    key={item.name}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      fontSize: '12px',
+                      padding: '3px 0',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span
+                        style={{
+                          width: '10px',
+                          height: '10px',
+                          borderRadius: '50%',
+                          background: item.color,
+                          display: 'inline-block',
+                          flexShrink: 0,
+                        }}
+                      />
+                      <span style={{ color: '#334139', fontWeight: 500 }}>{item.name}</span>
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: 700, color: '#16251e', marginRight: '6px' }}>
+                        {formatCurrency(item.amount)}
+                      </span>
+                      <span style={{ fontSize: '11px', color: '#78847d' }}>({item.pct}%)</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div style={{ color: '#888', fontSize: '12px' }}>No direct expenses logged for this month.</div>
+              )}
+            </div>
+          </div>
+        </section>
+      </div>
 
       <div className="dashboard-grid">
-        {/* Dynamic Monthly Income & Expense Bar Graph */}
+        {/* Dynamic Monthly Income & Expense Bar Graph (Fixed calculation) */}
         <section className="panel chart-panel">
           <div className="panel-header">
             <div>
               <h2>Income & Expense Overview</h2>
-              <p>Live monthly profit vs expenses distribution</p>
+              <p>Live monthly profit vs expenses distribution (Last 6 Months)</p>
             </div>
-            <button className="select-button" onClick={onMonthlyReport}><FileDown size={14} /> Download PDF</button>
+            <button className="select-button" onClick={onMonthlyReport}>
+              <FileDown size={14} /> Download PDF
+            </button>
           </div>
           <div className="chart-legend">
-            <span><i className="legend-income" /> Income (Profit)</span>
-            <span><i className="legend-expense" /> Expenses</span>
+            <span><i className="legend-income" /> Income (Customer Profit + Kirkol)</span>
+            <span><i className="legend-expense" /> Spending (Direct Expenses)</span>
           </div>
           <div className="bar-chart">
             {barChartData.data.map((item) => {
               const incomeHeight = Math.min(Math.max((item.income / barChartData.maxVal) * 100, item.income > 0 ? 6 : 2), 100);
               const expenseHeight = Math.min(Math.max((item.expense / barChartData.maxVal) * 100, item.expense > 0 ? 6 : 2), 100);
               return (
-                <div className="bar-group" key={item.label} title={`${item.fullName}\nIncome: ${formatCurrency(item.income)}\nExpense: ${formatCurrency(item.expense)}`}>
+                <div
+                  className="bar-group"
+                  key={item.label}
+                  title={`${item.fullName}\nIncome: ${formatCurrency(item.income)}\nSpending: ${formatCurrency(item.expense)}`}
+                >
                   <div className="bar-stack">
                     <span className="bar income" style={{ height: `${incomeHeight}%` }} />
                     <span className="bar expense" style={{ height: `${expenseHeight}%` }} />
@@ -1133,50 +1747,57 @@ function Income({
           </div>
         </section>
 
-        {/* Dynamic Work Type Donut / Pie Chart */}
-        <section className="panel">
-          <div className="panel-header">
+        {/* Dynamic Work Type Breakdown in Income */}
+        <section className="panel table-panel">
+          <div className="panel-header" style={{ padding: '16px 20px 0' }}>
             <div>
-              <h2>Work Type Distribution</h2>
-              <p>Most requested services based on customer records</p>
+              <h2>Income by Work Type</h2>
+              <p>Aggregated turnover and profit margins ({selectedMonthLabel})</p>
             </div>
           </div>
-          <div className="donut-wrap">
-            <div className="donut" style={{ background: donutData.gradient }}>
-              <div>
-                <strong>{donutData.total}</strong>
-                <span>Total jobs</span>
-              </div>
-            </div>
-            <div className="donut-list">
-              {donutData.items.length > 0 ? (
-                donutData.items.map((item) => (
-                  <LegendRow
-                    key={item.name}
-                    label={`${item.name} (${item.count})`}
-                    value={`${item.pct}%`}
-                    customHex={item.color}
-                  />
-                ))
-              ) : (
-                <div style={{ color: '#888', fontSize: '12px', padding: '10px 0' }}>No customer records logged yet.</div>
-              )}
-            </div>
+          <div className="table-scroll" style={{ maxHeight: '280px' }}>
+            <table>
+              <thead>
+                <tr>
+                  <th>Work type</th>
+                  <th>Jobs</th>
+                  <th>Total amount</th>
+                  <th>Income (Profit)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {groups.map(([name, row]) => (
+                  <tr key={name}>
+                    <td><strong>{name}</strong></td>
+                    <td>{row.count}</td>
+                    <td>{formatCurrency(row.total)}</td>
+                    <td className="income-value">{formatCurrency(row.income)}</td>
+                  </tr>
+                ))}
+                {!groups.length && (
+                  <tr>
+                    <td colSpan={4} style={{ textAlign: 'center', color: '#888', padding: '16px' }}>
+                      No customer jobs in {selectedMonthLabel}.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </section>
       </div>
 
-      {/* 3. Dedicated Kirkol (Miscellaneous Counter Sales) Table */}
+      {/* Dedicated Kirkol Table for Selected Month */}
       <section className="panel table-panel" style={{ marginTop: '18px' }}>
         <div className="panel-header" style={{ padding: '20px 20px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <h2>Kirkol Work & Price Ledger</h2>
               <span className="work-pill" style={{ background: '#fff0ea', color: '#e8753a', fontWeight: 700 }}>
-                {kirkol.length} entries · Total {formatCurrency(totals.kirkolIncome)}
+                {monthFilteredKirkol.length} entries · Total {formatCurrency(monthFinancials.kirkolIncome)}
               </span>
             </div>
-            <p>Miscellaneous direct counter work, printing, Xerox, and daily counter transactions.</p>
+            <p>Miscellaneous direct counter work, printing, Xerox, and daily counter transactions ({selectedMonthLabel}).</p>
           </div>
           <button className="button kirkol-btn" onClick={onKirkol}>
             <Wand size={15} /> Add Kirkol
@@ -1194,7 +1815,7 @@ function Income({
               </tr>
             </thead>
             <tbody>
-              {kirkol.map((item, idx) => (
+              {monthFilteredKirkol.map((item, idx) => (
                 <tr key={item.id}>
                   <td><span className="table-index">{idx + 1}</span></td>
                   <td>
@@ -1219,9 +1840,9 @@ function Income({
               ))}
             </tbody>
           </table>
-          {!kirkol.length && (
+          {!monthFilteredKirkol.length && (
             <div className="empty-state">
-              <p>No Kirkol entries recorded yet.</p>
+              <p>No Kirkol entries recorded for {selectedMonthLabel}.</p>
               <button className="button kirkol-btn" style={{ marginTop: '8px' }} onClick={onKirkol}>
                 <Wand size={15} /> Add first Kirkol entry
               </button>
@@ -1230,12 +1851,12 @@ function Income({
         </div>
       </section>
 
-      {/* Income by Work Type Table */}
+      {/* Income by Work Type Table Details */}
       <section className="panel table-panel" style={{ marginTop: '18px' }}>
         <div className="panel-header" style={{ padding: '20px 20px 0' }}>
           <div>
-            <h2>Income by Work Type</h2>
-            <p>Aggregated turnover, direct expenses, and profit margins by service.</p>
+            <h2>Full Turnover & Profit Analysis by Work Type</h2>
+            <p>Aggregated turnover, direct expenses, and profit margins by service ({selectedMonthLabel}).</p>
           </div>
         </div>
         <div className="table-scroll">

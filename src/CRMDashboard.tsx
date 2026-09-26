@@ -46,7 +46,10 @@ export function CRMDashboard({
   onOpenAIAssistant,
   onOpenSMSReminders,
 }: Props) {
-  const [selectedMonthKey, setSelectedMonthKey] = useState<string>('ALL'); // 'ALL' or 'YYYY-MM' (e.g. '2026-08')
+  const [selectedMonthKey, setSelectedMonthKey] = useState<string>(() => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth()).padStart(2, '0')}`;
+  });
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
   const [workFilter, setWorkFilter] = useState('ALL');
   const [customerFilter, setCustomerFilter] = useState('ALL');
@@ -54,7 +57,6 @@ export function CRMDashboard({
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<CustomerRecord | null>(null);
   const [deleting, setDeleting] = useState<CustomerRecord | null>(null);
-  const [activeChartTab, setActiveChartTab] = useState<'status' | 'category' | 'both'>('both');
 
   // Generate available Month & Year options from recorded customer, spending, and kirkol dates
   const monthOptions = useMemo(() => {
@@ -319,8 +321,6 @@ export function CRMDashboard({
 
   const handleSave = async (data: Partial<CustomerRecord>, editingId?: string): Promise<void> => {
     await onSaveCustomer(data, editingId);
-    setShowForm(false);
-    setEditing(null);
   };
 
   const handleDelete = async (): Promise<void> => {
@@ -339,36 +339,116 @@ export function CRMDashboard({
       <div className="page-heading">
         <div>
           <span className="eyebrow accent">AL UZER SERVICES & CRM</span>
-          <h1>Job Management & Monthly Reports</h1>
-          <p>Live accounting, monthly income reports, remaining balance, and job workflow.</p>
+          <h1>Job Management & Workflow</h1>
+          <p>Customer work orders, statuses, daily workflow, and thermal receipt billing.</p>
         </div>
         <div className="heading-actions">
           {onOpenSMSReminders && (
             <button
-              className="button secondary"
+              className="button"
               style={{
-                background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15))',
-                borderColor: 'rgba(52, 211, 153, 0.4)',
-                color: '#a7f3d0',
+                background: 'linear-gradient(135deg, #064e3b 0%, #047857 50%, #0d9488 100%)',
+                color: '#ffffff',
+                border: '1px solid rgba(52, 211, 153, 0.45)',
+                boxShadow: '0 4px 14px rgba(5, 150, 105, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
+                fontWeight: 700,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '9px 15px',
+                borderRadius: '10px',
+                transition: 'all 0.2s ease',
+                position: 'relative',
+                overflow: 'hidden',
+                cursor: 'pointer',
               }}
               onClick={onOpenSMSReminders}
               title="Open Automated 5-Day SMS Reminder Hub"
             >
-              <Smartphone size={16} className="text-emerald-400" /> SMS Reminders
+              <Smartphone size={16} style={{ filter: 'drop-shadow(0 0 5px rgba(52,211,153,0.9))' }} />
+              <span>SMS Reminders</span>
+              <span
+                style={{
+                  background: 'rgba(255, 255, 255, 0.22)',
+                  backdropFilter: 'blur(4px)',
+                  border: '1px solid rgba(255, 255, 255, 0.35)',
+                  color: '#ffffff',
+                  fontSize: '10px',
+                  fontWeight: 800,
+                  padding: '2px 6px',
+                  borderRadius: '12px',
+                  letterSpacing: '0.4px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                <span
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    background: '#34d399',
+                    boxShadow: '0 0 6px #34d399',
+                    display: 'inline-block',
+                  }}
+                />
+                5-DAY
+              </span>
             </button>
           )}
           {onOpenAIAssistant && (
             <button
-              className="button secondary"
+              className="button"
               style={{
-                background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15))',
-                borderColor: 'rgba(129, 140, 248, 0.4)',
-                color: '#c7d2fe',
+                background: 'linear-gradient(135deg, #312e81 0%, #4f46e5 50%, #7c3aed 100%)',
+                color: '#ffffff',
+                border: '1px solid rgba(167, 139, 250, 0.45)',
+                boxShadow: '0 4px 14px rgba(99, 102, 241, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
+                fontWeight: 700,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '9px 15px',
+                borderRadius: '10px',
+                transition: 'all 0.2s ease',
+                position: 'relative',
+                overflow: 'hidden',
+                cursor: 'pointer',
               }}
               onClick={onOpenAIAssistant}
-              title="Open AI Intelligence & Dual-Data Assistant"
+              title="Open AI Intelligence & Payment Chat Assistant"
             >
-              <Sparkles size={16} className="animate-pulse text-indigo-400" /> AI Assistant
+              <Sparkles size={16} style={{ filter: 'drop-shadow(0 0 6px rgba(196,181,253,0.9))' }} />
+              <span>AI Assistant</span>
+              <span
+                style={{
+                  background: 'rgba(255, 255, 255, 0.22)',
+                  backdropFilter: 'blur(4px)',
+                  border: '1px solid rgba(255, 255, 255, 0.35)',
+                  color: '#ffffff',
+                  fontSize: '10px',
+                  fontWeight: 800,
+                  padding: '2px 6px',
+                  borderRadius: '12px',
+                  letterSpacing: '0.4px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                <span
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    background: '#a78bfa',
+                    boxShadow: '0 0 6px #a78bfa',
+                    display: 'inline-block',
+                  }}
+                />
+                CHAT
+              </span>
             </button>
           )}
           {onOpenMonthlyReport && (
@@ -461,12 +541,12 @@ export function CRMDashboard({
         </div>
       </div>
 
-      {/* Month-Wise Financial Metrics Cards */}
+      {/* Privacy-Safe Operational Job Metrics */}
       <div
         className="month-financial-grid"
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
           gap: '12px',
           marginBottom: '18px',
         }}
@@ -479,48 +559,11 @@ export function CRMDashboard({
             Total Jobs
           </span>
           <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px' }}>
-            {monthFinancials.totalJobs}
+            {monthFilteredCustomers.length}
           </strong>
-          <span style={{ fontSize: '11px', color: '#8b9790' }}>in {selectedMonthKey === 'ALL' ? 'all months' : selectedMonthLabel}</span>
-        </div>
-
-        <div
-          className="crm-summary-card"
-          style={{ background: '#ffffff', border: '1px solid #e4e9e4', borderRadius: '12px', padding: '14px 16px' }}
-        >
-          <span className="crm-summary-label" style={{ color: '#78847d', fontSize: '12px', fontWeight: 600 }}>
-            Total Amount
+          <span style={{ fontSize: '11px', color: '#8b9790' }}>
+            in {selectedMonthKey === 'ALL' ? 'all months' : selectedMonthLabel}
           </span>
-          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px' }}>
-            {formatCurrency(monthFinancials.totalAmount)}
-          </strong>
-          <span style={{ fontSize: '11px', color: '#8b9790' }}>Gross customer billed</span>
-        </div>
-
-        <div
-          className="crm-summary-card"
-          style={{ background: '#ffffff', border: '1px solid #e4e9e4', borderRadius: '12px', padding: '14px 16px' }}
-        >
-          <span className="crm-summary-label" style={{ color: '#78847d', fontSize: '12px', fontWeight: 600 }}>
-            Received Amount
-          </span>
-          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px', color: '#167c57' }}>
-            {formatCurrency(monthFinancials.receivedAmount)}
-          </strong>
-          <span style={{ fontSize: '11px', color: '#167c57' }}>Collected payment</span>
-        </div>
-
-        <div
-          className="crm-summary-card"
-          style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', padding: '14px 16px' }}
-        >
-          <span className="crm-summary-label" style={{ color: '#c2410c', fontSize: '12px', fontWeight: 600 }}>
-            Pending Amount
-          </span>
-          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px', color: '#ea580c' }}>
-            {formatCurrency(monthFinancials.pendingAmount)}
-          </strong>
-          <span style={{ fontSize: '11px', color: '#ea580c' }}>To collect</span>
         </div>
 
         <div
@@ -528,222 +571,39 @@ export function CRMDashboard({
           style={{ background: '#ffffff', border: '1px solid #bbf7d0', borderRadius: '12px', padding: '14px 16px' }}
         >
           <span className="crm-summary-label" style={{ color: '#15803d', fontSize: '12px', fontWeight: 600 }}>
-            Total Income
+            Completed & Delivered
           </span>
           <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px', color: '#15803d' }}>
-            {formatCurrency(monthFinancials.totalIncome)}
+            {monthFilteredCustomers.filter((c) => ['Completed', 'Delivered'].includes(c.work_status)).length}
           </strong>
-          <span style={{ fontSize: '11px', color: '#15803d' }}>Customer Profit + Kirkol</span>
+          <span style={{ fontSize: '11px', color: '#15803d' }}>Fulfilled jobs</span>
         </div>
 
         <div
           className="crm-summary-card"
-          style={{ background: '#ffffff', border: '1px solid #fecaca', borderRadius: '12px', padding: '14px 16px' }}
+          style={{ background: '#ffffff', border: '1px solid #fed7aa', borderRadius: '12px', padding: '14px 16px' }}
         >
-          <span className="crm-summary-label" style={{ color: '#b91c1c', fontSize: '12px', fontWeight: 600 }}>
-            Total Spending
+          <span className="crm-summary-label" style={{ color: '#c2410c', fontSize: '12px', fontWeight: 600 }}>
+            Active / In Progress
           </span>
-          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px', color: '#dc2626' }}>
-            {formatCurrency(monthFinancials.totalSpending)}
+          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px', color: '#ea580c' }}>
+            {monthFilteredCustomers.filter((c) => ['Pending', 'In Progress', 'Payment Pending', 'Document Required'].includes(c.work_status)).length}
           </strong>
-          <span style={{ fontSize: '11px', color: '#b91c1c' }}>Direct business expenses</span>
+          <span style={{ fontSize: '11px', color: '#ea580c' }}>In processing</span>
         </div>
 
         <div
           className="crm-summary-card"
-          style={{
-            background: 'linear-gradient(135deg, #eaf6ef, #d4f0df)',
-            border: '2px solid #84cc16',
-            borderRadius: '12px',
-            padding: '14px 16px',
-            boxShadow: '0 4px 12px rgba(22, 124, 87, 0.1)',
-          }}
+          style={{ background: '#ffffff', border: '1px solid #c7d2fe', borderRadius: '12px', padding: '14px 16px' }}
         >
-          <span className="crm-summary-label" style={{ color: '#0d6648', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase' }}>
-            ★ Remaining Amount
+          <span className="crm-summary-label" style={{ color: '#4338ca', fontSize: '12px', fontWeight: 600 }}>
+            Al Uzer Direct
           </span>
-          <strong className="crm-summary-value" style={{ fontSize: '22px', display: 'block', marginTop: '4px', color: '#0d6648', fontWeight: 900 }}>
-            {formatCurrency(monthFinancials.remainingAmount)}
+          <strong className="crm-summary-value" style={{ fontSize: '20px', display: 'block', marginTop: '4px', color: '#4338ca' }}>
+            {alUzerCount}
           </strong>
-          <span style={{ fontSize: '11px', color: '#0d6648', fontWeight: 700 }}>Total Income − Spending</span>
+          <span style={{ fontSize: '11px', color: '#4338ca' }}>Counter tasks</span>
         </div>
-      </div>
-
-      {/* Pie Charts Section (Category & Work Status) */}
-      <div
-        className="pie-charts-grid"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '16px',
-          marginBottom: '20px',
-        }}
-      >
-        {/* Pie Chart 1: Work Status Distribution */}
-        <section className="panel" style={{ padding: '18px 20px', borderRadius: '12px' }}>
-          <div className="panel-header" style={{ marginBottom: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '7px' }}>
-                <PieChart size={18} color="#167c57" /> Work Status Report
-              </h2>
-              <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#78847d' }}>
-                Breakdown of active vs completed jobs ({selectedMonthLabel})
-              </p>
-            </div>
-          </div>
-          <div className="donut-wrap" style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
-            <div
-              className="donut"
-              style={{
-                background: workStatusPieData.gradient,
-                width: '130px',
-                height: '130px',
-                borderRadius: '50%',
-                display: 'grid',
-                placeItems: 'center',
-                flexShrink: 0,
-                position: 'relative',
-              }}
-            >
-              <div
-                style={{
-                  width: '76px',
-                  height: '76px',
-                  background: '#ffffff',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.06)',
-                }}
-              >
-                <strong style={{ fontSize: '18px', color: '#16251e' }}>{workStatusPieData.total}</strong>
-                <span style={{ fontSize: '9.5px', color: '#78847d', fontWeight: 600 }}>Total Jobs</span>
-              </div>
-            </div>
-            <div className="donut-list" style={{ flex: 1, minWidth: '160px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {workStatusPieData.items.length > 0 ? (
-                workStatusPieData.items.map((item) => (
-                  <div
-                    key={item.name}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      fontSize: '12px',
-                      padding: '3px 0',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span
-                        style={{
-                          width: '10px',
-                          height: '10px',
-                          borderRadius: '50%',
-                          background: item.color,
-                          display: 'inline-block',
-                          flexShrink: 0,
-                        }}
-                      />
-                      <span style={{ color: '#334139', fontWeight: 500 }}>{item.name}</span>
-                    </div>
-                    <div>
-                      <span style={{ fontWeight: 700, color: '#16251e', marginRight: '6px' }}>{item.count}</span>
-                      <span style={{ fontSize: '11px', color: '#78847d' }}>({item.pct}%)</span>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div style={{ color: '#888', fontSize: '12px' }}>No jobs found for this month.</div>
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* Pie Chart 2: Category Spending Distribution */}
-        <section className="panel" style={{ padding: '18px 20px', borderRadius: '12px' }}>
-          <div className="panel-header" style={{ marginBottom: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <h2 style={{ fontSize: '16px', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '7px' }}>
-                <Wallet size={18} color="#e8753a" /> Spending by Category Report
-              </h2>
-              <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#78847d' }}>
-                Expense allocation by business categories ({selectedMonthLabel})
-              </p>
-            </div>
-          </div>
-          <div className="donut-wrap" style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
-            <div
-              className="donut"
-              style={{
-                background: categoryPieData.gradient,
-                width: '130px',
-                height: '130px',
-                borderRadius: '50%',
-                display: 'grid',
-                placeItems: 'center',
-                flexShrink: 0,
-                position: 'relative',
-              }}
-            >
-              <div
-                style={{
-                  width: '76px',
-                  height: '76px',
-                  background: '#ffffff',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.06)',
-                }}
-              >
-                <strong style={{ fontSize: '14px', color: '#16251e' }}>{formatCurrency(categoryPieData.total)}</strong>
-                <span style={{ fontSize: '9px', color: '#78847d', fontWeight: 600 }}>Total Spent</span>
-              </div>
-            </div>
-            <div className="donut-list" style={{ flex: 1, minWidth: '160px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {categoryPieData.items.length > 0 ? (
-                categoryPieData.items.map((item) => (
-                  <div
-                    key={item.name}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      fontSize: '12px',
-                      padding: '3px 0',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span
-                        style={{
-                          width: '10px',
-                          height: '10px',
-                          borderRadius: '50%',
-                          background: item.color,
-                          display: 'inline-block',
-                          flexShrink: 0,
-                        }}
-                      />
-                      <span style={{ color: '#334139', fontWeight: 500 }}>{item.name}</span>
-                    </div>
-                    <div>
-                      <span style={{ fontWeight: 700, color: '#16251e', marginRight: '6px' }}>
-                        {formatCurrency(item.amount)}
-                      </span>
-                      <span style={{ fontSize: '11px', color: '#78847d' }}>({item.pct}%)</span>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div style={{ color: '#888', fontSize: '12px' }}>No direct expenses logged for this month.</div>
-              )}
-            </div>
-          </div>
-        </section>
       </div>
 
       {/* Status Bar */}
@@ -812,9 +672,10 @@ export function CRMDashboard({
                 <th>Customer</th>
                 <th>Work Type</th>
                 <th>Status</th>
-                <th>Total Amount</th>
+                <th>Total</th>
                 <th>Received</th>
                 <th>Balance</th>
+                <th>Payment Mode</th>
                 <th>Date</th>
                 <th style={{ textAlign: 'right' }}>Actions</th>
               </tr>
@@ -847,6 +708,19 @@ export function CRMDashboard({
                     <td>{formatCurrency(row.paid)}</td>
                     <td className={balance > 0 ? 'warning-text' : 'success-text'}>
                       <strong>{formatCurrency(balance)}</strong>
+                    </td>
+                    <td>
+                      <span
+                        className="work-pill"
+                        style={{
+                          fontSize: '11px',
+                          background: row.payment_mode === 'Online' ? '#e0f2fe' : '#f0fdf4',
+                          color: row.payment_mode === 'Online' ? '#0369a1' : '#15803d',
+                          fontWeight: 600,
+                        }}
+                      >
+                        {row.payment_mode === 'Online' ? '💳 Online' : '💵 Cash'}
+                      </span>
                     </td>
                     <td>{formatDate(row.created_at)}</td>
                     <td>
@@ -935,6 +809,7 @@ function CRMJobModal({
   const [received, setReceived] = useState(String(editing?.paid ?? ''));
   const [date, setDate] = useState(editing ? editing.created_at.slice(0, 10) : todayISO());
   const [status, setStatus] = useState(editing?.work_status ?? workStatuses[0]?.name ?? 'Pending');
+  const [paymentMode, setPaymentMode] = useState(editing?.payment_mode ?? 'Cash');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -972,6 +847,7 @@ function CRMJobModal({
       income: totalAmount - match.expense,
       payment_status: getStatus(receivedAmount, totalAmount),
       work_status: status,
+      payment_mode: paymentMode,
       created_at: new Date(date + 'T' + new Date().toTimeString().slice(0, 8)).toISOString(),
     };
   };
@@ -1004,6 +880,7 @@ function CRMJobModal({
       setTotal('');
       setReceived('');
       setStatus(workStatuses[0]?.name ?? 'Pending');
+      setPaymentMode('Cash');
       setSaveSuccessMsg(`✓ Saved ${savedName}! Ready for next customer.`);
       setTimeout(() => setSaveSuccessMsg(''), 4000);
     } finally {
@@ -1104,6 +981,13 @@ function CRMJobModal({
                   {ws.name}
                 </option>
               ))}
+            </select>
+          </label>
+          <label>
+            Payment mode
+            <select name="paymentMode" value={paymentMode} onChange={(e) => setPaymentMode(e.target.value)}>
+              <option value="Cash">💵 Cash</option>
+              <option value="Online">💳 Online</option>
             </select>
           </label>
           <label>
