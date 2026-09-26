@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { ShieldAlert, KeyRound, X, Lock } from 'lucide-react';
-
-const OWNER_PIN = '163692';
+import { useState, useEffect, useCallback } from 'react';
+import { KeyRound, X, Lock } from 'lucide-react';
+import { verifyOwnerPin } from './securityService';
 
 interface OwnerAuthModalProps {
   isOpen: boolean;
@@ -14,7 +13,7 @@ interface OwnerAuthModalProps {
 export function OwnerAuthModal({
   isOpen,
   actionTitle = 'Owner Authorization Required',
-  actionDescription = 'Enter Owner PIN (163692) to edit or delete customer records',
+  actionDescription = 'Enter Owner PIN to edit or delete records',
   onClose,
   onVerified,
 }: OwnerAuthModalProps) {
@@ -22,7 +21,7 @@ export function OwnerAuthModal({
   const [isError, setIsError] = useState(false);
 
   const verifyPin = useCallback((currentPin: string) => {
-    if (currentPin === OWNER_PIN) {
+    if (verifyOwnerPin(currentPin)) {
       setPin('');
       onVerified();
     } else {
@@ -87,6 +86,7 @@ export function OwnerAuthModal({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        padding: '16px',
       }}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();

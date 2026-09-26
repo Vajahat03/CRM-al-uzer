@@ -24,6 +24,7 @@ type Props = {
   categories?: Category[];
   workTypes: WorkType[];
   workStatuses: WorkStatus[];
+  isOwnerMode?: boolean;
   onSaveCustomer: (data: Partial<CustomerRecord>, editingId?: string) => Promise<void>;
   onDeleteCustomer: (id: string) => Promise<void>;
   onAddCustomer?: () => void;
@@ -40,6 +41,7 @@ export function CRMDashboard({
   categories = [],
   workTypes,
   workStatuses,
+  isOwnerMode = false,
   onSaveCustomer,
   onDeleteCustomer,
   onAddCustomer,
@@ -840,6 +842,7 @@ export function CRMDashboard({
           workStatuses={workStatuses}
           customers={customers}
           editing={editing}
+          isOwnerMode={isOwnerMode}
           onClose={() => {
             setShowForm(false);
             setEditing(null);
@@ -861,8 +864,8 @@ export function CRMDashboard({
         actionTitle={ownerAuth.action === 'delete' ? 'Owner Authorization: Delete Record' : 'Owner Authorization: Edit Record'}
         actionDescription={
           ownerAuth.action === 'delete'
-            ? `Enter Owner PIN (163692) to delete "${ownerAuth.customer?.customer_name}"'s record.`
-            : `Enter Owner PIN (163692) to edit "${ownerAuth.customer?.customer_name}"'s record.`
+            ? `Enter Owner PIN to delete "${ownerAuth.customer?.customer_name}"'s record.`
+            : `Enter Owner PIN to edit "${ownerAuth.customer?.customer_name}"'s record.`
         }
         onClose={() => setOwnerAuth({ isOpen: false, action: 'edit', customer: null })}
         onVerified={handleOwnerVerified}

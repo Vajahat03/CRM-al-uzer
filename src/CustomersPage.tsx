@@ -13,6 +13,7 @@ type Props = {
   workTypes: WorkType[];
   workStatuses: WorkStatus[];
   search: string;
+  isOwnerMode?: boolean;
   onSearch: (value: string) => void;
   onAdd: () => void;
   onEdit?: (row: CustomerRecord) => void;
@@ -27,6 +28,7 @@ export function CustomersPage({
   workTypes,
   workStatuses,
   search,
+  isOwnerMode = false,
   onSearch,
   onAdd,
   onEdit,
@@ -400,6 +402,7 @@ export function CustomersPage({
           workStatuses={workStatuses}
           customers={customers}
           editing={editing}
+          isOwnerMode={isOwnerMode}
           onClose={() => setEditing(null)}
           onSubmit={saveCustomer}
         />
@@ -418,8 +421,8 @@ export function CustomersPage({
         actionTitle={ownerAuth.action === 'delete' ? 'Owner Authorization: Delete Customer' : 'Owner Authorization: Edit Customer'}
         actionDescription={
           ownerAuth.action === 'delete'
-            ? `Enter Owner PIN (163692) to delete "${ownerAuth.customer?.customer_name}"'s record.`
-            : `Enter Owner PIN (163692) to edit "${ownerAuth.customer?.customer_name}"'s record.`
+            ? `Enter Owner PIN to delete "${ownerAuth.customer?.customer_name}"'s record.`
+            : `Enter Owner PIN to edit "${ownerAuth.customer?.customer_name}"'s record.`
         }
         onClose={() => setOwnerAuth({ isOpen: false, action: 'edit', customer: null })}
         onVerified={handleOwnerVerified}

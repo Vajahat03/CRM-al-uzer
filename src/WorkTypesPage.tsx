@@ -6,6 +6,7 @@ import { ConfirmDialog } from './ConfirmDialog';
 
 type Props = {
   workTypes: WorkType[];
+  isOwnerMode?: boolean;
   onSaveWorkType?: (data: Partial<WorkType>, editingId?: string) => Promise<void>;
   onDeleteWorkType?: (id: string) => Promise<void>;
   setWorkTypes?: (types: WorkType[]) => void;
@@ -14,6 +15,7 @@ type Props = {
 
 export function WorkTypesPage({
   workTypes,
+  isOwnerMode = false,
   onSaveWorkType,
   onDeleteWorkType,
   setWorkTypes,
@@ -134,9 +136,9 @@ export function WorkTypesPage({
               <thead>
                 <tr>
                   <th>Work type</th>
-                  <th>Expense</th>
+                  {isOwnerMode && <th>Expense</th>}
                   <th>Status</th>
-                  <th />
+                  {isOwnerMode && <th />}
                 </tr>
               </thead>
               <tbody>
@@ -145,16 +147,18 @@ export function WorkTypesPage({
                     <td>
                       <strong>{row.name}</strong>
                     </td>
-                    <td className="expense-value">{formatCurrency(row.expense)}</td>
+                    {isOwnerMode && <td className="expense-value">{formatCurrency(row.expense)}</td>}
                     <td>
                       <span className="active-status">
                         <i />
                         Active
                       </span>
                     </td>
-                    <td>
-                      <RowMenu onEdit={() => startEdit(row)} onDelete={() => setDeleting(row)} />
-                    </td>
+                    {isOwnerMode && (
+                      <td>
+                        <RowMenu onEdit={() => startEdit(row)} onDelete={() => setDeleting(row)} />
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -162,40 +166,42 @@ export function WorkTypesPage({
             {!visible.length && <div className="empty-state">No work types found. Add a work type to get started.</div>}
           </div>
         </section>
-        <section className="panel add-work-panel">
-          <div className="form-icon">
-            <BriefcaseBusiness size={20} />
-          </div>
-          <h2>Add a work type</h2>
-          <p>This is instantly available in customer forms and synced across sessions.</p>
-          <label>
-            Work type name
-            <input
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="e.g. PAN CARD 800, PASSPORT FRESH"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') void add();
-              }}
-            />
-          </label>
-          <label>
-            Expense amount
-            <input
-              type="number"
-              min="0"
-              value={expense}
-              onChange={(event) => setExpense(event.target.value)}
-              placeholder="₹ 0"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') void add();
-              }}
-            />
-          </label>
-          <button className="button primary full" onClick={add} disabled={isSubmitting || !name.trim()}>
-            <Plus size={16} /> {isSubmitting ? 'Saving...' : 'Add & Sync work type'}
-          </button>
-        </section>
+        {isOwnerMode && (
+          <section className="panel add-work-panel">
+            <div className="form-icon">
+              <BriefcaseBusiness size={20} />
+            </div>
+            <h2>Add a work type</h2>
+            <p>This is instantly available in customer forms and synced across sessions.</p>
+            <label>
+              Work type name
+              <input
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                placeholder="e.g. PAN CARD 800, PASSPORT FRESH"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') void add();
+                }}
+              />
+            </label>
+            <label>
+              Expense amount
+              <input
+                type="number"
+                min="0"
+                value={expense}
+                onChange={(event) => setExpense(event.target.value)}
+                placeholder="₹ 0"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') void add();
+                }}
+              />
+            </label>
+            <button className="button primary full" onClick={add} disabled={isSubmitting || !name.trim()}>
+              <Plus size={16} /> {isSubmitting ? 'Saving...' : 'Add & Sync work type'}
+            </button>
+          </section>
+        )}
       </div>
 
       {editing && (

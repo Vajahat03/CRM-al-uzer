@@ -10,6 +10,7 @@ type Props = {
   workStatuses: WorkStatus[];
   customers?: CustomerRecord[];
   editing?: CustomerRecord | null;
+  isOwnerMode?: boolean;
   onClose: () => void;
   onSubmit: (data: Partial<CustomerRecord>, editingId?: string) => Promise<void>;
 };
@@ -27,6 +28,7 @@ export function CustomerModal({
   workStatuses,
   customers = [],
   editing,
+  isOwnerMode = false,
   onClose,
   onSubmit,
 }: Props) {
@@ -389,7 +391,7 @@ export function CustomerModal({
                   >
                     {workTypes.map((wt) => (
                       <option key={wt.id} value={wt.name}>
-                        {wt.name} (Exp: ₹{wt.expense})
+                        {isOwnerMode ? `${wt.name} (Exp: ₹${wt.expense})` : wt.name}
                       </option>
                     ))}
                   </select>
@@ -463,18 +465,39 @@ export function CustomerModal({
             textAlign: 'center',
           }}
         >
-          <div>
-            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, display: 'block' }}>Total Billed</span>
-            <strong style={{ fontSize: '16px', color: '#0f172a' }}>{formatCurrency(calculatedTotal)}</strong>
-          </div>
-          <div>
-            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, display: 'block' }}>Total Expense</span>
-            <strong style={{ fontSize: '16px', color: '#64748b' }}>{formatCurrency(calculatedExpense)}</strong>
-          </div>
-          <div>
-            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, display: 'block' }}>Estimated Profit</span>
-            <strong style={{ fontSize: '16px', color: '#059669' }}>{formatCurrency(calculatedTotal - calculatedExpense)}</strong>
-          </div>
+          {isOwnerMode ? (
+            <>
+              <div>
+                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, display: 'block' }}>Total Billed</span>
+                <strong style={{ fontSize: '16px', color: '#0f172a' }}>{formatCurrency(calculatedTotal)}</strong>
+              </div>
+              <div>
+                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, display: 'block' }}>Total Expense</span>
+                <strong style={{ fontSize: '16px', color: '#64748b' }}>{formatCurrency(calculatedExpense)}</strong>
+              </div>
+              <div>
+                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, display: 'block' }}>Estimated Profit</span>
+                <strong style={{ fontSize: '16px', color: '#059669' }}>{formatCurrency(calculatedTotal - calculatedExpense)}</strong>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, display: 'block' }}>Total Billed</span>
+                <strong style={{ fontSize: '16px', color: '#0f172a' }}>{formatCurrency(calculatedTotal)}</strong>
+              </div>
+              <div>
+                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, display: 'block' }}>Amount Paid</span>
+                <strong style={{ fontSize: '16px', color: '#167c57' }}>{formatCurrency(paidValue)}</strong>
+              </div>
+              <div>
+                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, display: 'block' }}>Balance Due</span>
+                <strong style={{ fontSize: '16px', color: calculatedTotal - paidValue > 0 ? '#ea580c' : '#059669' }}>
+                  {formatCurrency(Math.max(calculatedTotal - paidValue, 0))}
+                </strong>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Paid Amount & Balance Row */}

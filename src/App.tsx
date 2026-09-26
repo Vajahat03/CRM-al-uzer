@@ -4,7 +4,8 @@ import {
   ArrowUpRight, BarChart3, Bell, BriefcaseBusiness, Check, ChevronDown, CircleDollarSign,
   ClipboardList, FileSpreadsheet, LayoutDashboard, ListChecks, Menu, MoreHorizontal, Plus,
   Receipt, Search, Settings, ShoppingBag, Sparkles, Users, WalletCards, Wand, FileDown,
-  Pencil, Trash2, Download, Upload, Bot, Smartphone, Calendar, PieChart, Filter,
+  Pencil, Trash2, Download, Upload, Bot, Smartphone, Calendar, PieChart, Filter, Lock, Unlock,
+  KeyRound, ShieldCheck, UserCheck,
 } from 'lucide-react';
 import './index.css';
 import {
@@ -28,6 +29,8 @@ import { AIAssistantPage } from './AIAssistantPage';
 import { SMSDashboardPage } from './sms/SMSDashboardPage';
 import { SendSMSModal } from './sms/SendSMSModal';
 import { SecureVaultLock, SecureReportGateModal } from './SecureVaultLock';
+import { getStoredAppRole, setStoredAppRole, AppRole } from './securityService';
+import { ChangePinModal } from './ChangePinModal';
 
 const seedWorkTypes: WorkType[] = [
   { id: 'wt-1', name: 'PAN CARD 500', expense: 320, is_active: true },
@@ -152,16 +155,36 @@ function App() {
     loadFromLocalStorage(LOCAL_STORAGE_KEYS.KIRKOL, fallbackKirkol)
   );
 
+  const [appRole, setAppRole] = useState<AppRole>(() => getStoredAppRole());
+  const isOwnerMode = appRole === 'owner';
+  const [showChangePinModal, setShowChangePinModal] = useState(false);
+  const [showUnlockOwnerModal, setShowUnlockOwnerModal] = useState(false);
+
   const [showCustomerForm, setShowCustomerForm] = useState(false);
   const [showSpendingForm, setShowSpendingForm] = useState(false);
   const [showKirkolForm, setShowKirkolForm] = useState(false);
   const [showMonthlyReportModal, setShowMonthlyReportModal] = useState(false);
-  const [isVaultUnlocked, setIsVaultUnlocked] = useState(false);
+  const [isVaultUnlocked, setIsVaultUnlocked] = useState(isOwnerMode);
   const [showProtectedReportModal, setShowProtectedReportModal] = useState(false);
   const [editingKirkol, setEditingKirkol] = useState<Kirkol | null>(null);
 
+  const handleSwitchToEmployee = () => {
+    setAppRole('employee');
+    setStoredAppRole('employee');
+    setIsVaultUnlocked(false);
+    notify('Switched to Employee Mode. Confidential metrics locked.');
+  };
+
+  const handleUnlockOwner = () => {
+    setAppRole('owner');
+    setStoredAppRole('owner');
+    setIsVaultUnlocked(true);
+    setShowUnlockOwnerModal(false);
+    notify('👑 Owner Mode Unlocked with Full Access.');
+  };
+
   const handleOpenMonthlyReport = (): void => {
-    if (isVaultUnlocked) {
+    if (isOwnerMode || isVaultUnlocked) {
       setShowMonthlyReportModal(true);
     } else {
       setShowProtectedReportModal(true);
@@ -784,15 +807,15 @@ function App() {
     e.target.value = '';
   };
 
-  const navItems: { label: string; page: Page; icon: typeof LayoutDashboard }[] = [
+  const navItems: { label: string; page: Page; icon: typeof LayoutDashboard; requiresOwner?: boolean }[] = [
     { label: 'Dashboard', page: 'dashboard', icon: LayoutDashboard },
     { label: 'SMS Reminders', page: 'sms-reminders', icon: Smartphone },
     { label: 'AI Assistant', page: 'ai-assistant', icon: Bot },
-    { label: 'Customer Details', page: 'customers', icon: Users },
-    { label: 'Spending', page: 'spending', icon: Receipt },
+    { label: 'Customer Details', page: 'customers', icon: Users, requiresOwner: true },
+    { label: 'Spending', page: 'spending', icon: Receipt, requiresOwner: true },
     { label: 'Work Types', page: 'work-types', icon: BriefcaseBusiness },
-    { label: 'Categories & Statuses', page: 'categories', icon: ListChecks },
-    { label: 'Income & Reports', page: 'income', icon: BarChart3 },
+    { label: 'Categories & Statuses', page: 'categories', icon: ListChecks, requiresOwner: true },
+    { label: 'Income & Reports', page: 'income', icon: BarChart3, requiresOwner: true },
   ];
 
   return (
@@ -800,13 +823,40 @@ function App() {
       <aside className="sidebar">
         <div className="brand"><div className="brand-mark"><Sparkles size={18} /></div><div><strong>Al Uzer</strong><span>COMMON SERVICES</span></div></div>
         <div className="workspace"><span className="eyebrow">WORKSPACE</span><button className="workspace-select">Main branch <ChevronDown size={14} /></button></div>
-        <nav>{navItems.map(({ label, page: target, icon: Icon }) => <button key={target} className={`nav-item ${page === target ? 'active' : ''}`} onClick={() => setPage(target)}><Icon size={18} /><span>{label}</span>{target === 'customers' && <small>{customers.length}</small>}</button>)}</nav>
+        <nav>
+          {navItems.map(({ label, page: target, icon: Icon, requiresOwner }) => {
+            const isLocked = requiresOwner && !isOwnerMode;
+            return (
+              <button
+                key={target}
+                className={`nav-item ${page === target ? 'active' : ''}`}
+                onClick={() => setPage(target)}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Icon size={18} />
+                  <span>{label}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  {target === 'customers' && <small>{customers.length}</small>}
+                  {isLocked && <span title="Owner Protected" style={{ fontSize: '11px', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>🔒 Lock</span>}
+                </div>
+              </button>
+            );
+          })}
+        </nav>
         <div className="sidebar-bottom">
-          <button className={`nav-item ${page === 'sheets' ? 'active' : ''}`} onClick={() => setPage('sheets')}>
-            <FileSpreadsheet size={18} /><span>Google Sheets</span><span className="connected-dot" />
+          <button className={`nav-item ${page === 'sheets' ? 'active' : ''}`} onClick={() => setPage('sheets')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <FileSpreadsheet size={18} /><span>Google Sheets</span><span className="connected-dot" />
+            </div>
+            {!isOwnerMode && <span style={{ fontSize: '11px', color: '#ef4444' }}>🔒</span>}
           </button>
-          <button className="nav-item" onClick={handleOpenMonthlyReport}>
-            <FileDown size={18} /><span>Monthly PDF Report</span>
+          <button className="nav-item" onClick={handleOpenMonthlyReport} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <FileDown size={18} /><span>Monthly PDF Report</span>
+            </div>
+            {!isOwnerMode && <span style={{ fontSize: '11px', color: '#ef4444' }}>🔒</span>}
           </button>
           <button className="nav-item" onClick={downloadBackup} title="Download a complete offline backup file of all records">
             <Download size={18} /><span>Backup Data (JSON)</span>
@@ -815,7 +865,17 @@ function App() {
             <Upload size={18} /><span>Restore Backup</span>
             <input type="file" accept=".json" onChange={handleRestoreFile} style={{ display: 'none' }} />
           </label>
-          <div className="profile"><div className="avatar">AK</div><div><strong>Admin account</strong><span>Business owner</span></div><MoreHorizontal size={17} /></div>
+          <div className="profile" style={{ cursor: 'pointer', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '10px' }}>
+            <div className="avatar" style={{ background: isOwnerMode ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #f59e0b, #d97706)' }}>
+              {isOwnerMode ? '👑' : '👷'}
+            </div>
+            <div style={{ flex: 1 }}>
+              <strong>{isOwnerMode ? 'Owner Account' : 'Employee Account'}</strong>
+              <span style={{ fontSize: '11px', color: isOwnerMode ? '#10b981' : '#f59e0b', fontWeight: 600 }}>
+                {isOwnerMode ? 'Full Admin Access' : 'Restricted (Add Only)'}
+              </span>
+            </div>
+          </div>
         </div>
       </aside>
 
@@ -823,8 +883,33 @@ function App() {
         <header className="topbar">
           <div className="mobile-brand"><Menu size={20} /><strong>Al Uzer</strong></div>
           <div className="breadcrumbs"><span>Workspace</span><span>/</span><strong>{navItems.find((item) => item.page === page)?.label ?? (page === 'sheets' ? 'Google Sheets' : 'Dashboard')}</strong></div>
-          <div className="top-actions">
+          <div className="top-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
             <div className="global-search"><Search size={17} /><input placeholder="Search customers, work types..." value={search} onChange={(event) => setSearch(event.target.value)} /></div>
+            
+            {/* Mode Switcher & PIN Management */}
+            {isOwnerMode ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '5px 10px', borderRadius: '20px', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.3)', fontSize: '12px', fontWeight: 700 }}>
+                  <ShieldCheck size={14} /> 👑 OWNER MODE
+                </span>
+                <button className="button secondary" style={{ padding: '6px 10px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }} onClick={() => setShowChangePinModal(true)} title="Change 6-digit Owner Security PIN">
+                  <KeyRound size={13} /> <span>Change PIN</span>
+                </button>
+                <button className="button secondary" style={{ padding: '6px 10px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(239, 68, 68, 0.08)', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.2)' }} onClick={handleSwitchToEmployee} title="Lock and switch back to Employee Mode">
+                  <Lock size={13} /> <span>Lock Mode</span>
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', padding: '5px 10px', borderRadius: '20px', background: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', border: '1px solid rgba(245, 158, 11, 0.3)', fontSize: '12px', fontWeight: 700 }}>
+                  <UserCheck size={14} /> 👷 EMPLOYEE MODE
+                </span>
+                <button className="button primary" style={{ padding: '6px 12px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '5px', background: 'linear-gradient(135deg, #f59e0b, #d97706)', border: 'none', boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)' }} onClick={() => setShowUnlockOwnerModal(true)}>
+                  <Unlock size={13} /> <span>Unlock Owner</span>
+                </button>
+              </div>
+            )}
+
             <button className="button secondary" style={{ padding: '7px 12px', fontSize: '11px' }} onClick={downloadBackup} title="Download instant offline backup">
               <Download size={14} /> <span>Backup</span>
             </button>
@@ -832,7 +917,9 @@ function App() {
               <FileDown size={14} /> <span>PDF Report</span>
             </button>
             <button className="icon-button"><Bell size={18} /><i /></button>
-            <div className="top-avatar">AK</div>
+            <div className="top-avatar" style={{ background: isOwnerMode ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #f59e0b, #d97706)' }}>
+              {isOwnerMode ? '👑' : 'AK'}
+            </div>
           </div>
         </header>
 
@@ -845,43 +932,73 @@ function App() {
               categories={categories}
               workTypes={workTypes}
               workStatuses={workStatuses}
+              isOwnerMode={isOwnerMode}
+              onUnlockOwner={() => setShowUnlockOwnerModal(true)}
               onSaveCustomer={saveCustomer}
               onDeleteCustomer={deleteCustomer}
               onAddCustomer={() => setShowCustomerForm(true)}
               onAddKirkol={() => setShowKirkolForm(true)}
+              onAddSpending={() => setShowSpendingForm(true)}
               onOpenMonthlyReport={handleOpenMonthlyReport}
               onOpenAIAssistant={() => setPage('ai-assistant')}
               onOpenSMSReminders={() => setPage('sms-reminders')}
             />
           )}
           {page === 'customers' && (
-            <CustomersPage
-              customers={filteredCustomers}
-              workTypes={workTypes}
-              workStatuses={workStatuses}
-              search={search}
-              onSearch={setSearch}
-              onAdd={() => setShowCustomerForm(true)}
-              onEdit={() => { }}
-              onDelete={() => { }}
-              onSendSMS={(row) => setSendingSMSCustomer(row)}
-              saveCustomer={saveCustomer}
-              deleteCustomer={deleteCustomer}
-            />
+            !isOwnerMode ? (
+              <SecureVaultLock
+                isUnlocked={false}
+                onUnlock={handleUnlockOwner}
+                onLock={() => {}}
+                title="Customer Master Database Vault"
+                subtitle="Customer sensitive records and editing are protected. Enter Owner PIN to unlock."
+              >
+                <div />
+              </SecureVaultLock>
+            ) : (
+              <CustomersPage
+                customers={filteredCustomers}
+                workTypes={workTypes}
+                workStatuses={workStatuses}
+                search={search}
+                isOwnerMode={isOwnerMode}
+                onSearch={setSearch}
+                onAdd={() => setShowCustomerForm(true)}
+                onEdit={() => { }}
+                onDelete={() => { }}
+                onSendSMS={(row) => setSendingSMSCustomer(row)}
+                saveCustomer={saveCustomer}
+                deleteCustomer={deleteCustomer}
+              />
+            )
           )}
           {page === 'spending' && (
-            <SpendingPage
-              spendings={spendings}
-              categories={categories}
-              onAdd={() => setShowSpendingForm(true)}
-              saveSpending={saveSpending}
-              deleteSpending={deleteSpending}
-              onAddCategory={() => setCategoryModal({ open: true, editing: null })}
-            />
+            !isOwnerMode ? (
+              <SecureVaultLock
+                isUnlocked={false}
+                onUnlock={handleUnlockOwner}
+                onLock={() => {}}
+                title="Company Spending Ledger Vault"
+                subtitle="Confidential spending history and expense analysis are restricted. Enter Owner PIN to unlock."
+              >
+                <div />
+              </SecureVaultLock>
+            ) : (
+              <SpendingPage
+                spendings={spendings}
+                categories={categories}
+                isOwnerMode={isOwnerMode}
+                onAdd={() => setShowSpendingForm(true)}
+                saveSpending={saveSpending}
+                deleteSpending={deleteSpending}
+                onAddCategory={() => setCategoryModal({ open: true, editing: null })}
+              />
+            )
           )}
           {page === 'work-types' && (
             <WorkTypesPage
               workTypes={workTypes}
+              isOwnerMode={isOwnerMode}
               onSaveWorkType={saveWorkType}
               onDeleteWorkType={deleteWorkType}
               setWorkTypes={setWorkTypes}
@@ -889,23 +1006,35 @@ function App() {
             />
           )}
           {page === 'categories' && (
-            <CategoriesAndStatusesPage
-              categories={categories}
-              workStatuses={workStatuses}
-              onAddCategory={(name) => saveCategory(name)}
-              onEditCategory={(cat) => setCategoryModal({ open: true, editing: cat })}
-              onDeleteCategory={(cat) => deleteCategory(cat.id)}
-              onAddStatus={(name) => saveStatus(name)}
-              onEditStatus={(ws) => setStatusModal({ open: true, editing: ws })}
-              onDeleteStatus={(ws) => deleteStatus(ws.id)}
-              notify={notify}
-            />
+            !isOwnerMode ? (
+              <SecureVaultLock
+                isUnlocked={false}
+                onUnlock={handleUnlockOwner}
+                onLock={() => {}}
+                title="Configuration Master Vault"
+                subtitle="Categories and status management are restricted to owners. Enter Owner PIN to unlock."
+              >
+                <div />
+              </SecureVaultLock>
+            ) : (
+              <CategoriesAndStatusesPage
+                categories={categories}
+                workStatuses={workStatuses}
+                onAddCategory={(name) => saveCategory(name)}
+                onEditCategory={(cat) => setCategoryModal({ open: true, editing: cat })}
+                onDeleteCategory={(cat) => deleteCategory(cat.id)}
+                onAddStatus={(name) => saveStatus(name)}
+                onEditStatus={(ws) => setStatusModal({ open: true, editing: ws })}
+                onDeleteStatus={(ws) => deleteStatus(ws.id)}
+                notify={notify}
+              />
+            )
           )}
           {page === 'income' && (
             <SecureVaultLock
-              isUnlocked={isVaultUnlocked}
-              onUnlock={() => setIsVaultUnlocked(true)}
-              onLock={() => setIsVaultUnlocked(false)}
+              isUnlocked={isOwnerMode}
+              onUnlock={handleUnlockOwner}
+              onLock={handleSwitchToEmployee}
               title="Financial & Reports Security Vault"
               subtitle="Confidential business revenue, profit margins, kirkol counter cash, and analytics"
             >
@@ -927,13 +1056,25 @@ function App() {
             </SecureVaultLock>
           )}
           {page === 'sheets' && (
-            <GoogleSheetsPage
-              customers={customers}
-              spendings={spendings}
-              kirkol={kirkol}
-              totals={totals}
-              notify={notify}
-            />
+            !isOwnerMode ? (
+              <SecureVaultLock
+                isUnlocked={false}
+                onUnlock={handleUnlockOwner}
+                onLock={() => {}}
+                title="Google Sheets Sync Vault"
+                subtitle="Direct cloud spreadsheet integration is restricted to owners. Enter Owner PIN to unlock."
+              >
+                <div />
+              </SecureVaultLock>
+            ) : (
+              <GoogleSheetsPage
+                customers={customers}
+                spendings={spendings}
+                kirkol={kirkol}
+                totals={totals}
+                notify={notify}
+              />
+            )
           )}
           {page === 'sms-reminders' && (
             <SMSDashboardPage
@@ -966,6 +1107,7 @@ function App() {
           workTypes={workTypes}
           workStatuses={workStatuses}
           customers={customers}
+          isOwnerMode={isOwnerMode}
           onClose={() => setShowCustomerForm(false)}
           onSubmit={saveCustomer}
         />
@@ -1002,11 +1144,29 @@ function App() {
           onClose={() => setShowProtectedReportModal(false)}
           onSuccess={() => {
             setShowProtectedReportModal(false);
-            setIsVaultUnlocked(true);
+            handleUnlockOwner();
             setShowMonthlyReportModal(true);
           }}
         />
       )}
+      {showUnlockOwnerModal && (
+        <SecureReportGateModal
+          isOpen={showUnlockOwnerModal}
+          onClose={() => setShowUnlockOwnerModal(false)}
+          onSuccess={handleUnlockOwner}
+        />
+      )}
+      {showChangePinModal && (
+        <ChangePinModal
+          isOpen={showChangePinModal}
+          onClose={() => setShowChangePinModal(false)}
+          onSuccess={() => {
+            setShowChangePinModal(false);
+            notify('Security PIN updated successfully!');
+          }}
+        />
+      )}
+
       {sendingSMSCustomer && (
         <SendSMSModal
           customer={sendingSMSCustomer}
@@ -1105,7 +1265,7 @@ function Income({
           const label = `${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
           map.set(key, { key, label, year: d.getFullYear(), month: d.getMonth() });
         }
-      } catch {}
+      } catch { }
     };
 
     const now = new Date();

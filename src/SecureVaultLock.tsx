@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback, ReactNode } from 'react';
-import { Lock, Flame, ShieldAlert, Sparkles, KeyRound, Key, RotateCcw } from 'lucide-react';
+import { Lock, Flame, KeyRound } from 'lucide-react';
 import './SecureVaultLock.css';
-
-const VAULT_PASSCODE = '163692';
+import { verifyOwnerPin } from './securityService';
 
 interface SecureVaultLockProps {
   children: ReactNode;
@@ -83,7 +82,7 @@ function playSound(type: 'type' | 'error' | 'keyTurn' | 'eruption') {
       whiteNoise.stop(ctx.currentTime + 1.4);
 
       // Crystalline Eruption Fanfare Chime
-      const notes = [440, 554.37, 659.25, 880, 1108.73, 1318.51]; // A major triumphant geyser
+      const notes = [440, 554.37, 659.25, 880, 1108.73, 1318.51];
       notes.forEach((freq, idx) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -113,6 +112,18 @@ interface VolcanoParticle {
   color: string;
 }
 
+interface EruptingDataCard {
+  id: number;
+  label: string;
+  sub: string;
+  amount: string;
+  tag: string;
+  tagColor: string;
+  tx: string;
+  ty: string;
+  rot: string;
+}
+
 export function SecureVaultLock({
   children,
   title = 'Confidential Income & Financial Reports',
@@ -125,6 +136,7 @@ export function SecureVaultLock({
   const [isError, setIsError] = useState(false);
   const [isErupting, setIsErupting] = useState(false);
   const [particles, setParticles] = useState<VolcanoParticle[]>([]);
+  const [dataCards, setDataCards] = useState<EruptingDataCard[]>([]);
   const [showMagmaRing, setShowMagmaRing] = useState(false);
   const [showGeyserBeam, setShowGeyserBeam] = useState(false);
   const [showKeyAnimation, setShowKeyAnimation] = useState(false);
@@ -149,7 +161,6 @@ export function SecureVaultLock({
 
       // Generate 55 high-velocity volcanic particles spraying upward in a geyser cone from the keyhole
       for (let i = 0; i < 55; i++) {
-        // Upward parabolic volcanic spray cone (between -150 deg and -30 deg)
         const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.6;
         const velocity = 200 + Math.random() * 380;
         newParticles.push({
@@ -163,7 +174,34 @@ export function SecureVaultLock({
         });
       }
 
+      // Live simulated Customer Cards & Reports bursting out in 3D perspective from keyhole
+      const sampleBurstCards = [
+        { label: '👤 AYASHA MAZHAR', sub: 'PAN CARD 400', amount: '₹400', tag: 'PAID', tagColor: '#10b981' },
+        { label: '👤 NASIR RASHID', sub: 'DRIVING LICENSE', amount: '₹5,500', tag: 'PARTIAL', tagColor: '#f59e0b' },
+        { label: '📊 MONTHLY REVENUE', sub: 'Gross Profit', amount: '₹28,450', tag: '+24%', tagColor: '#3b82f6' },
+        { label: '🧾 THERMAL BILL', sub: 'Al Uzer Receipt', amount: '₹1,200', tag: 'DELIVERED', tagColor: '#10b981' },
+        { label: '👤 SAHAIL HAKIM', sub: 'PAN CARD 500', amount: '₹450', tag: 'PAID', tagColor: '#10b981' },
+        { label: '📈 PROFIT MARGIN', sub: 'Total Income', amount: '₹18,900', tag: 'STABLE', tagColor: '#8b5cf6' },
+      ];
+
+      const newBurstCards: EruptingDataCard[] = sampleBurstCards.map((card, idx) => {
+        const angle = -Math.PI / 2 + ((idx - (sampleBurstCards.length - 1) / 2) * 0.45);
+        const dist = 180 + Math.random() * 140;
+        return {
+          id: idx,
+          label: card.label,
+          sub: card.sub,
+          amount: card.amount,
+          tag: card.tag,
+          tagColor: card.tagColor,
+          tx: `${Math.cos(angle) * dist}px`,
+          ty: `${Math.sin(angle) * dist}px`,
+          rot: `${(Math.random() - 0.5) * 35}deg`,
+        };
+      });
+
       setParticles(newParticles);
+      setDataCards(newBurstCards);
     }, 450);
 
     // Stage 2: Data bursts outwards from keyhole and takes over the page
@@ -173,12 +211,13 @@ export function SecureVaultLock({
       setShowMagmaRing(false);
       setShowKeyAnimation(false);
       setParticles([]);
+      setDataCards([]);
       onUnlock();
-    }, 1400);
+    }, 1450);
   }, [onUnlock]);
 
   const verifyPin = useCallback((currentPin: string) => {
-    if (currentPin === VAULT_PASSCODE) {
+    if (verifyOwnerPin(currentPin)) {
       triggerVolcanicEruption();
     } else {
       setIsError(true);
@@ -314,6 +353,43 @@ export function SecureVaultLock({
             </div>
           )}
 
+          {/* Holographic Customer Records & Charts Erupting out from Keyhole */}
+          {dataCards.length > 0 && (
+            <div className="volcano-particle-layer">
+              {dataCards.map((card) => (
+                <div
+                  key={card.id}
+                  className="holographic-data-card"
+                  style={
+                    {
+                      '--tx': card.tx,
+                      '--ty': card.ty,
+                      '--rot': card.rot,
+                    } as React.CSSProperties
+                  }
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                    <span>{card.label}</span>
+                    <span
+                      style={{
+                        fontSize: '9px',
+                        padding: '1px 5px',
+                        borderRadius: '4px',
+                        background: card.tagColor,
+                        color: '#ffffff',
+                      }}
+                    >
+                      {card.tag}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '9.5px', color: '#94a3b8', marginTop: '2px' }}>
+                    {card.sub} • <strong style={{ color: '#facc15' }}>{card.amount}</strong>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
           <svg viewBox="0 0 120 120" width="130" height="130" style={{ filter: 'drop-shadow(0 12px 24px rgba(0,0,0,0.6))' }}>
             <defs>
               <linearGradient id="goldMetallic" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -413,7 +489,7 @@ export function SecureVaultLock({
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(234, 88, 12, 0.2)', border: '1px solid rgba(251, 146, 60, 0.5)', padding: '4px 14px', borderRadius: '20px', marginBottom: '12px' }}>
           <Flame size={14} style={{ color: '#fb923c' }} />
           <span style={{ fontSize: '11px', fontWeight: 800, color: '#fdba74', letterSpacing: '1px' }}>
-            {isErupting ? '🌋 VOLCANIC ERUPTION IN PROGRESS' : 'RESTRICTED FINANCIAL VAULT'}
+            {isErupting ? '🌋 VOLCANIC DATA ERUPTION IN PROGRESS' : 'RESTRICTED FINANCIAL VAULT'}
           </span>
         </div>
 
